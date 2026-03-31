@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/src/assets/main.scss">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title></title>
+        <script>
+            window.updateTheme = function (theme) {
+                switch (theme) {
+                    case 'light':
+                        document.documentElement.style.colorScheme = 'light'
+                        break
+                    case 'dark':
+                        document.documentElement.style.colorScheme = 'dark'
+                        break
+                    default:
+                        document.documentElement.style.colorScheme = ''
+                }
+            }
+
+            window.updateLanguage = function (lang) {
+                switch (lang) {
+                    case 'en':
+                        document.documentElement.lang = 'en'
+                        // TODO wymyślić lepszą angielską nazwę Wnioskomatu
+                        document.head.querySelector('title').innerText = 'Request paper generator'
+                        break
+                    case 'uk':
+                        document.documentElement.lang = 'uk'
+                        // TODO wymyślić ukraińską nazwę Wnioskomatu, ta jest przeklejona z tłumacza
+                        document.head.querySelector('title').innerText = 'Заявка'
+                        break
+                    default:
+                        document.documentElement.lang = 'pl'
+                        document.head.querySelector('title').innerText = 'Wnioskomat'
+                }
+            }
+
+            updateTheme(localStorage.theme)
+            updateLanguage(localStorage.lang)
+        </script>
+    </head>
+    <body>
+        <div id="app" v-cloak></div>
+        <script type="module" src="/src/main.js"></script>
+    </body>
+</html>
