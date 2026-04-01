@@ -491,6 +491,10 @@ a {
     .next {
         padding: 0.6em 0.75em 0.6em 1em;
     }
+
+    .side-pane & {
+        margin-top: 2em;
+    }
 }
 
 .questions {
@@ -705,6 +709,27 @@ a {
 .side-pane {
     width: 32em;
     flex-shrink: 0;
+}
+
+.generated-doc {
+    background-color: light-dark($white, $gray-900);
+    padding: 1em;
+    padding-top: 0.75em;
+    margin-top: 2em;
+    border-radius: 6px;
+
+    button {
+        border-radius: 4px;
+    }
+}
+
+.doc-title {
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    font-weight: 500;
+    gap: 0.5em;
 }
 
 @keyframes fadeIn {

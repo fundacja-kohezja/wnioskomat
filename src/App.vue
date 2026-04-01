@@ -33,7 +33,7 @@ const navigate = function (screen) {
             <TheLocaleError />
 
             <TheForm v-if="currentScreen === 'form'" @go-to-start="navigate('start')" @go-to-end="navigate('end')" />
-            <TheEnd v-else-if="currentScreen === 'end'" />
+            <TheEnd v-else-if="currentScreen === 'end'" @go-to-form="navigate('form')" />
             <TheStartScreen v-else @go-to-form="navigate('form')" />
         </main>
     </template>
