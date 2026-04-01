@@ -1,7 +1,8 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { computed, nextTick, reactive, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 
+import useFormStore from '../stores/form'
 import AnswerInput from './AnswerInput.vue'
 import DataSummary from './DataSummary.vue'
 import steps from '../steps'
@@ -9,6 +10,8 @@ import steps from '../steps'
 const emit = defineEmits(['goToStart', 'goToEnd'])
 
 const { t } = useI18n()
+
+const { answers } = useFormStore()
 
 const heading = ref()
 const currentIndex = ref(0)
@@ -21,13 +24,6 @@ watch(currentIndex, currentIndex => {
     }
     nextTick(() => heading.value.scrollIntoView({ block: 'nearest' }))
 })
-
-const createAnswerFields = q => ({
-    ...q.subquestions ? { subanswers: q.subquestions.map(createAnswerFields) } : {},
-    ...q.initialValue ? { answer: q.initialValue } : {},
-})
-
-const answers = reactive(steps.map(({ questions }) => questions.map(createAnswerFields)))
 
 </script>
 
@@ -62,10 +58,9 @@ const answers = reactive(steps.map(({ questions }) => questions.map(createAnswer
                     v-model="answers[currentIndex][i]"
                     :question="q"
                     :label-id="'q_'+currentIndex+'_'+i"
-                    :answers="answers"
                 />
             </form>
-            <DataSummary v-else :answers="answers" />
+            <DataSummary v-else />
             <nav class="prev-next">
                 <button v-if="currentIndex > 0" class="btn-link prev" @click="currentIndex--">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" width="18" height="18">

@@ -1,5 +1,6 @@
 export default [
     {
+        listInSummary: true,
         questions: [
             {
                 type: 'radio_featured',
@@ -30,6 +31,7 @@ export default [
     },
     {
         hasDescription: true,
+        listInSummary: true,
         questions: [
             { type: 'checkbox', hasDescription: true, initialValue: true, isDisabled: true },
             { type: 'checkbox', hasDescription: true, hasLinkInDescription: true, initialValue: true, isDisabled: true },
@@ -137,6 +139,7 @@ export default [
         ],
     },
     {
+        hasSummaryHeading: false,
         questions: [
             { type: 'textarea', hasDescription: true },
             { type: 'month' },

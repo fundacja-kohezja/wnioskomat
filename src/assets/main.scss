@@ -696,6 +696,10 @@ a {
     .featured + legend {
         margin-bottom: 0.5em;
     }
+
+    del {
+        color: light-dark($gray-500, $gray-400);
+    }
 }
 
 .side-pane {

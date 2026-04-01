@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 
+import useFormStore from '../stores/form'
 import MonthPicker from './MonthPicker.vue'
 
 defineProps({
@@ -12,13 +13,11 @@ defineProps({
         type: String,
         required: true,
     },
-    answers: { // TODO this should not be drilled down
-        type: Array,
-        required: true,
-    },
 })
 
 const value = defineModel()
+
+const { answers } = useFormStore()
 
 const { t } = useI18n()
 
