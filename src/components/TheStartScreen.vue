@@ -1,9 +1,22 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
+
+import useFormStore from '../stores/form'
 
 const emit = defineEmits(['goToForm'])
 
 const { t } = useI18n()
+
+const formStore = useFormStore()
+const { clearAnswers } = formStore
+const { anyAnswers } = storeToRefs(formStore)
+
+const startOver = () => {
+    if(!confirm(t('start_over_confirm'))) return
+    clearAnswers()
+    emit('goToForm')
+}
 
 </script>
 
@@ -17,14 +30,14 @@ const { t } = useI18n()
 
         <div class="intro-btns">
             <button class="btn-primary" @click="emit('goToForm')">
-                {{ t('begin') }}&ensp;
+                {{ t(anyAnswers ? 'resume' : 'begin') }}&ensp;
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="24" height="24">
                     <path d="M13.5 4.5 21 12 13.5 19.5M21 12H3" />
                 </svg>
             </button>
-            <!-- <button class="btn-secondary">
+             <button v-if="anyAnswers" class="btn-secondary" @click="startOver">
                 {{ t('start_over') }}
-            </button> -->
+            </button>
         </div>
 
         <div class="box">

@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import { computed, nextTick, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import useFormStore from '../stores/form'
 import AnswerInput from './AnswerInput.vue'
@@ -11,7 +12,7 @@ const emit = defineEmits(['goToStart', 'goToEnd'])
 
 const { t } = useI18n()
 
-const { answers } = useFormStore()
+const { answers, stepStatuses } = storeToRefs(useFormStore())
 
 const heading = ref()
 const currentIndex = ref(0)
@@ -55,9 +56,10 @@ watch(currentIndex, currentIndex => {
             <form v-if="currentIndex < steps.length">
                 <AnswerInput
                     v-for="(q, i) of currentStep.questions"
-                    v-model="answers[currentIndex][i]"
+                    v-model="answers[currentIndex]['a_'+i]"
                     :question="q"
-                    :label-id="'q_'+currentIndex+'_'+i"
+                    :step="currentIndex"
+                    :answer-number="'a_'+i"
                 />
             </form>
             <DataSummary v-else />

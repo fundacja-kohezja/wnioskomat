@@ -1,0 +1,17 @@
+This folder contain base64-encoded ttf files of the following font:
+Font: TeX Gyre Termes
+Authors: Bogusław Jackowski and Janusz M. Nowacki
+Version: 2.004
+Date: 7 X 2009
+Downloads: http://www.gust.org.pl/projects/e-foundry/tex-gyre/termes
+
+This font is available under following license:
+
+Copyright 2006--2009 for TeX Gyre extensions by B. Jackowski
+and J.M. Nowacki (on behalf of TeX Users Groups).
+Vietnamese characters were added by Han The Thanh.
+
+This work can be freely used and distributed under
+the GUST Font License (GFL -- see GUST-FONT-LICENSE.txt)
+which is actually an instance of the LaTeX Project Public License
+(LPPL -- see http://www.latex-project.org/lppl.txt ).

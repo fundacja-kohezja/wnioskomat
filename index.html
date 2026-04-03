@@ -37,8 +37,10 @@
                 }
             }
 
-            updateTheme(localStorage.theme)
-            updateLanguage(localStorage.lang)
+            if (localStorage) {
+                updateTheme(localStorage.theme)
+                updateLanguage(localStorage.lang)
+            }
         </script>
     </head>
     <body>

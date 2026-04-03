@@ -5,10 +5,11 @@ import { useI18n } from 'vue-i18n'
 export default defineStore('prefs', () => {
 
     // theme
-    const theme = ref(localStorage.theme || 'auto')
+    const theme = ref(localStorage?.theme || 'auto')
 
     watch(theme, theme => {
         window.updateTheme(theme)
+        if (!localStorage) return
         localStorage.theme = theme
     })
 
@@ -38,7 +39,9 @@ export default defineStore('prefs', () => {
     importLocale(locale.value)
 
     watch(selectedLang, lang => {
-        localStorage.lang = lang
+        if (localStorage) {
+            localStorage.lang = lang
+        }
         switch (localesStatus[lang]) {
             case 'ready':
                 locale.value = lang
