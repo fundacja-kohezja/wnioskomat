@@ -469,6 +469,17 @@ a {
 
         svg {
             flex-shrink: 0;
+
+            &.completed {
+                color: light-dark($gray-600, $gray-400);
+            }
+        }
+    }
+
+    .current .step svg.completed {
+
+        &.completed {
+            color: light-dark($gray-950, $gray-100);
         }
     }
 }
@@ -533,7 +544,7 @@ a {
 
         &:disabled {
             background-image:
-                linear-gradient(to left, light-dark(transparent, rgba($gray-900, 0.6)), light-dark(transparent, rgba($gray-900, 0.6))),
+                linear-gradient(to left, light-dark(transparent, rgba($gray-900, 0.7)), light-dark(transparent, rgba($gray-900, 0.7))),
                 url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22%23f5f5f5%22%3E%3Cpath%20d%3D%22M12.416%203.376a.75.75%200%200%201%20.208%201.04l-5%207.5a.75.75%200%200%201-1.154.114l-3-3a.75.75%200%200%201%201.06-1.06l2.353%202.353%204.493-6.74a.75.75%200%200%201%201.04-.207Z%22%2F%3E%3C%2Fsvg%3E')
             ;
         }

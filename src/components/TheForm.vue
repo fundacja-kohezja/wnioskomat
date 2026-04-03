@@ -35,9 +35,10 @@ watch(currentIndex, currentIndex => {
             <ol>
                 <li v-for="(_, index) of steps" :class="{ current: currentIndex === index }" :aria-current="currentIndex === index ? true : undefined">
                     <span class="step">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                            <title>Nie wypełniono</title>
-                            <circle cx="12" cy="12" r="10" fill="none" stroke-width="1.5" stroke="currentColor" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" :class="stepStatuses[index]">
+                            <title>{{ t('step_'+stepStatuses[index]) }}</title>
+                            <path v-if="stepStatuses[index] === 'completed'" fill="currentColor" fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+                            <circle v-else cx="12" cy="12" r="10" fill="none" stroke-width="1.5" stroke="currentColor" />
                         </svg>
                         <button class="nav-link" @click="currentIndex = index">{{ t('step_'+index) }}</button>
                     </span>

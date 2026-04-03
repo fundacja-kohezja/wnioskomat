@@ -42,7 +42,7 @@ export default defineStore('form', () => {
         if (statuses.includes('invalid')) return 'invalid'
         if (statuses.every(status => status === 'valid')) return 'completed'
         if (statuses.every(status => status === 'unfilled')) return 'empty'
-        return 'partially'
+        return 'partial'
     }))
 
     const anyAnswers = computed(() => stepStatuses.value.some(status => status !== 'empty'))
