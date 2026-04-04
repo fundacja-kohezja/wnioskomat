@@ -1,6 +1,7 @@
-import steps from '../steps'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+
+import steps from '../steps'
 
 const initAnswers = () => steps.map(() => ({}))
 
@@ -18,13 +19,14 @@ const validateAnswer = (q, i, id, answers) => {
     if (!isFilled(answer, answers)) {
         return ['unfilled', ...subanswers]
     }
-    if (!q.valid || q.valid(answer)) {
+    if (!q.valid || q.valid.every(validator => validator(answer))) {
         return ['valid', ...subanswers]
     }
     return ['invalid', ...subanswers]
 }
 
 export default defineStore('form', () => {
+    // TODO versioning & migrations
 
     const answers = ref(initAnswers())
 
@@ -38,18 +40,13 @@ export default defineStore('form', () => {
         )
     ))
 
-    const stepStatuses = computed(() => answerStatuses.value.map(statuses => {
-        if (statuses.includes('invalid')) return 'invalid'
-        if (statuses.every(status => status === 'valid')) return 'completed'
-        if (statuses.every(status => status === 'unfilled')) return 'empty'
-        return 'partial'
-    }))
-
-    const anyAnswers = computed(() => stepStatuses.value.some(status => status !== 'empty'))
+    const anyAnswers = computed(() => answerStatuses.value.some(
+        statuses => statuses.some(status => status !== 'unfilled')
+    ))
 
     return {
         answers, // state
-        answerStatuses, stepStatuses, anyAnswers, // getters
+        answerStatuses, anyAnswers, // getters
         clearAnswers, // actions
     }
 }, {

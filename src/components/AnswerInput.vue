@@ -28,6 +28,19 @@ const { t } = useI18n()
 
 const labelId = computed(() => 'q_' + props.step + '_' + props.answerNumber.slice(2))
 
+const validationError = computed(() => {
+    if (!value.value) return
+
+    const validators = props.question.valid
+    if (!validators) return
+
+    for (const i in validators) {
+        if (!validators[i](value.value)) {
+            return t(labelId.value+'_invalid_'+i)
+        }
+    }
+})
+
 </script>
 
 <template>
@@ -38,6 +51,7 @@ const labelId = computed(() => 'q_' + props.step + '_' + props.answerNumber.slic
     <div
         v-show="!question.showIf || question.showIf(answers)"
         v-bind="$attrs"
+        :class="{ 'has-validation-error': validationError }"
     >
         <label
             v-if="question.type === 'checkbox'"
@@ -78,7 +92,7 @@ const labelId = computed(() => 'q_' + props.step + '_' + props.answerNumber.slic
             <input
                 v-else
                 type="text"
-                v-model="value"
+                v-model.lazy.trim="value"
                 :list="question.datalist ? (labelId+'_datalist') : undefined"
                 :placeholder="question.placeholder"
             />
@@ -88,7 +102,7 @@ const labelId = computed(() => 'q_' + props.step + '_' + props.answerNumber.slic
             class="text-input"
         >
             <span>{{ t(labelId) }}</span>
-            <textarea v-model="value" rows="4"></textarea>
+            <textarea v-model.lazy="value" rows="4"></textarea>
         </label>
         <fieldset v-else-if="question.type === 'month'">
             <legend v-if="question.hasLabel !== false">{{ t(labelId) }}</legend>
@@ -106,6 +120,7 @@ const labelId = computed(() => 'q_' + props.step + '_' + props.answerNumber.slic
         <datalist v-if="question.datalist" :id="labelId+'_datalist'">
             <option v-for="item of question.datalist" :value="item"></option>
         </datalist>
+        <div v-if="validationError" class="validation-message">{{ validationError }}</div>
         <p v-if="question.hasDescription" class="help-text">
             {{ t(labelId+'_desc') }}
             <a v-if="question.hasLinkInDescription" :href="t(labelId+'_desc_link')" target="_blank">

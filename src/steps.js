@@ -148,9 +148,11 @@ export default [
         questions: [
             { // pesel
                 type: 'text',
-                valid: a => a.length === 11 // has 11 chars
-                    && a.split('').every(digit => !isNaN(Number(digit))) // all chars are digits
-                    && 10 - ([a[0]*1, a[1]*3, a[2]*7, a[3]*9, a[4]*1, a[5]*3, a[6]*7, a[7]*9, a[8]*1, a[9]*3].map(x => x % 10).reduce((x, y) => x + y) % 10) == a[10], // checksum is correct
+                valid: [
+                    a => a.length === 11, // has 11 chars
+                    a => a.split('').every(digit => !isNaN(Number(digit))), // all chars are digits
+                    a => 10 - ([a[0]*1, a[1]*3, a[2]*7, a[3]*9, a[4]*1, a[5]*3, a[6]*7, a[7]*9, a[8]*1, a[9]*3].map(x => x % 10).reduce((x, y) => x + y) % 10) == a[10], // checksum is correct
+                ]
             },
             { type: 'textarea', hasDescription: true }, // adres
             { // pełnomocnik do doręczeń?
@@ -181,7 +183,7 @@ export default [
                     { // email
                         type: 'text',
                         showIf: answers => answers[2].a_4,
-                        valid: a => a.includes('@'),
+                        valid: [a => a.includes('@')],
                     },
                     { // tel
                         type: 'text',
@@ -191,7 +193,13 @@ export default [
             },
             { type: 'text', hasHeading: true }, // imię z aktu
             { type: 'text' }, // nazwisko z aktu
-            { type: 'date', valid: a => new Date(a) < new Date }, // data urodzenia TODO sprawdzenie czy skończono 18 lat
+            { // data urodzenia
+                type: 'date',
+                valid: [
+                    a => new Date(a) < new Date,
+                    a => new Date - new Date(a) > 1000*60*60*24*365*18, // almost 18 years, no need to be precise here
+                ]
+            },
             { type: 'text', hasDescription: true, placeholder: 'XXXXXXX/XX/AU/XXXX/XXXXXX' }, // nr aktu
             { type: 'text', prefix: 'Urząd Stanu Cywilnego w…' }, // urząd wystawiający
         ],

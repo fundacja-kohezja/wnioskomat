@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import { computed, nextTick, ref, watch } from 'vue'
+import { computedWithControl } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 
 import useFormStore from '../stores/form'
@@ -12,11 +13,25 @@ const emit = defineEmits(['goToStart', 'goToEnd'])
 
 const { t } = useI18n()
 
-const { answers, stepStatuses } = storeToRefs(useFormStore())
+const { answers, answerStatuses } = storeToRefs(useFormStore())
 
 const heading = ref()
 const currentIndex = ref(0)
 const currentStep = computed(() => steps[currentIndex.value])
+
+const stepStatuses = computedWithControl(
+    currentStep,
+    () => answerStatuses.value.map(statuses => {
+        if (statuses.includes('invalid')) return 'invalid'
+        if (statuses.every(status => status === 'valid')) return 'completed'
+        if (statuses.every(status => status === 'unfilled')) return 'empty'
+        return 'partial'
+    }),
+)
+watch(() => answerStatuses.value[currentIndex.value], () => {
+    if (stepStatuses.value[currentIndex.value] === 'empty') return
+    stepStatuses.trigger()
+})
 
 watch(currentIndex, currentIndex => {
     if (currentIndex > steps.length) {
@@ -39,6 +54,8 @@ watch(currentIndex, currentIndex => {
                             <title>{{ t('step_'+stepStatuses[index]) }}</title>
                             <path v-if="stepStatuses[index] === 'completed'" fill="currentColor" fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
                             <circle v-else cx="12" cy="12" r="10" fill="none" stroke-width="1.5" stroke="currentColor" />
+                            <line v-if="stepStatuses[index] === 'partial'" stroke-linecap="round" x1="9" y1="12" x2="15" y2="12" stroke-width="1.5" class="dash" />
+                            <path v-if="stepStatuses[index] === 'invalid'" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.25m0 3.5h.008v.008H12v-.008Z" stroke-width="2" class="exclamation" />
                         </svg>
                         <button class="nav-link" @click="currentIndex = index">{{ t('step_'+index) }}</button>
                     </span>
