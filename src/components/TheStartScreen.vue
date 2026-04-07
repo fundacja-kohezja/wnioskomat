@@ -1,8 +1,10 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
+import { useModal } from 'vue-final-modal'
 
 import useFormStore from '../stores/form'
+import StartOverModal from './StartOverModal.vue'
 
 const emit = defineEmits(['goToForm'])
 
@@ -12,10 +14,21 @@ const formStore = useFormStore()
 const { clearAnswers } = formStore
 const { anyAnswers } = storeToRefs(formStore)
 
+const { open, close } = useModal({
+    component: StartOverModal,
+    attrs: {
+        onClose() {
+            close()
+        },
+        onConfirm() {
+            clearAnswers()
+            emit('goToForm')
+        },
+    },
+})
+
 const startOver = () => {
-    if(!confirm(t('start_over_confirm'))) return
-    clearAnswers()
-    emit('goToForm')
+    open()
 }
 
 </script>

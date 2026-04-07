@@ -44,13 +44,25 @@ export default defineStore('form', () => {
         statuses => statuses.some(status => status !== 'unfilled')
     ))
 
+    const exportAnswers = () => {
+        const link = document.createElement('a')
+        const file = new Blob([JSON.stringify(answers.value)], {
+            type: "application/json",
+        })
+        link.href = URL.createObjectURL(file)
+        link.download = 'Postęp wypełniania wniosku.json'
+        link.click()
+        link.href = URL.revokeObjectURL(file)
+    }
+
     return {
         answers, // state
         answerStatuses, anyAnswers, // getters
-        clearAnswers, // actions
+        clearAnswers, exportAnswers, // actions
     }
 }, {
     persist: {
+        // TODO data needs to be validated upon hydration as user can put anything in localStorage
         onPersistError: () => {
             // TODO this doesn't work for now, but it should when new version of PiniaPluginPersistedstate releases
         },

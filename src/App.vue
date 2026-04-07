@@ -2,6 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { ModalsContainer } from 'vue-final-modal'
 
 import usePrefsStore from './stores/prefs'
 import useFormStore from './stores/form'
@@ -48,5 +49,6 @@ const navigate = function (screen) {
             <TheEnd v-else-if="currentScreen === 'end'" @go-to-form="navigate('form')" />
             <TheStartScreen v-else @go-to-form="navigate('form')" />
         </main>
+        <ModalsContainer />
     </template>
 </template>

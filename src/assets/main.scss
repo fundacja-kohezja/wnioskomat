@@ -66,6 +66,18 @@ $amber-700: #b45309;
 $amber-800: #78350f;
 $amber-900: #451a03;
 
+$red-50: #fef2f2;
+$red-100: #fee2e2;
+$red-200: #fecaca;
+$red-300: #fca5a5;
+$red-400: #f87171;
+$red-500: #ef4444;
+$red-600: #dc2626;
+$red-700: #b91c1c;
+$red-800: #991b1b;
+$red-900: #7f1d1d;
+$red-950: #450a0a;
+
 :root {
     color-scheme: light dark;
     height: 100%;
@@ -126,6 +138,12 @@ fieldset {
     border: none;
 }
 
+hr {
+    align-self: stretch;
+    border: none;
+    border-top: 1px solid light-dark($gray-200, $gray-800);
+}
+
 .padding-x {
     padding-inline: 2rem;
 }
@@ -165,6 +183,53 @@ fieldset {
     display: flex;
     align-items: center;
     gap: 0.25em;
+}
+
+.vfm--fixed{position:fixed}
+.vfm--absolute{position:absolute}
+.vfm--inset{top:0;right:0;bottom:0;left:0}
+.vfm--overlay{
+    z-index:-1;
+    background-color:light-dark(rgba($gray-400, 0.67), rgba($gray-700, 0.67))
+}
+.vfm--prevent-none{pointer-events:none}
+.vfm--prevent-auto{pointer-events:auto}
+.vfm--outline-none:focus{outline:none}
+.vfm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.vfm__content {
+    background-color: light-dark($white, $gray-900);
+    padding: 1em;
+    max-width: 36em;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1.5em 0.25em rgba(#000, 0.25);
+}
+
+.confirm-modal .vfm__content {
+    gap: 1.5em;
+    padding: 2em;
+
+    &, .container {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-self: stretch;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 1em;
+    }
 }
 
 .buttons-group label,
@@ -281,6 +346,7 @@ fieldset {
     .btn-primary {
         padding: 0.75em 1.5em;
         font-size: 1.25em;
+        border-radius: 6px;
     }
 
     .btn-secondary {
@@ -290,17 +356,22 @@ fieldset {
 
 .btn-primary,
 .btn-secondary,
+.btn-destructive,
 .btn-link {
     font-weight: 700;
     font-size: inherit;
+}
+
+.btn-primary,
+.btn-destructive {
+    padding: 0.5em 1em;
+    border-radius: 4px;
 }
 
 .btn-primary {
     background-color: light-dark($teal-700, $emerald-700);
     color: $white;
     border: none;
-    padding: 0.5em 1em;
-    border-radius: 6px;
 
     &:hover {
         background-color: light-dark($teal-650, $emerald-650);
@@ -311,12 +382,32 @@ fieldset {
     }
 }
 
+.btn-destructive {
+    background-color: light-dark($red-50, $red-950);
+    color: light-dark($red-800, $red-300);
+    border: 1px solid light-dark($red-200, $red-900);
+
+    svg {
+        margin-top: -2px;
+    }
+
+    &:hover {
+        background-color: light-dark(rgba($red-50, 0.5), #530E0E);
+        color: light-dark($red-700, $red-300);
+    }
+
+    &:active {
+        background-color: light-dark($red-100, rgba($red-950, 0.5));
+        color: light-dark($red-900, $red-300);
+    }
+}
+
 .btn-secondary {
     background-color: transparent;
     border: 2px solid light-dark($teal-700, $emerald-700);
     color: light-dark($teal-800, $gray-200);
     padding: 0.25em 1em;
-    border-radius: 6px;
+    border-radius: 4px;
 
     &:hover {
         border-color: light-dark($teal-650, $emerald-650);
@@ -526,6 +617,7 @@ a {
 
     .next {
         padding: 0.6em 0.75em 0.6em 1em;
+        border-radius: 5px;
     }
 
     .side-pane & {

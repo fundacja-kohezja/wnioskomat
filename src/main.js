@@ -4,10 +4,15 @@ import { createI18n } from 'vue-i18n'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import App from './App.vue'
+import { createVfm } from 'vue-final-modal'
 
-const app = createApp(App)
-
-app.use(createI18n({ legacy: false, locale: localStorage?.lang || 'pl' }))
-app.use(createPinia().use(piniaPluginPersistedstate))
-
-app.mount('#app')
+createApp(App)
+    .use(createI18n({
+        legacy: false,
+        locale: localStorage?.lang || 'pl',
+    }))
+    .use(createPinia()
+        .use(piniaPluginPersistedstate)
+    )
+    .use(createVfm())
+    .mount('#app')
