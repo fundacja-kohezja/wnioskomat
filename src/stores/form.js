@@ -44,13 +44,13 @@ export default defineStore('form', () => {
         statuses => statuses.some(status => status !== 'unfilled')
     ))
 
-    const exportAnswers = () => {
+    const exportAnswers = (filename) => {
         const link = document.createElement('a')
         const file = new Blob([JSON.stringify(answers.value)], {
             type: "application/json",
         })
         link.href = URL.createObjectURL(file)
-        link.download = 'Postęp wypełniania wniosku.json'
+        link.download = filename + '.json'
         link.click()
         link.href = URL.revokeObjectURL(file)
     }

@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useModal } from 'vue-final-modal'
 
 import useFormStore from '../stores/form'
-import StartOverModal from './StartOverModal.vue'
+import StartOverModal from './modals/StartOverModal.vue'
 
 const emit = defineEmits(['goToForm'])
 
@@ -48,7 +48,7 @@ const startOver = () => {
                     <path d="M13.5 4.5 21 12 13.5 19.5M21 12H3" />
                 </svg>
             </button>
-             <button v-if="anyAnswers" class="btn-secondary" @click="startOver">
+            <button v-if="anyAnswers" class="btn-secondary" @click="startOver">
                 {{ t('start_over') }}
             </button>
         </div>

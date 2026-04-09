@@ -3,12 +3,12 @@ $gray-50: #fafafa;
 $gray-100: #f5f5f5;
 $gray-200: #e5e5e5;
 $gray-300: #d4d4d4;
-$gray-350: #bbb; // only for checked disabled inputs
+$gray-350: #bbb; // for checked disabled inputs
 $gray-400: #a3a3a3;
 $gray-500: #737373;
 $gray-600: #525252;
 $gray-700: #404040;
-$gray-750: #333; // only for button hover
+$gray-750: #333; // for button hover
 $gray-800: #262626;
 $gray-900: #171717;
 $gray-950: #111;
@@ -19,7 +19,7 @@ $teal-300: #5eead4;
 $teal-400: #2dd4bf;
 $teal-500: #14b8a6;
 $teal-600: #0d9488;
-$teal-650: #0e857b; // only for button hover
+$teal-650: #0e857b; // for button hover
 $teal-700: #0f766e;
 $teal-800: #115e59;
 $teal-900: #134e4a;
@@ -30,14 +30,14 @@ $emerald-300: #6ee7b7;
 $emerald-400: #34d399;
 $emerald-500: #10b981;
 $emerald-600: #059669;
-$emerald-650: #048760; // only for button hover
+$emerald-650: #048760; // for button hover
 $emerald-700: #047857;
 $emerald-800: #065f46;
 $emerald-900: #064e3b;
 
 $sky-100: #e0f2fe;
 $sky-200: #bae6fd;
-$sky-250: #9cddfd; // only for link hover
+$sky-250: #9cddfd; // for link hover
 $sky-300: #7dd3fc;
 $sky-400: #38bdf8;
 $sky-500: #0ea5e9;
@@ -155,15 +155,28 @@ hr {
     display: flex;
     gap: 1.5em;
 
+    label span,
+    .btn {
+        font-size: 12px;
+        padding-block: .25em;
+        font-weight: 700;
+    }
+
     .secondary-section {
         display: flex;
         margin-left: auto;
+        gap: 0.75em;
+    }
+
+    hr {
+        border-top: none;
+        border-left: 1px solid light-dark($gray-200, $gray-800);
+        margin-inline: 0.5em;
     }
 
     legend,
     .indicator {
         color: light-dark($gray-700, $gray-300);
-        animation: fadeIn 0.5s;
     }
 
     legend {
@@ -176,6 +189,22 @@ hr {
             margin-top: -0.15em;
         }
     }
+}
+
+.compound-button {
+    display: flex;
+    gap: 0.75em;
+    position: relative;
+
+    button::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s;
 }
 
 .indicator {
@@ -203,12 +232,16 @@ hr {
 .vfm__content {
     background-color: light-dark($white, $gray-900);
     padding: 1em;
-    max-width: 36em;
+    width: 42em;
+    max-width: calc(100vw - 2em);
     border-radius: 6px;
     box-shadow: 0 0.5em 1.5em 0.25em rgba(#000, 0.25);
+    max-height: calc(100vh - 2em);
+    box-sizing: border-box;
+    overflow: auto;
 }
 
-.confirm-modal .vfm__content {
+.base-modal .vfm__content {
     gap: 1.5em;
     padding: 2em;
 
@@ -230,15 +263,25 @@ hr {
         align-items: start;
         gap: 1em;
     }
+
+    .btn-primary svg {
+        margin-block: 1px;
+    }
+
+    .message {
+        text-align: center;
+        width: 100%;
+    }
 }
 
 .buttons-group label,
-.button {
+.btn {
     background-color: light-dark($gray-100, $gray-800);
     color: light-dark($teal-800, $emerald-300);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.25em;
 
     &:hover {
         background-color: light-dark($gray-50, $gray-750);
@@ -251,11 +294,10 @@ hr {
     }
 }
 
-.button {
+.btn {
     border: 1px solid light-dark($gray-300, $gray-700);
     border-radius: 4px;
     font-size: inherit;
-    margin-block: -0.25em;
 }
 
 .buttons-group {
@@ -303,10 +345,54 @@ hr {
         svg {
             position: relative;
             z-index: 1;
-            font-size: 12px;
-            padding-block: .25em;
-            font-weight: 700;
         }
+    }
+}
+
+.file-input {
+    border: 2px dashed light-dark($gray-300, $gray-700);
+    border-radius: 4px;
+    width: 100%;
+    height: 12em;
+    padding: 1em;
+    box-sizing: border-box;
+
+    &::file-selector-button {
+        margin: auto;
+    }
+
+    &-container {
+        position: relative;
+    }
+
+    &:hover {
+        border: 2px dashed light-dark($gray-350, $gray-600);
+    }
+
+    &-help-text {
+        position: absolute;
+        inset: 0.5em;
+        padding: 0.5em;
+        background-color: light-dark($white, $gray-900);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        pointer-events: none;
+
+        .part {
+            color: light-dark($teal-700, $emerald-400);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+    }
+
+    &:hover + &-help-text .part {
+        color: light-dark($teal-650, $emerald-300);
+    }
+
+    &:active + &-help-text .part {
+        color: light-dark($teal-800, $emerald-500);
     }
 }
 
@@ -354,6 +440,7 @@ hr {
     }
 }
 
+.btn,
 .btn-primary,
 .btn-secondary,
 .btn-destructive,
@@ -362,10 +449,14 @@ hr {
     font-size: inherit;
 }
 
+.base-modal .btn,
 .btn-primary,
 .btn-destructive {
     padding: 0.5em 1em;
     border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
 }
 
 .btn-primary {
@@ -388,7 +479,9 @@ hr {
     border: 1px solid light-dark($red-200, $red-900);
 
     svg {
-        margin-top: -2px;
+        margin-top: -1px;
+        margin-bottom: 1px;
+        margin-left: -2px;
     }
 
     &:hover {
@@ -508,6 +601,48 @@ a {
     }
 }
 
+.modal-contents {
+    line-height: 1.4;
+    font-size: 0.9em;
+
+    > p:first-child,
+    > p:first-child + p:nth-child(2) {
+        font-size: 1rem;
+    }
+
+    > * + * {
+        margin-top: 0.5em;
+    }
+
+    h3 {
+        margin-top: 1.5em;
+    }
+
+    ul > li + li {
+        margin-top: 0.5em;
+    }
+
+    svg {
+        vertical-align: bottom;
+    }
+
+    > button {
+        margin-top: 1em;
+    }
+}
+
+.success-message {
+    text-align: center;
+    margin-bottom: 2em;
+    font-weight: 700;
+
+    svg {
+        height: 6em;
+        width: 6em;
+        color: light-dark($gray-500, $gray-400);
+    }
+}
+
 .cols-layout {
     display: flex;
     margin-bottom: auto;
@@ -526,6 +661,7 @@ a {
     .nav-link {
         text-decoration-thickness: 1.5px;
         text-decoration-color: light-dark($gray-300, $gray-750);
+        color: inherit;
 
         &:hover {
             text-decoration-color: light-dark($teal-600, $emerald-500);

@@ -16,7 +16,7 @@ const { selectedLang } = storeToRefs(prefsStore)
         </svg>
         <p class="flex-wrap">
             There was an error fetching {{ selectedLang }} translation file
-            <button @click="importLocale(selectedLang)" class="button">Try again</button>
+            <button @click="importLocale(selectedLang)" class="btn" style="margin-block: -0.25em">Try again</button>
         </p>
     </div>
 </template>
