@@ -1,0 +1,85 @@
+<template>
+    <p>
+        Zacznij od zapoznania się poradnikiem:
+        <a href="https://tranzycja.pl/krok-po-kroku/zmiana-danych-sad/" target="_blank">
+            Jak zmienić oznaczenie płci w dokumentach? Poradnik do sądu
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                <path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" />
+                <path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" />
+            </svg>
+        </a>
+    </p>
+
+    <h3>
+        Pytania i kwestie merytoryczne
+    </h3>
+    <p>
+        Jeśli masz pytanie dotyczące wniosku lub procedury, na które nie ma odpowiedzi w powyższym poradniku
+        lub znalazł_ś błąd merytoryczny, napisz tutaj:
+    </p>
+    <p>
+        <a href="mailto:kontakt@tranzycja.pl">kontakt@tranzycja.pl</a>
+    </p>
+    <p>
+        <a href="https://www.facebook.com/tranzycjapl/" target="_blank">
+            facebook.com/tranzycjapl
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                <path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" />
+                <path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" />
+            </svg>
+        </a>
+    </p>
+
+    <h3>
+        Pomoc prawna
+    </h3>
+    <p>
+        Jeśli występują u Ciebie trudności, z którymi nie możesz sobie poradzić samodzielnie, zgłoś się
+        po profesjonalne wsparcie prawne. Zalecamy zwrócenie się do którejś z poniższych organizacji
+        specjalizujących się w sprawach osób transpłciowych:
+    </p>
+    <ul>
+        <li>
+            <a href="https://www.lambdawarszawa.org/wsparcie#04_wsparcie_poradnictwoprawne" target="_blank">
+                Lambda Warszawa
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                    <path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" />
+                    <path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" />
+                </svg></a>, adres mailowy prawo@lambdawarszawa.org
+        </li>
+        <li>
+            <a href="https://znakirownosci.org.pl/kontakt/" target="_blank">
+                Federacja Znaki Równości
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                    <path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" />
+                    <path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" />
+                </svg></a>, adres mailowy pomoc.prawna@znakirownosci.org.pl (możliwa reprezentacja prawna w sprawie, ale trzeba odczekać w kolejce)
+        </li>
+        <li>
+            <a href="https://mnw.org.pl/prawo/" target="_blank">
+                Miłość Nie Wyklucza
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                    <path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" />
+                    <path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" />
+                </svg></a>, zgłoszenia przez stronę (możliwa reprezentacja prawna w sprawie, ale trzeba poczekać na otwarcie tury)
+        </li>
+        <li>
+            <a href="https://www.transfuzja.org/pomoc" target="_blank">
+                Fundacja Trans-Fuzja
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                    <path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" />
+                    <path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" />
+                </svg></a>, adres mailowy prawnik@transfuzja.org
+        </li>
+    </ul>
+
+    <h3>
+        Problemy techniczne
+    </h3>
+    <p>
+        Jeśli coś nie działa jak powinno we Wnioskomacie lub trafił Ci się błąd techniczny, możesz to zgłosić wysłając maila z opisem problemu na adres:
+    </p>
+    <p>
+        <a href="mailto:kontakt@kohezja.org">kontakt@kohezja.org</a>
+    </p>
+</template>
