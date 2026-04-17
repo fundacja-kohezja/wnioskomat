@@ -83,14 +83,12 @@
     "q_0_2_0": "What surname would you like?",
     "q_0_3": "Exemption from court fees",
     "q_0_3_desc": "Submitting the application requires a 100 PLN court fee. You may apply for exemption, but it will extend the procedure and require additional forms. Costs that may arise during proceedings (e.g. expert opinions) can be addressed later.",
-
     "q_1_0": "Short birth certificate extract",
     "q_1_0_desc": "You can obtain it from any civil registry office or via the ePUAP platform.",
     "q_1_1": "Proof of court fee payment (100 PLN)",
     "q_1_1_desc": "The fee can be paid via bank transfer, at the court cashier, or by purchasing a court fee stamp:",
     "q_1_1_desc_link": "https://oplaty.ms.gov.pl/znaki-oplaty-sadowej/zakup",
     "q_1_1_desc_link_text": "Ministry website",
-
     "q_1_2": "At least one psychological opinion",
     "q_1_2_desc": "Select opinions you have and diagnoses included",
     "q_1_2_0": "Psychologist",
@@ -99,7 +97,6 @@
     "q_1_2_1": "Psychologist-sexologist",
     "q_1_2_1_0": "F64.0 (ICD-10)",
     "q_1_2_1_1": "HA60 (ICD-11)",
-
     "q_1_3": "At least one medical certificate",
     "q_1_3_desc": "Select certificates you have and diagnoses included",
     "q_1_3_0": "Psychiatrist",
@@ -108,25 +105,20 @@
     "q_1_3_1": "Sexologist",
     "q_1_3_1_0": "F64.0 (ICD-10)",
     "q_1_3_1_1": "HA60 (ICD-11)",
-
     "q_1_4": "Medical certificate confirming hormone therapy",
     "q_1_5": "Polish Sexological Society recommendations",
     "q_1_5_desc": "Many judges lack sufficient knowledge about transgender issues, so it is helpful to guide them with an appropriate document. Download here:",
     "q_1_5_desc_link": "https://pts-seksuologia.pl/sites/strona/118/zalecenia-pts-dotyczace-opieki-nad-zdrowiem-doroslych-osob-transplciowych--stanowisko-panelu-ekspertow.",
     "q_1_5_desc_link_text": "PTS recommendations",
-
     "q_1_6": "Publication “Proceedings in gender recognition cases. A guide” by the Ombudsman",
     "q_1_6_desc": "A large document, but worth attaching. You can reduce printing costs by fitting 4 pages per sheet (double-sided). Make sure it's the latest edition (2024).",
-
     "q_1_7": "Decision on name change",
     "q_1_7_desc": "If you have already changed your name, include the decision as evidence. Alternatively, attach a full birth certificate showing the change.",
-
     "q_1_8": "Documents proving functioning in society as your gender",
     "q_1_8_desc": "Evidence of consistent identification – e.g. social media screenshots, workplace ID, university system printouts.",
     "q_1_8_0_A": "social media printout",
     "q_1_8_0_B": "work ID",
     "q_1_8_0_C": "USOS printout",
-
     "q_2_0": "Your PESEL number",
     "q_2_0_invalid_0": "PESEL number must be 11 digits long",
     "q_2_0_invalid_1": "PESEL number must contain only digits",
@@ -137,18 +129,15 @@
     "q_2_2_desc": "If you cannot receive correspondence yourself, you can appoint someone to do it for you.",
     "q_2_2_0": "Proxy full name",
     "q_2_2_1": "Proxy address",
-
     "q_2_3_heading": "Court selection",
     "q_2_3_subheading": "Choose the district court for your place of residence. If unsure, contact the court’s information office.",
     "q_2_3": "Search by town/district",
-
     "q_2_4_heading": "Contact details",
     "q_2_4": "I want to provide contact details",
     "q_2_4_desc": "Not required, but may facilitate communication",
     "q_2_4_0": "Email address",
     "q_2_4_0_invalid_0": "This is not a valid e-mail address",
     "q_2_4_1": "Phone number",
-
     "q_2_5_heading": "Birth certificate data",
     "q_2_5": "First name(s)",
     "q_2_6": "Surname",
@@ -158,7 +147,6 @@
     "q_2_8": "Record number",
     "q_2_8_desc": "Location depends on document type (full vs short extract).",
     "q_2_9": "Issuing authority",
-
     "q_3_0": "Briefly describe the beginning of your transgender experience",
     "q_3_0_desc": "Example: Around the age of […] I began to feel a discrepancy between my assigned gender and my gender identity, which led to dysphoria and lowered mood.",
     "q_3_1": "Since when have you been undergoing hormone therapy?",

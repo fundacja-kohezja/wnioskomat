@@ -1,27 +1,45 @@
 <script setup>
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 
-import SummaryItem from './SummaryItem.vue'
+import SummaryField from './SummaryField.vue'
 import useFormStore from '../stores/form'
-import steps from '../steps'
+import generateSummary from '../summary'
 
 const { t } = useI18n()
 
 const { answers } = storeToRefs(useFormStore())
 
+const summary = computed(() => generateSummary(answers.value, t))
+
 </script>
 
 <template>
-    <template v-for="(step, i) of steps">
-        <h3 v-if="step.hasSummaryHeading !== false">{{ t('step_'+i+'_summary') }}</h3>
-        <ul v-if="step.listInSummary">
-            <li v-for="(q, j) of step.questions">
-                <SummaryItem :label="t('q_'+i+'_'+j)" :question="q" :answer="answers[i]['a_'+j]" />
-            </li>
-        </ul>
-        <template v-else>
-            <div v-for="(q, j) of step.questions">{{ t('q_'+i+'_'+j) }} <b>{{ answers[i]['a_'+j] }}</b></div>
+    <template v-for="({ type, content, items, crossedItems, crossedItemsLabel, rows }) of summary">
+        <h3 v-if="type === 'h'" class="summary-heading">{{ content }}</h3>
+        <div v-else-if="type === 'list'" :class="{ 'summary-lists': crossedItems && crossedItems.length }">
+            <ul class="summary-list">
+                <li v-for="item of items">
+                    <SummaryField :content="item" />
+                </li>
+            </ul>
+            <ul v-if="crossedItems && crossedItems.length" :aria-label="crossedItemsLabel" class="summary-crossed-list">
+                <li v-for="item of crossedItems">
+                    <SummaryField :content="item" />
+                </li>
+            </ul>
+        </div>
+        <dl v-else-if="type === 'table'" class="summary-table">
+            <template v-for="(val, label) in rows">
+                <dt>{{ label }}</dt>
+                <dd><SummaryField :content="val" /></dd>
+            </template>
+        </dl>
+        <template v-else-if="type === 'paragraphs'">
+            <p v-for="item of items" class="summary-paragraph">
+                <SummaryField :content="item" />
+            </p>
         </template>
     </template>
 </template>

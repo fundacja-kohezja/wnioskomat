@@ -45,6 +45,7 @@ export default [
                 hasLinkInDescription: true,
                 initialValue: true,
                 isDisabled: true,
+                showIf: answers => !answers[0].a_3,
             },
             { // opinia psychologiczna
                 type: 'checkbox',

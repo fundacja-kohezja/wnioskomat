@@ -1001,6 +1001,49 @@ a {
     flex-shrink: 0;
 }
 
+.summary {
+
+    &-heading {
+        margin-top: 0.5em;
+    }
+
+    &-lists {
+        display: flex;
+        gap: 2em;
+    }
+
+    &-list,
+    &-crossed-list {
+        padding-left: 1.5em;
+
+        li + li {
+            margin-top: 1em;
+        }
+    }
+
+    &-crossed-list {
+        list-style-type: '✕ ';
+        opacity: 0.75;
+        text-decoration: line-through;
+        text-decoration-color: light-dark(rgba($gray-950, 0.75), rgba($gray-100, 0.75));
+    }
+
+    &-table {
+        display: grid;
+        grid-template-columns: minmax(auto, 10em) 1fr;
+        gap: 1em;
+        white-space: pre-wrap;
+
+        dd {
+            font-weight: bold;
+
+            span {
+                font-weight: normal;
+            }
+        }
+    }
+}
+
 .generated-doc {
     background-color: light-dark($white, $gray-900);
     padding: 1em;
