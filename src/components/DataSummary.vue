@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 
 import SummaryField from './SummaryField.vue'
 import useFormStore from '../stores/form'
-import generateSummary from '../summary'
+import generateSummary from '../helpers/generateSummary'
 
 const { t } = useI18n()
 
