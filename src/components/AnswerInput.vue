@@ -102,7 +102,7 @@ const validationError = computed(() => {
             class="text-input"
         >
             <span>{{ t(labelId) }}</span>
-            <textarea v-model.lazy="value" rows="4"></textarea>
+            <textarea v-model.lazy="value" rows="4" :lang="question.alwaysPl ? 'pl' : undefined"></textarea>
         </label>
         <fieldset v-else-if="question.type === 'month'">
             <legend v-if="question.hasLabel !== false">{{ t(labelId) }}</legend>

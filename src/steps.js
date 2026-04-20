@@ -208,7 +208,7 @@ export default [
     { // experience description
         hasSummaryHeading: false,
         questions: [
-            { type: 'textarea', hasDescription: true }, // opis doświadczeń
+            { type: 'textarea', hasDescription: true, alwaysPl: true }, // opis doświadczeń
             { // od kiedy w hormonoterapii
                 type: 'month',
                 filled: (([month, year] = []) => month && year),
