@@ -68,7 +68,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     }
 
     // TODO do it differently
-    const city = normalize(step_2.a_1).split('\n').at(-1).split(' ').slice(1).join(' ')
+    const city = normalize(step_2.a_1).split('\n').at(-1).split(' ').slice(1).join(' ') || '......................'
     doc.text(city + ', ' + (new Date).toLocaleDateString('pl-PL', { dateStyle: 'long' }), w - margin, y, { align: 'right' })
     y += 10
 
@@ -77,7 +77,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
         p('Wydział Cywilny', 100)
         p(courts[step_2.a_3].address, 100)
     } else {
-        p('Sąd Rejonowy w …', 100)
+        p('Sąd Rejonowy w ......................', 100)
         p('Wydział Cywilny', 100)
         p('......................', 100)
     }
@@ -109,7 +109,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     // TODO remember tab characters are problematic
     p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego wnoszę o:')
-    li('1.', 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[step_0.a_0] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ normalize(step_2.a_9) +' za nr '+ normalize(step_2.a_8) +', w ten sposób, żeby:')
+    li('1.', 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[step_0.a_0] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ (normalize(step_2.a_9) || '......................') +' za nr '+ (normalize(step_2.a_8) || '......................') +', w ten sposób, żeby:')
     li('a.', {
         K:'błędnie wpisana w akcie płeć oznaczona jako męska (mężczyzna) została zmieniona na prawidłową – żeńską (kobieta);',
         M:'błędnie wpisana w akcie płeć oznaczona jako żeńska (kobieta) została zmieniona na prawidłową – męską (mężczyzna);',
