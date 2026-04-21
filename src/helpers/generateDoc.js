@@ -21,6 +21,11 @@ export default ([step_0, step_1, step_2, step_3]) => {
         content()
         doc.setFont('TeXGyreTermes', 'normal', 'normal')
     }
+    const italic = (content) => {
+        doc.setFont('TeXGyreTermes', 'italic')
+        content()
+        doc.setFont('TeXGyreTermes', 'normal')
+    }
     let lineHeightFactor = 1.15
     const lineHeight = (lh) => {
         doc.setLineHeightFactor(lh)
@@ -32,39 +37,83 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     let y = margin
 
-    const p = (text, shift = 0, spaceAfter = 1.5, options) => {
+    const newPage = () => {
+        doc.addPage()
+        y = margin
+    }
+
+    const space = (height) => {
+        if (y !== margin) { // don't add space on top, if it's the first text on top of the page
+            y += height
+        }
+    }
+
+    const italicizeLines = (lines, italicSep, shift = 0) => {
+        let isItalic = false
+        let curY = y
+        lines.forEach(line => {
+            let x = 0
+            line.split(italicSep).forEach((part, i) => {
+                if (i > 0) {
+                    isItalic = !isItalic
+                    if (isItalic) {
+                        doc.setFont('TeXGyreTermes', 'italic')
+                    } else {
+                        doc.setFont('TeXGyreTermes', 'normal')
+                    }
+                }
+                doc.text(part, margin + shift + x, curY)
+                x += doc.getStringUnitWidth(part) * 11/(72/25.4)
+            })
+            curY += 11*lineHeightFactor/(72/25.4)
+        })
+        doc.setFont('TeXGyreTermes', 'normal')
+    }
+
+    const p = (text, shift = 0, spaceAfter = 1.5, options = {}) => {
         const lines = doc.splitTextToSize(text, maxWidth - shift)
-        doc.text(lines, options?.align === 'center' ? (w/2) : (margin + shift), y, options)
+        let linesLeft = (297 - y - margin)/(11*lineHeightFactor/(72/25.4))
+
+        if (linesLeft < lines.length) {
+            // if paragraph is long enough, allow spreading it across pages
+            if (lines.length > 3 && linesLeft > 2) {
+                if (lines.length - linesLeft === 1) { // prevent widows
+                    linesLeft--
+                }
+                if (options.italicSep) {
+                    italicizeLines(lines.slice(0, linesLeft), options.italicSep)
+                } else {
+                    doc.text(lines.slice(0, linesLeft), options?.align === 'center' ? (w/2) : (margin + shift), y, options)
+                }
+                newPage()
+                lines.splice(0, linesLeft)
+            } else {
+                newPage()
+            }
+        }
+
+        if (options.italicSep) {
+            italicizeLines(lines, options.italicSep)
+        } else {
+            doc.text(lines, options?.align === 'center' ? (w/2) : (margin + shift), y, options)
+        }
         y += 11*lineHeightFactor/(72/25.4)*lines.length
         y += spaceAfter
     }
 
     const li = (nb, text, level = 1, italicSep) => {
         const lines = doc.splitTextToSize(text, maxWidth - 10)
+        const height = 11*lineHeightFactor/(72/25.4)*lines.length
+        if (y + height > 297 - margin) {
+            newPage()
+        }
         doc.text(nb, margin + 8*level - 6, y)
         if (italicSep) {
-            let isItalic = false
-            lines.forEach(line => {
-                let x = 0
-                line.split(italicSep).forEach((part, i) => {
-                    if (i > 0) {
-                        isItalic = !isItalic
-                        if (isItalic) {
-                            doc.setFont('TeXGyreTermes', 'italic')
-                        } else {
-                            doc.setFont('TeXGyreTermes', 'normal')
-                        }
-                    }
-                    doc.text(part, margin + 8*level + x, y)
-                    x += doc.getStringUnitWidth(part) * 11/(72/25.4)
-                })
-                y += 11*lineHeightFactor/(72/25.4)
-            })
-            doc.setFont('TeXGyreTermes', 'normal')
+            italicizeLines(lines, italicSep, 8*level)
         } else {
             doc.text(lines, margin + 8*level, y)
-            y += 11*lineHeightFactor/(72/25.4)*lines.length
         }
+        y += height
     }
 
     // TODO do it differently
@@ -96,6 +145,8 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     y += 12
 
+    // TODO proxy person
+
     lineHeight(1.5)
 
     bold(() => {
@@ -115,9 +166,8 @@ export default ([step_0, step_1, step_2, step_3]) => {
         M:'błędnie wpisana w akcie płeć oznaczona jako żeńska (kobieta) została zmieniona na prawidłową – męską (mężczyzna);',
     }[step_0.a_0] || '......................', 2)
     let next = 'b.'
+    const name = normalize(step_2.a_5) || '......................'
     if (step_0.a_1) {
-        // TODO different text when there are more names
-        const name = normalize(step_2.a_5) || '......................'
         const newName = normalize(step_0.a_1_0) || '......................'
         li(next, (name.includes(' ') ? ('imiona '+name+' zostały') : ('imię '+name+' zostało')) + ' zmienione na '+(newName.includes(' ')?'imiona ':'imię ')+newName+';', 2)
         next = 'c.'
@@ -170,13 +220,54 @@ export default ([step_0, step_1, step_2, step_3]) => {
         li(next, 'dokumentu zatytułowanego |Zalecenia Polskiego Towarzystwa Seksuologicznego dotyczące opieki nad zdrowiem dorosłych osób transpłciowych – stanowisko panelu ekspertów| – na fakt aktualnych polskich standardów opieki nad osobami transpłciowymi, wymogów diagnostycznych niezbędnych do postawienia diagnozy F64.0, spełniania przeze mnie kryteriów diagnostycznych;', 2, '|')
         increment()
     }
-    if (step_1.a_7) {
+    if (!step_0.a_1 && step_1.a_7) {
         li(next, 'decyzji o zmianie imienia – na fakt zmiany imienia w związku z trwałym poczuciem przynależności do płci '+({ K: 'żeńskiej;', M: 'męskiej;' }[step_0.a_0] || '.......;'), 2)
         increment()
     }
     if (step_1.a_8) {
         li(next, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS' }[step_1.a_8_0] || '......................')+' – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[step_0.a_0] || '.......')+' w otoczeniu;', 2)
     }
+
+    if (step_0.a_3) {
+        space(3)
+        li('5.', 'wnoszę o zwolnienie mnie od obowiązku ponoszenia kosztów procesu w całości, ponieważ nie jestem w stanie ich ponieść bez uszczerbku utrzymania koniecznego dla siebie i rodziny.')
+    }
+
+    if (step_1.a_5) {
+        space(8)
+        p('Jednocześnie przedkładam jako załącznik wydaną przez Rzecznika Praw Obywatelskich publikację |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, zawierającą szereg specjalistycznych informacji dotyczących praw osób transpłciowych oraz aktualnych standardów orzeczniczych w sprawach o ustalenie płci.', undefined, undefined, { italicSep: '|' })
+    }
+
+    space(8)
+    let text = 'Na wstępie wyjaśniam, że zdaję sobie sprawę z metrykalnego oznaczenia mojej płci jako '+({ K: 'męskiej', M: 'żeńskiej' }[step_0.a_0] || '.......')+', jednak wskazuję, że w codziennym życiu funkcjonuję jako '+({ K: 'kobieta', M: 'mężczyzna' }[step_0.a_0] || '.......')+'. W związku z tym, że tożsamość płciowa jest jednym z dóbr osobistych człowieka, we wniosku będę używać '+({ K: 'żeńskich', M: 'męskich' }[step_0.a_0] || '.......')+' form gramatycznych.'
+    if (step_3.a_3) {
+        text += ' Jednocześnie wskazuję, że na co dzień używam imienia '+ (normalize(step_3.a_3_0) || '....... ') +'.'
+    }
+    p(text, 0, 8)
+
+    bold(() => {
+        p('Uzasadnienie', 0, 3, { align: 'center' })
+        p('TWIERDZENIA FAKTYCZNE', 0, 3)
+    })
+
+    text = 'Kierownik Urzędu Stanu Cywilnego w '+(normalize(step_2.a_9) || '........')
+    text += ' zarejestrował moje urodzenie w dniu '+(step_2.a_7 ? (new Date(step_2.a_7)).toLocaleDateString('pl-PL', { dateStyle: 'long' }) : '........')
+    text += ' w akcie o numerze '+(normalize(step_2.a_8) || '..................... ')+'. '
+    text += 'Moja płeć została tam oznaczona jako '+({ K: 'męska', M: 'żeńska' }[step_0.a_0] || '.......')+', w oparciu o ocenę mojej budowy anatomicznej przez personel medyczny. '
+    text += 'Nadano mi '+(name.includes(' ') ? 'imiona ' : 'imię ')+name+'.'
+    p(text, 0, 3)
+
+    italic(() => {
+        p('Dowód: odpis aktu urodzenia', 0, 3)
+    })
+
+    p(normalize(step_3.a_0) || '......................', 0, 3)
+
+    p('U osób transpłciowych występuje niezgodność pomiędzy płcią przypisaną przy urodzeniu a tożsamością płciową, czyli głębokim wewnętrznym przeżywaniem własnej płci. Ta rozbieżność może prowadzić do dysforii, czyli uczucia dyskomfortu wynikającego z rozdźwięku pomiędzy różnymi aspektami naszej płci (cechami płciowymi naszego ciała, tym jak wyglądamy, tym jak odbierają nas inni). Nasilona dysforia może wiązać się z poważnymi negatywnymi skutkami dla zdrowia psychicznego osoby transpłciowej. Formalnie u osób transpłciowych diagnozuje się „transseksualizm” według nomenklatury ICD-10 (F64.0). Według najnowszej nomenklatury ICD-11, nie wszędzie jeszcze wdrożonej, formalnie diagnozuje się „niezgodność płciową” (HA60), którą zdefiniowano jako utrzymującą się wyraźną niezgodność między doświadczaną przez osobę płcią oraz płcią przypisaną. Stan „niezgodności płciowej” został wyjęty z obszaru dotyczącego zaburzeń psychicznych, a przeniesiony do obszaru dotyczącego zdrowia seksualnego. Sama transpłciowość w tym ujęciu nie jest już stanem „patologicznym”, „chorobą” czy „zaburzeniem”. Po uzgodnieniu płci w toku tranzycji medycznej i/lub społecznej, w tym prawnej, niezgodność ta zanika.', 0, 3)
+
+    text = 'W związku z głęboko przeżywanym poczuciem identyfikacji z płcią '+({ K: 'żeńską', M: 'męską' }[step_0.a_0] || '.......')+' i występującą jednocześnie dysforią, '+({ K: 'rozpoczęłam', M: 'rozpocząłem' }[step_0.a_0] || 'rozpocz_ł_m')+' formalną diagnostykę u lekarzy specjalistów, w wyniku której '+({ K: 'otrzymałam', M: 'otrzymałem' }[step_0.a_0] || 'otrzymał_m')+' diagnozę '
+
+    p(text)
 
     return doc
 }
