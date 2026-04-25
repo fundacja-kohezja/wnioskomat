@@ -5,6 +5,7 @@ import { courts } from './datasets'
 import './fonts/TeXGyreTermes-normal'
 import './fonts/TeXGyreTermes-bold'
 import './fonts/TeXGyreTermes-italic'
+import { render } from 'vue'
 // import './fonts/TeXGyreTermes-bolditalic' // Unnecessary for now
 
 const normalize = text => (text || '').trim()
@@ -56,7 +57,16 @@ export default ([step_0, step_1, step_2, step_3]) => {
         let line = 0
         let x = 0
         let isFormatted = false
-        text.split(' ').forEach(word => {
+        const startNewLine = () => {
+            lines[line].textWidth = x
+            lines[++line] = { textWidth: 0, words: [] }
+            x = 0
+        }
+        text.replaceAll('\n', ' \n').split(' ').forEach(word => {
+            if (word[0] === '\n') {
+                startNewLine()
+                word = word.slice(1)
+            }
             let wordWidth = 0
             word.split(formatSeparator).forEach((part, i) => {
                 if (i > 0) {
@@ -74,9 +84,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
                 wordWidth += doc.getStringUnitWidth(part) * unitFactor
             })
             if (x + wordWidth > w) {
-                lines[line].textWidth = x
-                lines[++line] = { textWidth: 0, words: [] }
-                x = 0
+                startNewLine()
             }
             x += wordWidth
             x += doc.getStringUnitWidth(' ') * unitFactor
@@ -86,22 +94,22 @@ export default ([step_0, step_1, step_2, step_3]) => {
         return lines
     }
 
-    const renderJustified = (lines, formatSeparator, type, w = maxWidth, doExtra = () => {}) => {
+    const renderLines = (lines, { align = 'justify', shift = 0, formatSeparator, inlineFormat, w = maxWidth, doExtra = () => {} }) => {
         let linesLeft = Math.round((297 - y - margin)/(11*lineHeightFactor/(72/25.4)))
         let extrasDone = false
         let isFormatted = false
 
         const renderLine = ({ textWidth, words }) => {
-            const extraSpace = (w - textWidth) / (words.length - 1)
-            let x = margin // TODO parametrize
+            const extraSpace = align === 'justify' ? (w - textWidth) / (words.length - 1) : 0
+            let x = margin + shift
             words.forEach(word => {
-                if (word.text.includes(formatSeparator)) {
+                if (formatSeparator && word.text.includes(formatSeparator)) {
                     let x2 = 0
                     word.text.split(formatSeparator).forEach((part, i) => {
                         if (i > 0) {
                             isFormatted = !isFormatted
                             if (isFormatted) {
-                                if (type === 'b') {
+                                if (inlineFormat === 'b') {
                                     doc.setFont('TeXGyreTermes', 'normal', 'bold')
                                 } else {
                                     doc.setFont('TeXGyreTermes', 'italic', 'normal')
@@ -137,127 +145,29 @@ export default ([step_0, step_1, step_2, step_3]) => {
         }
 
         if (!extrasDone) doExtra()
-        const lastLine = lines.pop().words.map(({ text }) => text).join(' ')
+        const lastLine = lines.pop()
         lines.forEach(renderLine)
-        inlineFormat([lastLine], formatSeparator, type) // TODO obviously do this better
-
-        y += lineHeightFactor * unitFactor
+        align = 'left' // last line should not be justified
+        renderLine(lastLine)
     }
 
-    const inlineFormat = (lines, formatSeparator, type, shift = 0, justify = true) => {
-        let isFormatted = false
-        let curY = y
-        lines.forEach((line, i) => {
-            if (i === lines.length - 1) justify = false // dont justify last line
-            let x = 0
-            if (justify) {
-                let lineWidth
-                const calculate = () => {
-                    lineWidth = doc.getStringUnitWidth(line.replaceAll(formatSeparator, '')) * 11/(72/25.4)
-                }
-                const words = line.split(' ')
-                const spaces = words.length - 1
-                words.forEach(word => {
-                    calculate()
-                    const spaceLength = Math.max(doc.getStringUnitWidth(' ') * 11/(72/25.4) * 0.6, doc.getStringUnitWidth(' ') * 11/(72/25.4) + (maxWidth - shift - lineWidth)/spaces)
-                    if (word.includes(formatSeparator)) {
-                        const parts = word.split(formatSeparator)
-                        word = parts.pop()
-                        parts.forEach(part => {
-                            doc.text(part, margin + shift + x, curY)
-                            x += doc.getStringUnitWidth(part) * 11/(72/25.4)
-                            isFormatted = !isFormatted
-                            if (isFormatted) {
-                                if (type === 'b') {
-                                    doc.setFont('TeXGyreTermes', 'normal', 'bold')
-                                } else {
-                                    doc.setFont('TeXGyreTermes', 'italic', 'normal')
-                                }
-                            } else {
-                                doc.setFont('TeXGyreTermes', 'normal', 'normal')
-                            }
-                        })
-                    }
-                    doc.text(word, margin + shift + x, curY)
-                    x += doc.getStringUnitWidth(word) * 11/(72/25.4) + spaceLength
-                })
-            } else {
-                line.split(formatSeparator).forEach((part, i) => {
-                    if (i > 0) {
-                        isFormatted = !isFormatted
-                        if (isFormatted) {
-                            if (type === 'b') {
-                                doc.setFont('TeXGyreTermes', 'normal', 'bold')
-                            } else {
-                                doc.setFont('TeXGyreTermes', 'italic', 'normal')
-                            }
-                        } else {
-                            doc.setFont('TeXGyreTermes', 'normal', 'normal')
-                        }
-                    }
-                    doc.text(part, margin + shift + x, curY)
-                    x += doc.getStringUnitWidth(part) * 11/(72/25.4)
-                })
-            }
-            curY += 11*lineHeightFactor/(72/25.4)
-        })
-        doc.setFont('TeXGyreTermes', 'normal', 'normal')
-    }
-
-    const p = (text, shift = 0, spaceAfter = 3, options = {}, doExtra) => {
-        const lines = doc.splitTextToSize(text, maxWidth - shift)
-        let linesLeft = Math.round((297 - y - margin)/(11*lineHeightFactor/(72/25.4)))
-        let extrasDone = false
-
-        if (!options.align) {
-            options.align = 'justify'
-            if (!options.maxWidth) options.maxWidth = maxWidth - shift
-        }
-        if (options.align === 'justify' && !doExtra) {
-            const args = [options.italicSep || options.boldSep, options.boldSep ? 'b' : 'i', options.maxWidth]
-            const lines = textToLines(text, ...args)
-            console.log(lines)
-            renderJustified(lines, ...args)
-            y += spaceAfter
-            return
-        }
-        if (!doExtra) {
-            doExtra = () => {}
-        }
-
-        if (linesLeft < lines.length) {
-            // if paragraph is long enough, allow spreading it across pages
-            if (lines.length > 3 && linesLeft > 2) {
-                if (lines.length - linesLeft === 1) { // prevent widows
-                    linesLeft--
-                }
-                // add empty line at the end, so the actual last line also gets justified
-                const onPrevPage = [...lines.slice(0, linesLeft), '']
-                doExtra()
-                extrasDone = true
-                if (options.italicSep) {
-                    inlineFormat(onPrevPage, options.italicSep, 'i', shift)
-                } else if (options.boldSep) {
-                    inlineFormat(onPrevPage, options.boldSep, 'b', shift)
-                } else {
-                    doc.text(onPrevPage, options.align === 'center' ? (w/2) : (margin + shift), y, options)
-                }
-                newPage()
-                lines.splice(0, linesLeft)
-            } else {
-                newPage()
-            }
-        }
-
-        if (!extrasDone) doExtra()
-        if (options.italicSep) {
-            inlineFormat(lines, options.italicSep, 'i', shift)
-        } else if (options.boldSep) {
-            inlineFormat(lines, options.boldSep, 'b', shift)
+    const p = (text, shift = 0, spaceAfter = 3, { align = 'justify', italicSep, boldSep, ...options  } = {}, doExtra) => {
+        const width = options.maxWidth || maxWidth - shift
+        if (align === 'center' || align === 'right') {
+            const lines = doc.splitTextToSize(text, width)
+            doc.text(lines, align === 'center' ? w/2 : w - margin - shift, y, { align })
+            y += lines.length * fontSize * lineHeightFactor / unitFactor
         } else {
-            doc.text(lines, options.align === 'center' ? (w/2) : (margin + shift), y, options)
+            const lines = textToLines(text, italicSep || boldSep, boldSep ? 'b' : 'i', width)
+            renderLines(lines, {
+                align,
+                shift,
+                formatSeparator: italicSep || boldSep,
+                inlineFormat: boldSep ? 'b' : 'i',
+                w: width,
+                doExtra,
+            })
         }
-        y += 11*lineHeightFactor/(72/25.4)*lines.length
         y += spaceAfter
     }
 
@@ -315,7 +225,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
         }
     })
 
-    y += 10
+    y += 12
 
     // TODO remember tab characters are problematic
     p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego wnoszę o:')
@@ -405,7 +315,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     p(text, 0, 8)
 
     bold(() => {
-        p('Uzasadnienie', 0, 3, { align: 'center' })
+        p('Uzasadnienie', 0, 6, { align: 'center' })
         p('TWIERDZENIA FAKTYCZNE')
     })
 
@@ -470,7 +380,6 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     bold(() => {
         p('STAN PRAWNY')
-        // TODO this is not bold for some reason
         li('a)', 'Dopuszczalność wniosku o sprostowanie aktu urodzenia w trybie nieprocesowym i możliwość korzystania z dotychczasowej praktyki sądów okręgowych w sprawach o ustalenie płci w zakresie postępowania dowodowego.')
     })
     space(3)
@@ -533,7 +442,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
         p('W praktyce faktycznie brak zmiany imienia i nazwiska równolegle do zmiany oznaczenia płci i numeru PESEL powoduje, że osoby transpłciowe doświadczają wielu praktycznych trudności w okresie do czasu zmiany wszystkich danych i wydania nowego dowodu osobistego. Osoba nie posiada aktualnego dokumentu tożsamości, przestają działać systemy oparte o usługi cyfrowe obywatel.gov.pl (w tym ePUAP). Występują trudności w wystawieniu recept i ich realizowaniu. Przemawia to za koniecznością uzgodnienia od razu wszystkich danych.')
         p('Imiona i nazwiska są, oprócz oznaczenia płci, istotnymi danymi odróżniającymi osobę, a podstawa ich zmiany jest taka sama, jak w przypadku zmiany oznaczenia płci – czyli niezgodność płciowa. Orzeczenie sądowe żądane w niniejszym wniosku, będące krokiem na drodze do formalnej tranzycji osoby transpłciowej, winno – w braku pozytywnych uregulowań – dążyć do uzgodnienia wszystkich danych osobowych osoby transpłciowej zgodnie z obraną płcią.')
         p('Nie jest argumentem przemawiającym za niedopuszczalnością drogi sądowej w tym zakresie okoliczność, że istnieje uregulowana procedura administracyjna dotycząca zmiany imion i nazwisk, przewidziana w ustawie o zmianie imienia i nazwiska. Orzekający w tych sprawach organ administracji w osobie kierownika urzędu stanu cywilnego należy uznać za właściwy do korygowania danych osób transpłciowych wyłącznie wówczas, gdy wniosek kieruje się w trybie administracyjnym i w oparciu o owe „ważne powody”, wymienione w art. 4 odnośnej ustawy – niezwiązane ze zmianą oznaczenia płci. Nieenumeratywny katalog owych powodów odwołuje się jednak do sytuacji odmiennych rodzajowo, niż transpłciowość i zapadnięcie orzeczenia sądowego stwierdzającego, że wnioskodawca jest kobietą/mężczyzną zamiast płci przypisanej przy urodzeniu.')
-        p('Brak zatem podstawy do uznania, że w zakresie żądania zmiany imienia i wniosek podlega odrzuceniu na zasadzie art. 199 § 1 pkt 1 k.p.c. w zw. z art. 13 § 2 k.p.c., a wobec obrania przeze mnie konkretnego imienia żeńskiego –  jakie chce nosić po sprostowaniu aktu urodzenia poprzez ujawnienie tam płci żeńskiej – i jakich w praktyce używam, istnieje możliwość orzeczenia także i w tym przedmiocie.')
+        p('Brak zatem podstawy do uznania, że w zakresie żądania zmiany imienia wniosek podlega odrzuceniu na zasadzie art. 199 § 1 pkt 1 k.p.c. w zw. z art. 13 § 2 k.p.c., a wobec obrania przeze mnie konkretnego imienia '+({ K: 'żeńskiego', M: 'męskiego' }[step_0.a_0] || '.......')+' –  jakie chcę nosić po sprostowaniu aktu urodzenia poprzez ujawnienie tam płci '+({ K: 'żeńskiej', M: 'męskiej' }[step_0.a_0] || '.......')+' – i jakich w praktyce używam, istnieje możliwość orzeczenia także i w tym przedmiocie.')
 
         next = 'e)'
     }
@@ -547,39 +456,30 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     space(8)
 
-    p('Z tych względów wnoszę jak na wstępie.', 0, 6, { align: 'left' })
+    p('Z tych względów wnoszę jak na wstępie.', 0, 15, { align: 'left' })
 
     italic(() => {
-        p('Podpis', 100, 6, { align: 'left' })
+        p('Podpis', 120, 10, { align: 'left' })
     })
-    p('Załączniki:') // TODO dot always on the last one
-    li('1.', (step_0.a_3 ? 'oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania' : 'dowód uiszczenia opłaty sądowej od wniosku')+',')
-    li('2.', 'odpis aktu urodzenia,')
-    next = '3.'
-    if (step_1.a_2_0) {
-        li(next, 'opinia psychologiczna,')
-        increment()
-    }
-    if (step_1.a_2_1) {
-        li(next, 'opinia psychologiczna,')
-        increment()
-    }
-    if (step_1.a_3_0) {
-        li(next, 'zaświadczenie lekarza psychiatry,')
-        increment()
-    }
-    if (step_1.a_3_1) {
-        li(next, 'zaświadczenie lekarza seksuologa,')
-        increment()
-    }
-    if (step_1.a_5) {
-        li(next, 'dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich,', 1, '|')
-        increment()
-    }
-    if (step_1.a_4) {
-        li(next, 'dokument zatytułowany |Zalecenia Polskiego Towarzystwa Seksuologicznego dotyczące opieki nad zdrowiem dorosłych osób transpłciowych – stanowisko panelu ekspertów|.', 1, '|')
-    }
+    p('Załączniki:')
+    next = '1.'
+    const attachments = [
+        step_0.a_3 ? 'oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania' : 'dowód uiszczenia opłaty sądowej od wniosku',
+        'odpis aktu urodzenia',
+    ]
+    if (step_1.a_2_0) attachments.push('opinia psychologiczna')
+    if (step_1.a_2_1) attachments.push('opinia psychologiczna')
+    if (step_1.a_3_0) attachments.push('zaświadczenie lekarza psychiatry')
+    if (step_1.a_3_1) attachments.push('zaświadczenie lekarza seksuologa')
+    if (step_1.a_4) attachments.push('dokument zatytułowany |Zalecenia Polskiego Towarzystwa Seksuologicznego dotyczące opieki nad zdrowiem dorosłych osób transpłciowych – stanowisko panelu ekspertów|')
+    if (step_1.a_5) attachments.push('dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich')
 
+    const lastAttachment = attachments.pop()
+    attachments.forEach(attachment => {
+        li(next, attachment+',', 1, '|')
+        increment()
+    })
+    li(next, lastAttachment+ '.', 1, '|')
 
     return doc
 }
