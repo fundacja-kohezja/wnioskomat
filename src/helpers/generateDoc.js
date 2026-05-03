@@ -11,39 +11,78 @@ import { render } from 'vue'
 const normalize = text => (text || '').trim()
 
 export default ([step_0, step_1, step_2, step_3]) => {
-
     const doc = new jsPDF
-    const fontSize = 11
 
-    doc.setFontSize(fontSize)
-    doc.setFont('TeXGyreTermes')
+    let fontSize
+    const setFontSize = (size) => {
+        fontSize = size
+        doc.setFontSize(size)
+    }
+    setFontSize(11)
 
-    const bold = (content) => {
-        doc.setFont('TeXGyreTermes', 'normal', 'bold')
-        content()
-        doc.setFont('TeXGyreTermes', 'normal', 'normal')
-    }
-    const italic = (content) => {
-        doc.setFont('TeXGyreTermes', 'italic')
-        content()
-        doc.setFont('TeXGyreTermes', 'normal')
-    }
-    let lineHeightFactor = 1.15
-    const lineHeight = (lh) => {
+    let lineHeightFactor
+    const setLineHeight = (lh) => {
         doc.setLineHeightFactor(lh)
         lineHeightFactor = lh
     }
+    setLineHeight(1.15)
+
+    let fontStyle
+    const setFontStyle = style => {
+        fontStyle = style
+        switch(style) {
+            case 'bold':
+                doc.setFont('TeXGyreTermes', 'normal', 'bold')
+                break
+            case 'italic':
+                doc.setFont('TeXGyreTermes', 'italic', 'normal')
+                break
+            default:
+                doc.setFont('TeXGyreTermes', 'normal', 'normal')
+        }
+    }
+    setFontStyle('normal')
+
+    const font = ({ size, lh, style }, content) => {
+        const currentSize = fontSize
+        const currentLineHeight = lineHeightFactor
+        const currentFontStyle = fontStyle
+        if (size) setFontSize(size)
+        if (lh) setLineHeight(lh)
+        if (style) setFontStyle(style)
+        content()
+        setFontSize(currentSize)
+        setLineHeight(currentLineHeight)
+        setFontStyle(currentFontStyle)
+    }
+
     const margin = 25
     const w = 210
     const maxWidth = w - margin*2
 
+    let h = 297 // available height may shrink if footnotes appear
+
     const unitFactor = fontSize / (72/25.4)
 
     let y = margin
+    let pageFootnotes = []
 
     const newPage = () => {
+        if (pageFootnotes.length) {
+            doc.line(margin, y, margin + 50, y, 'S')
+            y += 6
+            font({ size: 8, lh: 1.15, style: 'normal' }, () => {
+                pageFootnotes.forEach(({ lines, height, number }) => {
+                    doc.text(number, margin, y - 1)
+                    doc.text(lines, margin, y)
+                    y += height
+                })
+            })
+        }
+        pageFootnotes = []
         doc.addPage()
         y = margin
+        h = 297
     }
 
     const space = (height) => {
@@ -52,7 +91,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
         }
     }
 
-    const textToLines = (text, formatSeparator, type, w = maxWidth) => {
+    const textToLines = (text, formatSeparator, type, w = maxWidth, footnotes) => {
         const lines = [{ textWidth: 0, words: [] }]
         let line = 0
         let x = 0
@@ -71,15 +110,12 @@ export default ([step_0, step_1, step_2, step_3]) => {
             word.split(formatSeparator).forEach((part, i) => {
                 if (i > 0) {
                     isFormatted = !isFormatted
-                    if (isFormatted) {
-                        if (type === 'b') {
-                            doc.setFont('TeXGyreTermes', 'normal', 'bold')
-                        } else {
-                            doc.setFont('TeXGyreTermes', 'italic', 'normal')
-                        }
-                    } else {
-                        doc.setFont('TeXGyreTermes', 'normal', 'normal')
-                    }
+                    setFontStyle(isFormatted ? type : 'normal')
+                }
+                if (footnotes) {
+                    footnotes.forEach(footnote => {
+                        part = part.replace(footnote, 'a') // 'a' glyph has roughly the same width as smaller number
+                    })
                 }
                 wordWidth += doc.getStringUnitWidth(part) * unitFactor
             })
@@ -94,36 +130,78 @@ export default ([step_0, step_1, step_2, step_3]) => {
         return lines
     }
 
-    const renderLines = (lines, { align = 'justify', shift = 0, formatSeparator, inlineFormat, w = maxWidth, doExtra = () => {} }) => {
-        let linesLeft = Math.round((297 - y - margin)/(11*lineHeightFactor/(72/25.4)))
-        let extrasDone = false
+    const renderLines = (lines, { align = 'justify', shift = 0, formatSeparator, inlineFormat, w = maxWidth, doExtra = () => {}, footnotes }) => {
         let isFormatted = false
 
         const renderLine = ({ textWidth, words }) => {
             const extraSpace = align === 'justify' ? (w - textWidth) / (words.length - 1) : 0
             let x = margin + shift
+
+            if (footnotes) {
+                Object.keys(footnotes).forEach(footnote => {
+                    if (words.every(word => !word.text.includes(footnote))) return
+
+                    if (!pageFootnotes.length) h -= 6
+                    font({ size: 8, lh: 1.15, style: 'normal' }, () => {
+                        const lines = doc.splitTextToSize('   '+footnotes[footnote], maxWidth)
+                        const height = (lines.length + 0.5) * fontSize * lineHeightFactor / (72/25.4)
+                        h -= height
+                        if (h - y - margin < 0) { // for edge case when reference is in the line at the bottom of the page
+                            newPage()
+                            h -= height
+                        }
+                        pageFootnotes.push({ lines, height, number: footnote[1] })
+                    })
+                })
+            }
+
             words.forEach(word => {
+                let renderWord
+                if (footnotes) {
+                    if (Object.keys(footnotes).every(footnote => !word.text.includes(footnote))) {
+                        renderWord = (text, x) => doc.text(text, x, y)
+                    } else {
+                        renderWord = (text, x) => {
+                            let isFootnote = false
+                            Object.keys(footnotes).forEach(footnote => {
+                                if (!text.includes(footnote)) return
+
+                                isFootnote = true
+                                let x2 = 0
+                                const [before = '', rest = ''] = text.split(footnote[0])
+                                const [inside = '', after = ''] = rest.split(footnote.at(-1))
+                                doc.text(before, x + x2, y)
+                                x2 += doc.getStringUnitWidth(before) * unitFactor
+                                font({ size: 8 }, () => {
+                                    doc.text(inside, x + x2, y - 1.5)
+                                })
+                                x2 += doc.getStringUnitWidth('a') * unitFactor
+                                doc.text(after, x + x2, y)
+                                x2 += doc.getStringUnitWidth(after) * unitFactor
+                            })
+                            if (!isFootnote) {
+                                doc.text(text, x, y)
+                            }
+                        }
+                    }
+                } else {
+                    renderWord = (text, x) => doc.text(text, x, y)
+                }
+
                 if (formatSeparator && word.text.includes(formatSeparator)) {
                     let x2 = 0
                     word.text.split(formatSeparator).forEach((part, i) => {
                         if (i > 0) {
                             isFormatted = !isFormatted
-                            if (isFormatted) {
-                                if (inlineFormat === 'b') {
-                                    doc.setFont('TeXGyreTermes', 'normal', 'bold')
-                                } else {
-                                    doc.setFont('TeXGyreTermes', 'italic', 'normal')
-                                }
-                            } else {
-                                doc.setFont('TeXGyreTermes', 'normal', 'normal')
-                            }
+                            setFontStyle(isFormatted ? inlineFormat : 'normal')
                         }
-                        doc.text(part, x + x2, y)
+                        renderWord(part, x + x2)
                         x2 += doc.getStringUnitWidth(part) * unitFactor
                     })
                 } else {
-                    doc.text(word.text, x, y)
+                    renderWord(word.text, x)
                 }
+
                 x += word.width
                 x += doc.getStringUnitWidth(' ') * unitFactor
                 x += extraSpace
@@ -131,41 +209,40 @@ export default ([step_0, step_1, step_2, step_3]) => {
             y += lineHeightFactor * unitFactor
         }
 
-        if (linesLeft < lines.length) {
-            // if paragraph is long enough, allow spreading it across pages
-            if (lines.length > 3 && linesLeft > 2) {
-                if (lines.length - linesLeft === 1) { // prevent widows
-                    linesLeft--
-                }
-                doExtra()
-                extrasDone = true
-                lines.splice(0, linesLeft).forEach(renderLine)
-            }
-            newPage()
-        }
+        lines.forEach((line, i) => {
+            const linesLeft = lines.length - i
+            const linesLeftOnPage = Math.round((h - y - margin)/(lineHeightFactor * unitFactor))
 
-        if (!extrasDone) doExtra()
-        const lastLine = lines.pop()
-        lines.forEach(renderLine)
-        align = 'left' // last line should not be justified
-        renderLine(lastLine)
+            if (
+                linesLeftOnPage < 1 ||
+                (linesLeft === 2 && linesLeftOnPage === 1) || // prevent widows on last page
+                (i === 0 && linesLeftOnPage === 1 && linesLeft > 1) // prevent widows on first page
+            ) {
+                newPage()
+            }
+            if (i === 0) doExtra()
+            if (lines.length - 1 === i) align = 'left' // last line should not be justified
+            renderLine(line)
+        })
     }
 
-    const p = (text, shift = 0, spaceAfter = 3, { align = 'justify', italicSep, boldSep, ...options  } = {}, doExtra) => {
+    const p = (text, shift = 0, spaceAfter = 3, { align = 'justify', italicSep, boldSep, footnotes, ...options  } = {}, doExtra) => {
         const width = options.maxWidth || maxWidth - shift
         if (align === 'center' || align === 'right') {
+            // TODO we should check if there is enough space and possibly move to another page
             const lines = doc.splitTextToSize(text, width)
             doc.text(lines, align === 'center' ? w/2 : w - margin - shift, y, { align })
             y += lines.length * fontSize * lineHeightFactor / unitFactor
         } else {
-            const lines = textToLines(text, italicSep || boldSep, boldSep ? 'b' : 'i', width)
+            const lines = textToLines(text, italicSep || boldSep, boldSep ? 'bold' : 'italic', width, footnotes && Object.keys(footnotes))
             renderLines(lines, {
                 align,
                 shift,
                 formatSeparator: italicSep || boldSep,
-                inlineFormat: boldSep ? 'b' : 'i',
+                inlineFormat: boldSep ? 'bold' : 'italic',
                 w: width,
                 doExtra,
+                footnotes,
             })
         }
         y += spaceAfter
@@ -194,7 +271,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     }
     y += 5
 
-    bold(() => {
+    font({ style: 'bold' }, () => {
         p({K: 'Wnioskodawczyni:', M: 'Wnioskodawca:'}[step_0.a_0] || '', ...top)
     })
 
@@ -207,7 +284,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     y += 5
 
     if (step_2.a_2) {
-        bold(() => {
+        font({ style: 'bold' }, () => {
             p('Pełnomocnik do doręczeń', ...top)
         })
         p(normalize(step_2.a_2_0) || '......................', ...top)
@@ -216,9 +293,9 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     y += 12
 
-    lineHeight(1.5)
+    setLineHeight(1.5)
 
-    bold(() => {
+    font({ style: 'bold' }, () => {
         p('WNIOSEK O SPROSTOWANIE AKTU URODZENIA', 0, 0, { align: 'center' })
         if (step_0.a_3) {
             p('wraz z wnioskiem o zwolnienie od obowiązku ponoszenia kosztów sądowych', 0, 0, { align: 'center' })
@@ -314,7 +391,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     }
     p(text, 0, 8)
 
-    bold(() => {
+    font({ style: 'bold' }, () => {
         p('Uzasadnienie', 0, 6, { align: 'center' })
         p('TWIERDZENIA FAKTYCZNE')
     })
@@ -326,7 +403,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     text += 'Nadano mi '+(name.includes(' ') ? 'imiona ' : 'imię ')+name+'.'
     p(text)
 
-    italic(() => {
+    font({ style: 'italic' }, () => {
         p('Dowód: odpis aktu urodzenia')
     })
 
@@ -378,7 +455,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     space(2)
 
-    bold(() => {
+    font({ style: 'bold' }, () => {
         p('STAN PRAWNY')
         li('a)', 'Dopuszczalność wniosku o sprostowanie aktu urodzenia w trybie nieprocesowym i możliwość korzystania z dotychczasowej praktyki sądów okręgowych w sprawach o ustalenie płci w zakresie postępowania dowodowego.')
     })
@@ -387,7 +464,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     p('Przed 22 czerwca 1989 r., kiedy to Sąd Najwyższy wydał uchwałę w sprawie III CZP 37/89, korekta oznaczenia płci w akcie urodzenia dokonywana była w postępowaniu o sprostowanie aktu urodzenia. We wspomnianej uchwale SN wykluczył taką procedurę, ale dla samej doktryny i orzecznictwa było oczywiste, że sama możliwość korekty oznaczenia płci powinna istnieć. Dyskusyjna była jedynie podstawa prawna. Warto przy tym podkreślić, że uchwała SN z 1989 r. zapadła w innym stanie prawnym, gdy brzmienie przepisu dotyczącego aktu urodzenia wskazywało, że sprostować można tylko dane, które w momencie sporządzenia aktu były wpisane nieprawidłowo.')
     p('W postanowieniu z 22 marca 1991 r. (sygn. akt III CRN 28/91) Sąd Najwyższy uznał, że |poczucie przynależności do danej płci jest dobrem osobistym w rozumieniu art. 23 k.c.| i można dochodzić jego ochrony w trybie procesowym. W orzeczeniu tym SN przesądził też, że właściwym trybem dochodzenia korekty aktu urodzenia jest pozew o ustalenie, oparty o art. 189 k.p.c. w zw. z art. 23 k.c., |którego przesłanką jest stwierdzenie trwałości poczucia przynależności do danej płci|. W kolejnych orzeczeniach SN uzupełniał luki procedury, m.in. wypowiadając się o legitymacji biernej w sytuacji, gdy w sprawie nie ma rodziców czy o posiadaniu (lub nie) interesu prawnego w rozstrzygnięciu. Procedura była jednak co do zasady niekwestionowana.', undefined, undefined, {boldSep: '|'})
     p('4 marca 2025 r. skład całej Izby Cywilnej Sądu Najwyższego w sprawie III CZP 6/24 podjął uchwałę o następującej treści:')
-    italic(() => {
+    font({ style: 'italic' }, () => {
         li('','1. Żądanie zmiany oznaczenia płci w akcie urodzenia podlega rozpoznaniu przez sąd w postępowaniu nieprocesowym przy zastosowaniu w drodze analogii art. 36 ustawy z dnia 28 listopada 2014 r. – Prawo o aktach stanu cywilnego.')
         li('','2. Zmiana oznaczenia płci w akcie urodzenia może nastąpić wyłącznie na wniosek osoby, której dotyczy ten akt.')
         li('','3. Oprócz wnioskodawcy uczestnikiem postępowania może być tylko jego małżonek (art. 510 k.p.c.).')
@@ -395,14 +472,31 @@ export default ([step_0, step_1, step_2, step_3]) => {
     })
     space(3)
 
-    p('Tym samym SN |de facto| powrócił do koncepcji obowiązującej przed 1989 r. W ustnym uzasadnieniu (do dnia złożenia wniosku nie opublikowano uzasadnienia na piśmie¹) Sąd Najwyższy zwrócił uwagę, że 28 listopada 2014 r. przyjęta została ustawa Prawo o aktach stanu cywilnego, która zmieniła podstawy i przesłanki sprostowania aktu urodzenia, a ponadto jednoznacznie określiła płeć człowieka jako element stanu cywilnego (art. 2 ust. 1 w zw. z art. 49 ust. 2 pkt. 1 p.a.s.c.). SN podkreślił, że wynik postępowania o zmianę oznaczenia płci dotyczy jedynie praw osobistych wnioskodawcy i podkreślił osobisty charakter tego typu spraw. Odnotował, że konstrukcja i mechanizmy trybu nieprocesowego w większym stopniu uwzględniają okoliczności ze sfery interesu publicznego, a także minimalizują wątpliwości odnoszące się do zagadnienia legitymacji procesowej. W szczególności przejście do trybu nieprocesowego pozwala na ominięcie tworzenia „sztucznego” pozwanego (o którym mówił SN m.in. w wyroku z 2019 r.), a także pozwala na skorzystanie gwarantowanej przez p.a.s.c. skuteczności |erga omnes| wydanego rozstrzygnięcia.', undefined, undefined, { italicSep: '|' })
-    p('Choć wydanie powyższej uchwały wywołało kontrowersje i niepewność, zwłaszcza wobec faktu, że w składzie wydającym uchwałę zasiadali sędziowie powołani na stanowisko sędziego przez Krajową Radę Sądownictwa ukształtowaną na podstawie przepisów ustawy z dnia 8 grudnia 2017 r. o zmianie ustawy o Krajowej Radzie Sądownictwa², |bez względu na to, czy uchwałę należy uznawać za ważną czy nie, należy co do zasady uznać słuszność rozumowania SN|. W doktrynie i wśród praktyków od lat wskazywano, że uchwała z 1989 r. utrudniła, a nie uprościła postępowanie o zmianę oznaczenia płci i że jej treść wynikała przede wszystkim z ówczesnego brzmienia przepisów dotyczących sprostowania aktu urodzenia. Od lat podnoszono, że bardziej odpowiednim trybem byłby tryb nieprocesowy, który nie stawia konieczności spełniania sztucznego wymogu – istnienia strony pozwanej i pozywania rodziców. Uchwała SN słusznie podkreśla osobisty charakter spraw o zmianę oznaczenia płci i wskazuje na to, że płeć jest już jednoznacznie elementem prawa stanu. Należy więc aprobująco odnieść się do tezy, że zmiana oznaczenia płci powinna nastąpić w drodze wniosku o sprostowanie aktu urodzenia przy zastosowaniu w drodze analogii art. 36 p.a.s.c.', undefined, undefined, { boldSep: '|' })
+    p('Tym samym SN |de facto| powrócił do koncepcji obowiązującej przed 1989 r. W ustnym uzasadnieniu (do dnia złożenia wniosku nie opublikowano uzasadnienia na piśmie{1}) Sąd Najwyższy zwrócił uwagę, że 28 listopada 2014 r. przyjęta została ustawa Prawo o aktach stanu cywilnego, która zmieniła podstawy i przesłanki sprostowania aktu urodzenia, a ponadto jednoznacznie określiła płeć człowieka jako element stanu cywilnego (art. 2 ust. 1 w zw. z art. 49 ust. 2 pkt. 1 p.a.s.c.). SN podkreślił, że wynik postępowania o zmianę oznaczenia płci dotyczy jedynie praw osobistych wnioskodawcy i podkreślił osobisty charakter tego typu spraw. Odnotował, że konstrukcja i mechanizmy trybu nieprocesowego w większym stopniu uwzględniają okoliczności ze sfery interesu publicznego, a także minimalizują wątpliwości odnoszące się do zagadnienia legitymacji procesowej. W szczególności przejście do trybu nieprocesowego pozwala na ominięcie tworzenia „sztucznego” pozwanego (o którym mówił SN m.in. w wyroku z 2019 r.), a także pozwala na skorzystanie gwarantowanej przez p.a.s.c. skuteczności |erga omnes| wydanego rozstrzygnięcia.', undefined, undefined, {
+        italicSep: '|',
+        footnotes: {
+            '{1}': 'Skrót ustnego uzasadnienia został opublikowany na stronie SN w części zawierającej komunikaty: https://www.sn.pl/aktualnosci/SitePages/Komunikaty_o_sprawach.aspx?ItemSID=695-b6b3e804-2752-4c7d-bcb4-7586782a1315&ListName=Komunikaty_o_sprawach',
+        },
+    })
+    p('Choć wydanie powyższej uchwały wywołało kontrowersje i niepewność, zwłaszcza wobec faktu, że w składzie wydającym uchwałę zasiadali sędziowie powołani na stanowisko sędziego przez Krajową Radę Sądownictwa ukształtowaną na podstawie przepisów ustawy z dnia 8 grudnia 2017 r. o zmianie ustawy o Krajowej Radzie Sądownictwa{2}, |bez względu na to, czy uchwałę należy uznawać za ważną czy nie, należy co do zasady uznać słuszność rozumowania SN|. W doktrynie i wśród praktyków od lat wskazywano, że uchwała z 1989 r. utrudniła, a nie uprościła postępowanie o zmianę oznaczenia płci i że jej treść wynikała przede wszystkim z ówczesnego brzmienia przepisów dotyczących sprostowania aktu urodzenia. Od lat podnoszono, że bardziej odpowiednim trybem byłby tryb nieprocesowy, który nie stawia konieczności spełniania sztucznego wymogu – istnienia strony pozwanej i pozywania rodziców. Uchwała SN słusznie podkreśla osobisty charakter spraw o zmianę oznaczenia płci i wskazuje na to, że płeć jest już jednoznacznie elementem prawa stanu. Należy więc aprobująco odnieść się do tezy, że zmiana oznaczenia płci powinna nastąpić w drodze wniosku o sprostowanie aktu urodzenia przy zastosowaniu w drodze analogii art. 36 p.a.s.c.', undefined, undefined, {
+        boldSep: '|',
+        footnotes: {
+            '{2}': 'Wątpliwości te wynikają przede wszystkim z uchwały trzech Izb Sądu Najwyższego z 23.01.2020 r. (BSA-I-4110-1/2020), a także późniejszego orzecznictwa Trybunału Sprawiedliwości Unii Europejskiej czy Europejskiego Trybunału Praw Człowieka, w których wskazuje się na wpływ takiej nominacji na ocenę bezstronności i niezawisłości sędziego i w konsekwencji – wpływ na ważność wydanego orzeczenia. Również wszystkie obecnie projektowane ustawy dotyczące funkcjonowania sądownictwa przewidują, że orzeczenia wydane przez SN w składach, w których zasiadali tak powołani sędziowie, będą nieważne.',
+        },
+    })
     p('Za stosowaniem w drodze analogii postępowania o sprostowanie aktu urodzenia przemawia również międzynarodowy standard dotyczący procedury zmiany oznaczenia płci. Konieczność istnienia procedury pozwalającej na zmianę oznaczenia płci w akcie urodzenia i dokumentach, potwierdza m.in. orzecznictwo Europejskiego Trybunału Praw Człowieka. Wielka Izba Trybunału w sprawie Goodwin przeciwko Zjednoczonemu Królestwu (wyrok z 11 lipca 2022 r., skarga nr 28957/95) uznała, że państwa – strony EKPC – |mają pozytywny obowiązek zapewnienia procedury prawnego uzgodnienia płci dla osoby transpłciowej|. W kolejnych orzeczeniach Trybunał wskazywał na konieczność zapewnienia, by procedura ta była |efektywna i łatwo dostępna| (X przeciwko Byłej Jugosławiańskiej Republice Macedonii, wyrok z 17 kwietnia 2019 r., skarga nr 29683/16), |szybka| (w sprawie S.V. przeciwko Włochom okres 2 lat prowadzenia postępowania uznano za zbyt długi i naruszający art. 8 EKPC), |bez uzależnienia od wymogu kilkuletniego okresu obserwacji| (Schlumpf przeciwko Szwajcarii, wyrok z 8 stycznia 2009 r., skarga nr 29002/06). |Nie można również wprowadzać wymogu przechodzenia określonych zabiegów medycznych, w tym chirurgicznych| (Y.Y. przeciwko Turcji, A.P. Garçon & Nicot przeciwko Francji). Wyrok S.V. przeciwko Włochom jasno pokazał, że prawo do prywatności (art. 8 EKPC)  należy obecnie wiązać z prawem do wolności, autonomii i prawem do samostanowienia. Z praw tych wynika, że życie prywatne człowieka obejmuje także tożsamość psychiczną i społeczną człowieka, w tym jego identyfikację płciową, którą państwo ma obowiązek uszanować.', undefined, undefined, { boldSep: '|' })
-    p('Wymóg, by procedura zmiany oznaczenia płci była |szybka, łatwo dostępna i respektowała tożsamość płciową jednostki| można znaleźć również w innych aktach i dokumentach międzynarodowych. Na poziomie europejskim jednym z kluczowych dokumentów poruszających tematykę uzgodnienia płci jest zalecenie CM/Rec(2010)5, przyjęte przez Komitet Ministrów Rady Europy w 2010 r. czy Zalecenie nr 17 dotyczące Ogólnej Polityki Europejskiej Komisji Przeciwko Rasizmowi i Nietolerancji w sprawie zapobiegania i zwalczania nietolerancji i dyskryminacji przeciwko osobom LGBTI. Niezależny Ekspert ONZ ds. ochrony przed przemocą i dyskryminacją opartych na orientacji seksualnej i tożsamości płciowej wskazał, że „procedura prawnego uzgodnienia płci pozwalająca osobom transpłciowym na zmianę imienia i oznaczenia płci w dokumentach |powinna być prostym postępowaniem administracyjnym opartym na samookreśleniu wnioskodawcy, powinna być dostępna i, tak dalece, jak to możliwe, wolna od kosztów|.', undefined, undefined, { boldSep: '|' })
+    p('Wymóg, by procedura zmiany oznaczenia płci była |szybka, łatwo dostępna i respektowała tożsamość płciową jednostki| można znaleźć również w innych aktach i dokumentach międzynarodowych. Na poziomie europejskim jednym z kluczowych dokumentów poruszających tematykę uzgodnienia płci jest zalecenie CM/Rec(2010)5, przyjęte przez Komitet Ministrów Rady Europy w 2010 r.{3} czy Zalecenie nr 17 dotyczące Ogólnej Polityki Europejskiej Komisji Przeciwko Rasizmowi i Nietolerancji w sprawie zapobiegania i zwalczania nietolerancji i dyskryminacji przeciwko osobom LGBTI{4}. Niezależny Ekspert ONZ ds. ochrony przed przemocą i dyskryminacją opartych na orientacji seksualnej i tożsamości płciowej wskazał, że „procedura prawnego uzgodnienia płci pozwalająca osobom transpłciowym na zmianę imienia i oznaczenia płci w dokumentach |powinna być prostym postępowaniem administracyjnym opartym na samookreśleniu wnioskodawcy, powinna być dostępna i, tak dalece, jak to możliwe, wolna od kosztów|{5}.', undefined, undefined, {
+        boldSep: '|',
+        footnotes: {
+            '{3}': 'Zalecenie CM/Rec(2010)5 Komitetu Ministrów dla Państw Członkowskich w zakresie środków zwalczania dyskryminacji opartej na orientacji seksualnej lub tożsamości płciowej. Tłumaczenie oficjalne Ministerstwa Sprawiedliwości za: https://arch-bip.ms.gov.pl/pl/prawa-czlowieka/inne-organizacje-miedzynarodowe-i-prawa-czlowieka/prawa-czlowieka-w-radzie-europy-/download,2254,3.html: „Państwa członkowskie powinny przyjąć odpowiednie środki gwarantujące pełne prawne uznanie zmiany płci we wszystkich dziedzinach życia, w szczególności poprzez umożliwienie zmiany imienia, nazwiska i płci w oficjalnych dokumentach w sposób szybki, przejrzysty i dostępny; państwa członkowskie powinny także zagwarantować, tam gdzie jest to wskazane, odpowiednie uznanie lub wprowadzenie zmian w kluczowych dokumentach wydawanych przez podmioty niepaństwowe [...]”.',
+            '{4}': 'ECRI General Policy Recommendation no. 17 on preventing and combating intolerance and discrimination against LGBTI persons, zalecenie przyjęte dnia 28.06.2023 r., CRI(2023)30.',
+            '{5}': 'Raport IE SOGI z wizytacji w Gruzji, A/HRC/41/45/Add.1, § 68.',
+        },
+    })
     p('Mając na uwadze standard międzynarodowy, można jednoznacznie stwierdzić, że postępowaniem, które w większym stopniu chroni prywatność jednostki, uznaje podmiotowość osoby transpłciowej i ma szansę być postępowaniem szybkim, efektywnym i łatwo dostępnym, jest właśnie postępowanie nieprocesowe, o sprostowanie aktu urodzenia.')
     p('Jednocześnie należy zauważyć, że brak jest powodów, by uznać za nieaktualne te tezy płynące z orzecznictwa Sądu Najwyższego i sądów powszechnych wydanych w ostatnich 36 latach, które nie dotyczyły trybu postępowania i osób legitymowanych w procesie o ustalenie płci. |W szczególności aktualna pozostaje teza, że tożsamość płciowa jest dobrem osobistym jednostki w rozumieniu art. 23 k.c. i że w postępowaniu należy wykazać trwałość poczucia przynależności do danej płci.| Zarówno pozew o ustalenie płci, jak i obecnie wniosek o sprostowanie aktu urodzenia wywołują ten sam skutek – w akcie urodzenia nanoszona jest wzmianka dodatkowa o orzeczeniu sądowym. Przemawia to za stosowaniem dotychczasowych standardów do uznania, czy spełnione zostały przesłanki zmiany oznaczenia płci w akcie urodzenia.', undefined, undefined, { boldSep: '|' })
     p('Rzecznik Praw Obywatelskich w swoich rekomendacjach wskazywał, że osoba dochodząca ustalenia płci (obecnie zmiany oznaczenia płci w wyniku wniosku o sprostowanie aktu urodzenia) |powinna wykazać trwałość poczucia przynależności do danej płci, co zasadniczo powinno nastąpić poprzez przedstawienie formalnej diagnozy.| Zgodnie z zaleceniami Polskiego Towarzystwa Seksuologicznego (PTS) diagnoza taka powinna być postawiona przez dwóch ekspertów. Pierwszym z nich powinien być lekarz psychiatra lub seksuolog, a drugim – psycholog ze specjalizacją z zakresu psychologii klinicznej lub psychoseksuologii lub posiadający certyfikat seksuologa klinicznego. Powyższe standardy w sposób kompleksowy omawiają, w jaki sposób i na jakich podstawach dochodzi do postawienia diagnozy transseksualizmu (wg ICD-10) czy niezgodności płciowej (wg ICD-11). |Wykazanie przez osobę transpłciową, że dysponuje diagnozą postawioną przez ekspertów zgodnie z zaleceniami PTS, jest wystarczające do stwierdzenia trwałości jej poczucia przynależności do płci, której ustalenia się domaga, a tym samym jest wystarczające do wydania postanowienia uwzględniającego wniosek.|', undefined, undefined, { boldSep: '|' })
-    bold(() => {
+    font({ style: 'bold' }, () => {
         li('b)', 'Uzasadnienie wniosku o rozpoznanie sprawy na posiedzeniu niejawnym na podstawie dokumentacji przedstawionej przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[step_0.a_0] || '.......')+', bez powoływania biegłego.')
     })
     space(3)
@@ -416,7 +510,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     p('Podkreślenia wymaga, że wydawanie wyroków w procesach o ustalenie płci na posiedzeniu niejawnym i bez powoływania biegłego stało się jedną z dominujących praktyk w ostatnich latach, przed wydaniem uchwały przez SN. Takie postępowanie jednoznacznie rekomendował też RPO w cytowanej publikacji. Obecnie zmianie ulega jedynie tryb postępowania, ale dotychczasowe przesłanki zmiany oznaczenia płci powinny zostać takie same. Nie ma więc żadnych przeszkód, by w sprawach o zmianę oznaczenia płci przez sprostowanie aktu urodzenia stosować te same standardy dowodowe, które utrwaliły się w sprawach o ustalenie płci. Jak podkreślono w przewodniku RPO, postępowaniach prowadzonych w latach 2020–2022 sądy okręgowe uwzględniły powództwa na posiedzeniach niejawnych aż w 132 sprawach (s. 93). Doświadczenie spraw prowadzonych w ostatnich latach wskazuje, że wyroki na posiedzeniu niejawnym i bez dowodu z opinii biegłego zapadały bardzo często. Rzadziej wyrok poprzedzała rozprawa, choć i wtedy sądy nie sięgały po opinię. Coraz rzadsze były sytuacje dopuszczania dowodu z opinii biegłego.')
     p('W orzecznictwie Sądu Najwyższego podkreślano, że prawo do identyfikowania się z daną płcią to prawo osobiste, z którego charakteru wynika, że interes prawny w uzgodnieniu płci ma wyłącznie podmiot tego prawa. Również w niedawnej uchwale SN podkreślił, że wynik sprawy o zmianę oznaczenia płci dotyczy wyłącznie tej jednostki. Przyjmowane w judykaturze rozwiązania są przy tym próbą znalezienia drogi realizacji ochrony prawnej w zakresie ustalenia zmiany oznaczenia płci |w warunkach luki prawnej|. W ostatnich 36 latach orzecznictwo uznawało, że właściwą ścieżką powinno być wykorzystanie w tym celu założeń powództwa o ustalenie (art. 189 k.p.c.). Obecnie uchwałą z marca 2025 r. SN powrócił do koncepcji stosowania przez analogię przepisów o sprostowaniu aktu urodzenia. Należy jednak zauważyć, że opisany wcześniej standard międzynarodowy podkreśla konieczność zapewnienia procedury, która będzie szybka, przejrzysta i łatwo dostępna, a Ekspert ONZ podnosi wręcz, że procedura powinna być oparta o samookreślenie jednostki. Biorąc pod uwagę ten standard i to, że obecne rozwiązanie jest jedynie wypełnieniem luki prawnej, rygory wynikające z postępowania sądowego i tym samym dowodowego, powinny być możliwie łagodzone.', undefined, undefined, { boldSep: '|' })
 
-    bold(() => {
+    font({ style: 'bold' }, () => {
         li('c)', 'Wniosek o rozpoznanie niniejszej sprawy w trybie pilnym, zgodnie z § 2 pkt 5 lit. x Rozporządzenia Ministra Sprawiedliwości z dnia 18 czerwca 2019 r. Regulamin urzędowania sądów powszechnych.')
     })
     space(3)
@@ -434,7 +528,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
             texts.push('nazwiska')
         }
         const text = texts.join(' ')
-        bold(() => {
+        font({ style: 'bold' }, () => {
             li(next, 'Możliwość wydania rozstrzygnięcia w przedmiocie '+ text +' '+({ K: 'Wnioskodawczyni', M: 'Wnioskodawcy' }[step_0.a_0] || '.......')+'.')
         })
         space(3)
@@ -447,7 +541,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
         next = 'e)'
     }
     if (step_0.a_3) {
-        bold(() => {
+        font({ style: 'bold' }, () => {
             li(next, 'Wniosek o zwolnienie od kosztów.')
         })
         space(3)
@@ -458,7 +552,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     p('Z tych względów wnoszę jak na wstępie.', 0, 15, { align: 'left' })
 
-    italic(() => {
+    font({ style: 'italic' }, () => {
         p('Podpis', 120, 10, { align: 'left' })
     })
     p('Załączniki:')
