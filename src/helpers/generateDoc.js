@@ -67,14 +67,36 @@ export default ([step_0, step_1, step_2, step_3]) => {
     let y = margin
     let pageFootnotes = []
 
+    let dryRun = false
+
     const newPage = () => {
+        if (dryRun) return
+
         if (pageFootnotes.length) {
             doc.line(margin, y, margin + 50, y, 'S')
             y += 6
             font({ size: 8, lh: 1.15, style: 'normal' }, () => {
-                pageFootnotes.forEach(({ lines, height, number }) => {
+                let isFormatted = false
+                pageFootnotes.forEach(({ lines, height, number, format }) => {
                     doc.text(number, margin, y - 1)
-                    doc.text(lines, margin, y)
+                    if (format) {
+                        let y2 = 0
+                        lines.forEach(line => {
+                            let x = 0
+                            line.split(format[1]).forEach((part, i) => {
+                                if (i > 0) {
+                                    isFormatted = !isFormatted
+                                    setFontStyle(isFormatted ? format[0] : 'normal')
+                                }
+                                doc.text(part, margin + x, y + y2)
+                                x += doc.getStringUnitWidth(part) * (72/25.4)
+                                x -= doc.getStringUnitWidth(' ') * (72/25.4)
+                            })
+                            y2 += fontSize * lineHeightFactor / (72/25.4)
+                        })
+                    } else {
+                        doc.text(lines, margin, y)
+                    }
                     y += height
                 })
             })
@@ -91,19 +113,33 @@ export default ([step_0, step_1, step_2, step_3]) => {
         }
     }
 
+    const noPageBreak = (content) => {
+        const currentY = y
+        dryRun = true
+        content()
+        dryRun = false
+        if (y > h - margin) {
+            newPage()
+        } else {
+            y = currentY
+        }
+        content()
+    }
+
     const textToLines = (text, formatSeparator, type, w = maxWidth, footnotes) => {
         const lines = [{ textWidth: 0, words: [] }]
         let line = 0
         let x = 0
         let isFormatted = false
-        const startNewLine = () => {
+        const startNewLine = (dontJustify = false) => {
             lines[line].textWidth = x
+            lines[line].dontJustify = dontJustify
             lines[++line] = { textWidth: 0, words: [] }
             x = 0
         }
         text.replaceAll('\n', ' \n').split(' ').forEach(word => {
             if (word[0] === '\n') {
-                startNewLine()
+                startNewLine(true)
                 word = word.slice(1)
             }
             let wordWidth = 0
@@ -130,10 +166,15 @@ export default ([step_0, step_1, step_2, step_3]) => {
         return lines
     }
 
-    const renderLines = (lines, { align = 'justify', shift = 0, formatSeparator, inlineFormat, w = maxWidth, doExtra = () => {}, footnotes }) => {
+    const renderLines = (lines, { align = 'justify', shift = 0, formatSeparator, inlineFormat, w = maxWidth, doExtra = () => {}, footnotes, footnotesFormat = {} }) => {
         let isFormatted = false
 
         const renderLine = ({ textWidth, words }) => {
+            if (dryRun) {
+                y += lineHeightFactor * unitFactor
+                return
+            }
+
             const extraSpace = align === 'justify' ? (w - textWidth) / (words.length - 1) : 0
             let x = margin + shift
 
@@ -150,7 +191,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
                             newPage()
                             h -= height
                         }
-                        pageFootnotes.push({ lines, height, number: footnote[1] })
+                        pageFootnotes.push({ lines, height, number: footnote[1], format: footnotesFormat[footnote] })
                     })
                 })
             }
@@ -221,17 +262,21 @@ export default ([step_0, step_1, step_2, step_3]) => {
                 newPage()
             }
             if (i === 0) doExtra()
-            if (lines.length - 1 === i) align = 'left' // last line should not be justified
+            let curAlign = align
+            if (lines.length - 1 === i || line.dontJustify) align = 'left' // last line should not be justified
             renderLine(line)
+            align = curAlign
         })
     }
 
-    const p = (text, shift = 0, spaceAfter = 3, { align = 'justify', italicSep, boldSep, footnotes, ...options  } = {}, doExtra) => {
+    const p = (text, shift = 0, spaceAfter = 3, { align = 'justify', italicSep, boldSep, footnotes, footnotesFormat, ...options  } = {}, doExtra) => {
         const width = options.maxWidth || maxWidth - shift
         if (align === 'center' || align === 'right') {
             // TODO we should check if there is enough space and possibly move to another page
             const lines = doc.splitTextToSize(text, width)
-            doc.text(lines, align === 'center' ? w/2 : w - margin - shift, y, { align })
+            if (!dryRun) {
+                doc.text(lines, align === 'center' ? w/2 : w - margin - shift, y, { align })
+            }
             y += lines.length * fontSize * lineHeightFactor / unitFactor
         } else {
             const lines = textToLines(text, italicSep || boldSep, boldSep ? 'bold' : 'italic', width, footnotes && Object.keys(footnotes))
@@ -243,6 +288,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
                 w: width,
                 doExtra,
                 footnotes,
+                footnotesFormat
             })
         }
         y += spaceAfter
@@ -379,7 +425,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
         li('5.', 'wnoszę o zwolnienie mnie od obowiązku ponoszenia kosztów procesu w całości, ponieważ nie jestem w stanie ich ponieść bez uszczerbku utrzymania koniecznego dla siebie i rodziny.')
     }
 
-    if (step_1.a_5) {
+    if (step_1.a_6) {
         space(8)
         p('Jednocześnie przedkładam jako załącznik wydaną przez Rzecznika Praw Obywatelskich publikację |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, zawierającą szereg specjalistycznych informacji dotyczących praw osób transpłciowych oraz aktualnych standardów orzeczniczych w sprawach o ustalenie płci.', undefined, undefined, { italicSep: '|' })
     }
@@ -488,10 +534,14 @@ export default ([step_0, step_1, step_2, step_3]) => {
     p('Wymóg, by procedura zmiany oznaczenia płci była |szybka, łatwo dostępna i respektowała tożsamość płciową jednostki| można znaleźć również w innych aktach i dokumentach międzynarodowych. Na poziomie europejskim jednym z kluczowych dokumentów poruszających tematykę uzgodnienia płci jest zalecenie CM/Rec(2010)5, przyjęte przez Komitet Ministrów Rady Europy w 2010 r.{3} czy Zalecenie nr 17 dotyczące Ogólnej Polityki Europejskiej Komisji Przeciwko Rasizmowi i Nietolerancji w sprawie zapobiegania i zwalczania nietolerancji i dyskryminacji przeciwko osobom LGBTI{4}. Niezależny Ekspert ONZ ds. ochrony przed przemocą i dyskryminacją opartych na orientacji seksualnej i tożsamości płciowej wskazał, że „procedura prawnego uzgodnienia płci pozwalająca osobom transpłciowym na zmianę imienia i oznaczenia płci w dokumentach |powinna być prostym postępowaniem administracyjnym opartym na samookreśleniu wnioskodawcy, powinna być dostępna i, tak dalece, jak to możliwe, wolna od kosztów|{5}.', undefined, undefined, {
         boldSep: '|',
         footnotes: {
-            '{3}': 'Zalecenie CM/Rec(2010)5 Komitetu Ministrów dla Państw Członkowskich w zakresie środków zwalczania dyskryminacji opartej na orientacji seksualnej lub tożsamości płciowej. Tłumaczenie oficjalne Ministerstwa Sprawiedliwości za: https://arch-bip.ms.gov.pl/pl/prawa-czlowieka/inne-organizacje-miedzynarodowe-i-prawa-czlowieka/prawa-czlowieka-w-radzie-europy-/download,2254,3.html: „Państwa członkowskie powinny przyjąć odpowiednie środki gwarantujące pełne prawne uznanie zmiany płci we wszystkich dziedzinach życia, w szczególności poprzez umożliwienie zmiany imienia, nazwiska i płci w oficjalnych dokumentach w sposób szybki, przejrzysty i dostępny; państwa członkowskie powinny także zagwarantować, tam gdzie jest to wskazane, odpowiednie uznanie lub wprowadzenie zmian w kluczowych dokumentach wydawanych przez podmioty niepaństwowe [...]”.',
-            '{4}': 'ECRI General Policy Recommendation no. 17 on preventing and combating intolerance and discrimination against LGBTI persons, zalecenie przyjęte dnia 28.06.2023 r., CRI(2023)30.',
+            '{3}': 'Zalecenie CM/Rec(2010)5 Komitetu Ministrów dla Państw Członkowskich w zakresie środków zwalczania dyskryminacji opartej na orientacji seksualnej lub tożsamości płciowej. Tłumaczenie oficjalne Ministerstwa Sprawiedliwości za: https://arch-bip.ms.gov.pl/pl/prawa-czlowieka/inne-organizacje-miedzynarodowe-i-prawa-czlowieka/prawa-czlowieka-w-radzie-europy-/download,2254,3.html: „Państwa członkowskie powinny przyjąć odpowiednie środki gwarantujące pełne prawne uznanie zmiany płci we wszystkich dziedzinach życia, w szczególności poprzez umożliwienie zmiany imienia, nazwiska i płci w oficjalnych dokumentach w |sposób szybki, przejrzysty i dostępny|; państwa członkowskie powinny także zagwarantować, tam gdzie jest to wskazane, odpowiednie uznanie lub wprowadzenie zmian w kluczowych dokumentach wydawanych przez podmioty niepaństwowe [...]”.',
+            '{4}': '|ECRI General Policy Recommendation no. 17 on preventing and combating intolerance and discrimination against LGBTI persons,| zalecenie przyjęte dnia 28.06.2023 r., CRI(2023)30.',
             '{5}': 'Raport IE SOGI z wizytacji w Gruzji, A/HRC/41/45/Add.1, § 68.',
         },
+        footnotesFormat: {
+            '{3}': ['bold', '|'],
+            '{4}': ['italic', '|'],
+        }
     })
     p('Mając na uwadze standard międzynarodowy, można jednoznacznie stwierdzić, że postępowaniem, które w większym stopniu chroni prywatność jednostki, uznaje podmiotowość osoby transpłciowej i ma szansę być postępowaniem szybkim, efektywnym i łatwo dostępnym, jest właśnie postępowanie nieprocesowe, o sprostowanie aktu urodzenia.')
     p('Jednocześnie należy zauważyć, że brak jest powodów, by uznać za nieaktualne te tezy płynące z orzecznictwa Sądu Najwyższego i sądów powszechnych wydanych w ostatnich 36 latach, które nie dotyczyły trybu postępowania i osób legitymowanych w procesie o ustalenie płci. |W szczególności aktualna pozostaje teza, że tożsamość płciowa jest dobrem osobistym jednostki w rozumieniu art. 23 k.c. i że w postępowaniu należy wykazać trwałość poczucia przynależności do danej płci.| Zarówno pozew o ustalenie płci, jak i obecnie wniosek o sprostowanie aktu urodzenia wywołują ten sam skutek – w akcie urodzenia nanoszona jest wzmianka dodatkowa o orzeczeniu sądowym. Przemawia to za stosowaniem dotychczasowych standardów do uznania, czy spełnione zostały przesłanki zmiany oznaczenia płci w akcie urodzenia.', undefined, undefined, { boldSep: '|' })
@@ -550,11 +600,14 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     space(8)
 
-    p('Z tych względów wnoszę jak na wstępie.', 0, 15, { align: 'left' })
+    noPageBreak(() => {
+        p('Z tych względów wnoszę jak na wstępie.', 0, 15, { align: 'left' })
 
-    font({ style: 'italic' }, () => {
-        p('Podpis', 120, 10, { align: 'left' })
+        font({ style: 'italic' }, () => {
+            p('Podpis', 120, 10, { align: 'left' })
+        })
     })
+
     p('Załączniki:')
     next = '1.'
     const attachments = [
@@ -565,8 +618,8 @@ export default ([step_0, step_1, step_2, step_3]) => {
     if (step_1.a_2_1) attachments.push('opinia psychologiczna')
     if (step_1.a_3_0) attachments.push('zaświadczenie lekarza psychiatry')
     if (step_1.a_3_1) attachments.push('zaświadczenie lekarza seksuologa')
-    if (step_1.a_4) attachments.push('dokument zatytułowany |Zalecenia Polskiego Towarzystwa Seksuologicznego dotyczące opieki nad zdrowiem dorosłych osób transpłciowych – stanowisko panelu ekspertów|')
-    if (step_1.a_5) attachments.push('dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich')
+    if (step_1.a_5) attachments.push('dokument zatytułowany |Zalecenia Polskiego Towarzystwa Seksuologicznego dotyczące opieki nad zdrowiem dorosłych osób transpłciowych – stanowisko panelu ekspertów|')
+    if (step_1.a_6) attachments.push('dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich')
 
     const lastAttachment = attachments.pop()
     attachments.forEach(attachment => {

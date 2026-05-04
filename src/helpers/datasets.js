@@ -608,44 +608,44 @@ export const courts = {
         coordinates: [52.924276, 14.864813],
     },
     'Sąd Rejonowy w Nakle nad Notecią': {
-        address: '',
-        coordinates: [],
+        address: 'Sądowa 3\n89-100 Nakło nad Notecią',
+        coordinates: [53.136171, 17.591136],
     },
     'Sąd Rejonowy w Nidzicy': {
-        address: '',
-        coordinates: [],
+        address: 'Kościuszki 15\n13-100 Nidzica',
+        coordinates: [53.358268, 20.421366],
     },
     'Sąd Rejonowy w Nisku': {
-        address: '',
-        coordinates: [],
+        address: 'Gisgesa 1\n37-400 Nisko',
+        coordinates: [50.516449, 22.149003],
     },
     'Sąd Rejonowy w Nowej Soli': {
-        address: '',
-        coordinates: [],
+        address: 'Piłsudskiego 24\n67-100 Nowa Sól',
+        coordinates: [51.807028, 15.715414],
     },
     'Sąd Rejonowy w Nowym Dworze Mazowieckim': {
-        address: '',
-        coordinates: [],
+        address: 'Słowackiego 19\n05-100 Nowy Dwór Mazowiecki',
+        coordinates: [52.429710, 20.714518],
     },
     'Sąd Rejonowy w Nowym Mieście Lubawskim': {
-        address: '',
-        coordinates: [],
+        address: 'Grunwaldzka 28\n13-300 Nowe Miasto Lubawskie',
+        coordinates: [53.430472, 19.589935],
     },
-    'Sąd Rejonowy w Nowym Sączu': {
-        address: '',
-        coordinates: [],
+    'Sąd Rejonowy w Nowym Sączu': { // TODO wyjaśnić kwestię zamiejscowego wydziału cywilnego
+        address: 'dr Juliana Smolika 1\n33-300 Nowy Sącz',
+        coordinates: [49.596912, 20.694871],
     },
     'Sąd Rejonowy w Nowym Targu': {
-        address: '',
-        coordinates: [],
+        address: 'Sądowa 6\n34-400 Nowy Targ',
+        coordinates: [49.464497, 19.997569],
     },
     'Sąd Rejonowy w Nowym Tomyślu': {
-        address: '',
-        coordinates: [],
+        address: 'Plac Niepodległości 31\n64-300 Nowy Tomyśl',
+        coordinates: [52.317889, 16.129279],
     },
     'Sąd Rejonowy w Nysie': {
-        address: '',
-        coordinates: [],
+        address: 'Plac Kościelny 6\n48-300 Nysa',
+        coordinates: [50.474528, 17.335500],
     },
     'Sąd Rejonowy w Obornikach': {
         address: '',
