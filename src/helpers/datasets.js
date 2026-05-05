@@ -1,3 +1,4 @@
+// TODO wyjaśnić kwestię tego, że niektóre sądy mają zamiejscowe wydziały cywilne
 export const courts = {
     'Sąd Rejonowy w Aleksandrowie Kujawskim': {
         address: 'Narutowicza 16\n87-700 Aleksandrów Kujawski',
@@ -631,7 +632,7 @@ export const courts = {
         address: 'Grunwaldzka 28\n13-300 Nowe Miasto Lubawskie',
         coordinates: [53.430472, 19.589935],
     },
-    'Sąd Rejonowy w Nowym Sączu': { // TODO wyjaśnić kwestię zamiejscowego wydziału cywilnego
+    'Sąd Rejonowy w Nowym Sączu': {
         address: 'dr Juliana Smolika 1\n33-300 Nowy Sącz',
         coordinates: [49.596912, 20.694871],
     },
@@ -648,80 +649,80 @@ export const courts = {
         coordinates: [50.474528, 17.335500],
     },
     'Sąd Rejonowy w Obornikach': {
-        address: '',
-        coordinates: [],
+        address: 'Piłsudskiego 47\n64-600 Oborniki',
+        coordinates: [52.651501, 16.815474],
     },
     'Sąd Rejonowy w Olecku': {
-        address: '',
-        coordinates: [],
+        address: 'Osiedle Siejnik I 18\n19-400 Olecko',
+        coordinates: [54.024340, 22.486959],
     },
     'Sąd Rejonowy w Oleśnicy': {
-        address: '',
-        coordinates: [],
+        address: '3 Maja 48/49\n56-400 Oleśnica',
+        coordinates: [51.205808, 17.379381],
     },
     'Sąd Rejonowy w Oleśnie': {
-        address: '',
-        coordinates: [],
+        address: 'Sądowa 3\n46-300 Olesno',
+        coordinates: [50.877860, 18.427159],
     },
     'Sąd Rejonowy w Olkuszu': {
-        address: '',
-        coordinates: [],
+        address: 'Króla Kazimierza Wielkiego 45\n32-300 Olkusz',
+        coordinates: [50.276595, 19.568362],
     },
     'Sąd Rejonowy w Olsztynie': {
-        address: '',
-        coordinates: [],
+        address: 'Dąbrowszczaków 44\n10-543 Olsztyn',
+        coordinates: [53.778282, 20.483121],
     },
     'Sąd Rejonowy w Oławie': {
-        address: '',
-        coordinates: [],
+        address: '11 Listopada 12\n55-200 Oława',
+        coordinates: [50.940998, 17.294385],
     },
     'Sąd Rejonowy w Opatowie': {
-        address: '',
-        coordinates: [],
+        address: 'Plac Obrońców Pokoju 18\n27-500 Opatów',
+        coordinates: [50.801331, 21.422326],
     },
     'Sąd Rejonowy w Opocznie': {
-        address: '',
-        coordinates: [],
+        address: 'Biernackiego 20\n26-300 Opoczno',
+        coordinates: [51.378104, 20.279662],
     },
     'Sąd Rejonowy w Opolu': {
-        address: '',
-        coordinates: [],
+        address: 'Ozimska 60a\n45-368 Opole',
+        coordinates: [50.667743, 17.944466],
     },
     'Sąd Rejonowy w Opolu Lubelskim': {
-        address: '',
-        coordinates: [],
+        address: 'Przemysłowa 1B\n24-300 Opole Lubelskie',
+        coordinates: [51.144618, 21.977613],
     },
     'Sąd Rejonowy w Ostrołęce': {
-        address: '',
-        coordinates: [],
+        address: 'Mazowiecka 3\n07-410 Ostrołęka',
+        coordinates: [53.082150, 21.566350],
     },
     'Sąd Rejonowy w Ostrowcu Świętokrzyskim': {
-        address: '',
-        coordinates: [],
+        address: 'Kościuszki 1\n27-400 Ostrowiec Świętokrzyski',
+        coordinates: [50.927832, 21.386492],
     },
     'Sąd Rejonowy w Ostrowi Mazowieckiej': {
-        address: '',
-        coordinates: [],
+        address: 'Bolesława Prusa 2\n07-300 Ostrów Mazowiecka',
+        coordinates: [52.802847, 21.891407],
     },
     'Sąd Rejonowy w Ostrowie Wielkopolskim': {
-        address: '',
-        coordinates: [],
+        address: 'Sądowa 2\n63-400 Ostrów Wielkopolski',
+        coordinates: [51.648834, 17.819808],
     },
-    'Sąd Rejonowy w Ostródzie ': {
-        address: '',
-        coordinates: [],
+    'Sąd Rejonowy w Ostródzie': {
+        address: 'Jana III Sobieskiego 12\n14-100 Ostróda',
+        coordinates: [53.695336, 19.962244],
     },
     'Sąd Rejonowy w Ostrzeszowie': {
-        address: '',
-        coordinates: [],
+        address: 'Zamkowa 9a, 63-500 Ostrzeszów',
+        coordinates: [51.426549, 17.930819],
     },
     'Sąd Rejonowy w Oświęcimiu': {
-        address: '',
-        coordinates: [],
+        address: 'Rynek Główny 14\n32-600 Oświęcim',
+        coordinates: [50.038885, 19.221058],
     },
     'Sąd Rejonowy w Otwocku': {
-        address: '',
-        coordinates: [],
+        address: 'Armii Krajowej 2\n05-400 Otwock',
+        coordinates: [52.105601, 21.265816],
     },
     'Sąd Rejonowy w Pabianicach': {
         address: '',

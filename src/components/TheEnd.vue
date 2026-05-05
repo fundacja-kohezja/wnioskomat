@@ -2,28 +2,36 @@
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 
+import FurtherStepsPl from './further-steps/FurtherStepsPl.vue'
+import FurtherStepsEn from './further-steps/FurtherStepsEn.vue'
+import FurtherStepsUk from './further-steps/FurtherStepsUk.vue'
 import useFormStore from '../stores/form'
-import generateDoc from '../helpers/generateDoc'
+import usePrefsStore from '../stores/prefs'
+import generateDoc from '../doc-generators/mainApplication'
 
 const emit = defineEmits(['goToForm'])
 
 const { t } = useI18n()
 const { answers } = storeToRefs(useFormStore())
+const { selectedLang } = storeToRefs(usePrefsStore())
 
 const doc = generateDoc(answers.value)
+
+// TODO load these dynamically?
+const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsUk }
 
 </script>
 
 <template>
     <div class="cols-layout">
         <div class="side-pane">
-            <h2>Gotowe! Oto Twój wniosek</h2>
+            <h2>{{ t('documents_ready') }}</h2>
             <div class="generated-doc">
                 <div class="doc-title">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                     </svg>
-                    Wniosek o sprostowanie aktu urodzenia
+                    {{ t('main_application') }}
                 </div>
                 <!-- <button>Podgląd</button> -->
                 <button @click="doc.save('wniosek.pdf')" class="btn-primary">
@@ -39,13 +47,13 @@ const doc = generateDoc(answers.value)
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" width="18" height="18">
                         <path d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
-                    Wróć do edycji
+                    {{ t('back_to_edit') }}
                 </button>
             </nav>
         </div>
         <div class="questions">
-            <!-- <h3>Co dalej?</h3>
-            <p>Sekcja w przygotowaniu</p> -->
+            <h3>{{ t('further_steps') }}</h3>
+            <component :is="furtherSteps[selectedLang]" />
         </div>
     </div>
 </template>

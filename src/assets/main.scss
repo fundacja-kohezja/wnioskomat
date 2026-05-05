@@ -92,6 +92,7 @@ body {
     color: light-dark($gray-950, $gray-100);
     background-color: light-dark($white, $gray-900);
     height: 100%;
+    accent-color: light-dark($teal-600, $emerald-600);
 }
 
 #app {
@@ -762,7 +763,6 @@ a {
 }
 
 .questions {
-    accent-color: light-dark($teal-600, $emerald-600);
 
     &, form {
         display: flex;
@@ -997,7 +997,7 @@ a {
 }
 
 .side-pane {
-    width: 32em;
+    width: 28em;
     flex-shrink: 0;
 }
 
@@ -1062,6 +1062,97 @@ a {
     margin-bottom: 1em;
     font-weight: 500;
     gap: 0.5em;
+}
+
+.further-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding-left: 1.5em;
+    font-weight: 600;
+
+    li * {
+        font-size: 14px;
+        font-weight: 400;
+
+        b, strong {
+            font-weight: bold;
+        }
+
+        li {
+            margin-top: 0.5em;
+        }
+    }
+
+    ol, ul {
+        padding-left: 1.5em;
+    }
+
+    ul {
+        list-style-type: disc;
+    }
+
+    h4 {
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    p, details {
+        margin-top: 1em;
+    }
+
+    details p {
+        margin-top: 0.75em;
+    }
+
+    summary {
+        cursor: default;
+
+        &::marker {
+            content: '';
+            color: light-dark($teal-600, $emerald-600);
+        }
+
+        &::-webkit-details-marker {
+            display: none;
+            color: light-dark($teal-600, $emerald-600);
+        }
+
+        &::before {
+            content: '';
+            width: 0.5em;
+            height: 0.5em;
+            display: inline-block;
+            border-top: 2px solid light-dark($teal-600, $emerald-600);
+            border-right: 2px solid light-dark($teal-600, $emerald-600);
+            transform: rotate(45deg);
+            margin-right: 0.75em;
+        }
+
+        &:hover::before {
+            border-color: light-dark($teal-500, $emerald-400);
+        }
+
+        &:active::before {
+            border-color: light-dark($teal-700, $emerald-700);
+        }
+
+        ~ * {
+            margin-left: 1.5em;
+        }
+
+        + * {
+            margin-top: 0.75em;
+        }
+
+        + details {
+            margin-top: 1em;
+        }
+    }
+
+    [open] > summary::before {
+        transform: rotate(135deg) translateX(-0.2em);
+    }
 }
 
 @keyframes fadeIn {

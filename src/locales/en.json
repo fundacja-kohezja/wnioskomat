@@ -67,6 +67,9 @@
     "step_partial": "Incomplete",
     "step_completed": "Complete",
     "step_invalid": "Contains errors",
+    "documents_ready": "Your application is ready!",
+    "further_steps": "Further steps",
+    "back_to_edit": "Go back to edit",
     "step_0": "What are you applying for?",
     "step_1": "Required documents",
     "step_1_desc": "Select which documents you plan to attach. The more, the better – it increases the chances of faster processing. Some are always required and cannot be unchecked.",
@@ -87,7 +90,7 @@
     "q_1_0_desc": "You can obtain it from any civil registry office or via the ePUAP platform.",
     "q_1_1": "Proof of court fee payment (100 PLN)",
     "q_1_1_desc": "The fee can be paid via bank transfer, at the court cashier, or by purchasing a court fee stamp:",
-    "q_1_1_desc_link": "https://oplaty.ms.gov.pl/znaki-oplaty-sadowej/zakup",
+    "q_1_1_desc_link": "https://oplaty.ms.gov.pl/en/court-fees/purchase",
     "q_1_1_desc_link_text": "Ministry website",
     "q_1_2": "At least one psychological opinion",
     "q_1_2_desc": "Select opinions you have and diagnoses included",
@@ -198,5 +201,6 @@
     "s_38": "Experience description",
     "s_39": "HRT since: ",
     "s_40": "In social life I function according to my gender identity ",
-    "s_41": "Name I use daily: "
+    "s_41": "Name I use daily: ",
+    "main_application": "Main application document"
 }

@@ -67,6 +67,9 @@
     "step_partial": "Nie dokończono",
     "step_completed": "Wypełniono",
     "step_invalid": "Zawiera błędy",
+    "documents_ready": "Gotowe! Oto Twój wniosek",
+    "further_steps": "Co dalej?",
+    "back_to_edit": "Wróć do edycji",
     "step_0": "O co wnioskujesz?",
     "step_1": "Potrzebne dokumenty",
     "step_1_desc": "Zaznacz, które dokumenty zamierzasz załączyć. Im więcej, tym lepiej – zwiększa to szansę na szybsze rozpatrzenie sprawy. Niektóre z nich są zawsze wymagane, dlatego nie można ich odznaczyć.",
@@ -198,5 +201,6 @@
     "s_38": "Opis początków",
     "s_39": "Początek terapii hormonalnej: ",
     "s_40": "W sferze społecznej funkcjonuję zgodnie z moją tożsamością płciową ",
-    "s_41": "Na co dzień używam imienia "
+    "s_41": "Na co dzień używam imienia ",
+    "main_application": "Wniosek o sprostowanie aktu urodzenia"
 }
