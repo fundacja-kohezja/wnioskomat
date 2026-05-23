@@ -290,7 +290,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
         if (step_0.a_2) {
             texts.push('nazwiska')
         }
-        const text = texts.join(' ')
+        const text = texts.join(' i ')
         font({ style: 'bold' }, () => {
             li(next, 'Możliwość wydania rozstrzygnięcia w przedmiocie '+ text +' '+({ K: 'Wnioskodawczyni', M: 'Wnioskodawcy' }[step_0.a_0] || '.......')+'.')
         })
@@ -341,5 +341,7 @@ export default ([step_0, step_1, step_2, step_3]) => {
     })
     li(next, lastAttachment+ '.', 1, '|')
 
-    return doc
+    return (filename) => {
+        doc.save(filename+'.pdf')
+    }
 }

@@ -44,6 +44,15 @@ export default defineStore('form', () => {
         statuses => statuses.some(status => status !== 'unfilled')
     ))
 
+    const anyInvalid = computed(() => answerStatuses.value.some(
+        statuses => statuses.some(status => status === 'invalid')
+    ))
+
+    const anyIncomplete = computed(() => answerStatuses.value.some(
+        statuses => statuses.some(status => status === 'unfilled')
+    ))
+
+
     const exportAnswers = (filename) => {
         const link = document.createElement('a')
         const file = new Blob([JSON.stringify(answers.value)], {
@@ -52,12 +61,12 @@ export default defineStore('form', () => {
         link.href = URL.createObjectURL(file)
         link.download = filename + '.json'
         link.click()
-        link.href = URL.revokeObjectURL(file)
+        URL.revokeObjectURL(file)
     }
 
     return {
         answers, // state
-        answerStatuses, anyAnswers, // getters
+        answerStatuses, anyAnswers, anyInvalid, anyIncomplete, // getters
         clearAnswers, exportAnswers, // actions
     }
 }, {

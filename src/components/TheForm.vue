@@ -3,17 +3,20 @@ import { useI18n } from 'vue-i18n'
 import { computed, nextTick, ref, watch } from 'vue'
 import { computedWithControl } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
+import { useModal } from 'vue-final-modal'
 
 import useFormStore from '../stores/form'
 import AnswerInput from './AnswerInput.vue'
 import DataSummary from './DataSummary.vue'
 import steps from '../steps'
+import ConfirmInvalid from './modals/ConfirmInvalid.vue'
+import ConfirmIncomplete from './modals/ConfirmIncomplete.vue'
 
 const emit = defineEmits(['goToStart', 'goToEnd'])
 
 const { t } = useI18n()
 
-const { answers, answerStatuses } = storeToRefs(useFormStore())
+const { answers, answerStatuses, anyInvalid, anyIncomplete } = storeToRefs(useFormStore())
 
 const heading = ref()
 const currentIndex = ref(0)
@@ -33,12 +36,32 @@ watch(() => answerStatuses.value[currentIndex.value], () => {
     stepStatuses.trigger()
 })
 
-watch(currentIndex, currentIndex => {
-    if (currentIndex > steps.length) {
-        emit('goToEnd')
+const confirmation = computed(() => anyInvalid.value ? ConfirmInvalid : ConfirmIncomplete)
+
+const cancelLabel = computed(() => t('back_to_form'))
+const confirmLabel = computed(() => t('generate_anyway'))
+
+const { open: openConfirmation, close } = useModal({
+    component: confirmation,
+    attrs: {
+        cancelLabel,
+        confirmLabel,
+        onCancel() { close() },
+        onConfirm() { emit('goToEnd') },
+    },
+})
+
+watch(currentIndex, index => {
+    if (index <= steps.length) {
+        nextTick(() => heading.value.scrollIntoView({ block: 'nearest' }))
         return
     }
-    nextTick(() => heading.value.scrollIntoView({ block: 'nearest' }))
+    if (!stepStatuses.value.every(status => status === 'completed')) {
+        openConfirmation()
+        currentIndex.value = steps.length
+        return
+    }
+    emit('goToEnd')
 })
 
 </script>

@@ -990,9 +990,45 @@ a {
 
     .validation-message {
         font-size: 0.9em;
-        color: light-dark(#c2410c, #fb923c);
-        font-weight: 600;
         margin-top: 0.5em;
+        font-weight: 600;
+    }
+}
+
+.validation-message {
+    color: light-dark(#c2410c, #fb923c);
+}
+
+.confirm-modal {
+    line-height: 1.4;
+
+    .message {
+        font-weight: 600;
+        font-size: 1.1em;
+        display: flex;
+        gap: 0.5em;
+        align-items: center;
+
+        svg {
+            color: light-dark($gray-600, $gray-400);
+            flex-shrink: 0;
+            align-self: center;
+        }
+
+        &.validation-message svg {
+            color: inherit;
+        }
+    }
+}
+
+.confirm-buttons {
+    margin-top: 1em;
+    display: flex;
+    margin-left: auto;
+    gap: 0.5em;
+
+    .btn {
+        padding-inline: 0.75em;
     }
 }
 
@@ -1044,11 +1080,32 @@ a {
     }
 }
 
+.invalid-warning {
+    display: flex;
+    font-size: 14px;
+    gap: 0.5em;
+    margin-top: 1.25em;
+
+    + .generated-doc {
+        margin-top: 1.25em;
+    }
+
+    svg {
+        flex-shrink: 0;
+        color: light-dark($gray-400, $gray-500);
+    }
+}
+
 .generated-doc {
     background-color: light-dark($white, $gray-900);
     padding: 1em;
     margin-top: 2em;
     border-radius: 6px;
+
+    .buttons {
+        display: flex;
+        gap: 0.5em;
+    }
 
     button {
         border-radius: 4px;
