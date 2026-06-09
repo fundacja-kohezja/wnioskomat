@@ -594,11 +594,16 @@ a {
 
 .warning {
     border-color: light-dark($amber-300, $amber-800);
-    margin-bottom: 4em;
-    margin-top: 0;
+    color: light-dark($amber-700, $amber-300);
+    font-weight: 600;
+
+    &:first-child {
+        margin-bottom: 4em;
+        margin-top: 0;
+    }
 
     > svg {
-        color: light-dark($amber-400, $amber-700);
+        color: light-dark($amber-500, $amber-600);
     }
 }
 

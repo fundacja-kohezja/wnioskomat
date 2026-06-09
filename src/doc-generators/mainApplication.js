@@ -1,4 +1,4 @@
-import { pdf } from './utils'
+import { pdf } from './pdfUtils'
 
 // TODO load it anynchronously
 import { courts } from '../helpers/datasets'
@@ -11,7 +11,7 @@ const normalize = text => (text || '').trim()
 
 export default ([step_0, step_1, step_2, step_3]) => {
 
-    const { doc, p, li, space, font, setLineHeight, noPageBreak } = pdf()
+    const { p, li, space, font, setLineHeight, noPageBreak, save } = pdf()
 
     // TODO do it differently
     const city = normalize(step_2.a_1).split('\n').at(-1).split(' ').slice(1).join(' ') || '......................'
@@ -63,7 +63,6 @@ export default ([step_0, step_1, step_2, step_3]) => {
 
     space(12)
 
-    // TODO remember tab characters are problematic
     p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego wnoszę o:')
     li('1.', 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[step_0.a_0] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ (normalize(step_2.a_9) || '......................') +' za nr '+ (normalize(step_2.a_8) || '......................') +', w ten sposób, żeby:')
     li(step_0.a_1 || step_0.a_2 ? 'a.' : '', {
@@ -341,7 +340,5 @@ export default ([step_0, step_1, step_2, step_3]) => {
     })
     li(next, lastAttachment+ '.', 1, '|')
 
-    return (filename) => {
-        doc.save(filename+'.pdf')
-    }
+    return save
 }

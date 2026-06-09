@@ -290,5 +290,9 @@ export function pdf() {
         })
     }
 
-    return { doc, p, li, space, font, setFontSize, setLineHeight, noPageBreak }
+    const save = (filename) => {
+        doc.save(filename+'.pdf')
+    }
+
+    return { p, li, space, font, setFontSize, setLineHeight, noPageBreak, save }
 }
