@@ -1,6 +1,11 @@
 import { jsPDF } from 'jspdf'
 
-export function pdf() {
+import './fonts/TeXGyreTermes-normal'
+import './fonts/TeXGyreTermes-bold'
+import './fonts/TeXGyreTermes-italic'
+// import './fonts/TeXGyreTermes-bolditalic' // Unnecessary for now
+
+export function initPdf() {
     const doc = new jsPDF
 
     let fontSize
@@ -58,6 +63,35 @@ export function pdf() {
     let pageFootnotes = []
 
     let dryRun = false
+
+    const numbering = {
+        'basic-numbering': [1, 'a'],
+        'section-marker': ['a'],
+    }
+    const resetNumbering = (r, l = 0) => {
+        if (typeof numbering[r][l] === 'number') {
+            numbering[r][l] = 1
+        } else {
+            numbering[r][l] = 'a'
+        }
+        if (++l < numbering[r].length) {
+            resetNumbering(r, l)
+        }
+    }
+    const numberingSuffixes = {
+        'basic-numbering': '.',
+        'section-marker': ')',
+    }
+    const increment = (r, l) => {
+        if (typeof numbering[r][l] === 'number') {
+            numbering[r][l]++
+        } else {
+            numbering[r][l] = String.fromCharCode(numbering[r][l].charCodeAt(0) + 1)
+        }
+        if (++l < numbering[r].length) { // reset deeper when incrementing shallower
+            resetNumbering(r, l)
+        }
+    }
 
     const newPage = () => {
         if (dryRun) return
@@ -259,7 +293,8 @@ export function pdf() {
         })
     }
 
-    const p = (text, shift = 0, spaceAfter = 3, { align = 'justify', italicSep, boldSep, footnotes, footnotesFormat, ...options  } = {}, doExtra) => {
+    const p = (text, { shift = 0, spaceAfter = 3, spaceBefore = 0, align = 'justify', italicSep, boldSep, footnotes, footnotesFormat, ...options  } = {}, doExtra) => {
+        space(spaceBefore)
         const width = options.maxWidth || maxWidth - shift
         if (align === 'center' || align === 'right') {
             // TODO we should check if there is enough space and possibly move to another page
@@ -284,9 +319,15 @@ export function pdf() {
         y += spaceAfter
     }
 
-    const li = (nb, text, level = 1, italicSep) => {
-        p(text, 8*level, 0, { italicSep }, () => {
-            doc.text(nb, margin + 8*level - 6, y)
+    const li = (reference, text, options = {}) => {
+        const { level = 1, spaceAfter = 0, ...rest } = options
+        p(text, {
+            ...rest,
+            shift: 8*level,
+            spaceAfter,
+        }, () => {
+            doc.text(numbering[reference][level-1] + numberingSuffixes[reference], margin + 8*level - 6, y)
+            increment(reference, level - 1)
         })
     }
 
@@ -294,5 +335,7 @@ export function pdf() {
         doc.save(filename+'.pdf')
     }
 
-    return { p, li, space, font, setFontSize, setLineHeight, noPageBreak, save }
+    const complete = () => {} // noop
+
+    return { p, li, font, setLineHeight, resetNumbering, noPageBreak, complete, save }
 }

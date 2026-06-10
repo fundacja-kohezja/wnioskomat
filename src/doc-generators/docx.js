@@ -9,7 +9,7 @@ import {
     convertMillimetersToTwip as mm,
 } from 'docx'
 
-export function docx() {
+export function initDocx() {
 
     let doc
     const content = []
@@ -18,7 +18,7 @@ export function docx() {
     let bold = false
     let italics = false
     let keepTogether = false
-    let numberingInstances = {
+    const numberingInstances = {
          'basic-numbering': 0,
          'section-marker': 0,
     }

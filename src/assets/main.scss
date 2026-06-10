@@ -593,9 +593,9 @@ a {
 }
 
 .warning {
-    border-color: light-dark($amber-300, $amber-800);
-    color: light-dark($amber-700, $amber-300);
-    font-weight: 600;
+    border-color: light-dark($amber-500, $amber-600);
+    color: light-dark($amber-800, $amber-100);
+    font-weight: 500;
 
     &:first-child {
         margin-bottom: 4em;

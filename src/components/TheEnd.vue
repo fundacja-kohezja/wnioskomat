@@ -8,7 +8,8 @@ import FurtherStepsUk from './further-steps/FurtherStepsUk.vue'
 import useFormStore from '../stores/form'
 import usePrefsStore from '../stores/prefs'
 import generateDoc from '../doc-generators/mainApplication'
-import generateWord from '../doc-generators/mainApplicationDocx'
+import { initPdf } from '../doc-generators/pdf'
+import { initDocx } from '../doc-generators/docx'
 
 const emit = defineEmits(['goToForm'])
 
@@ -16,8 +17,8 @@ const { t } = useI18n()
 const { answers, anyInvalid, anyIncomplete } = storeToRefs(useFormStore())
 const { selectedLang } = storeToRefs(usePrefsStore())
 
-const savePdf = generateDoc(answers.value)
-const saveWord = generateWord(answers.value)
+const savePdf = generateDoc(answers.value, initPdf)
+const saveDocx = generateDoc(answers.value, initDocx)
 
 // TODO load these dynamically?
 const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsUk }
@@ -53,7 +54,7 @@ const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsU
                         </svg>
                         {{ t('download_pdf') }}
                     </button>
-                    <button @click="saveWord(t('main_application'))" class="btn">
+                    <button @click="saveDocx(t('main_application'))" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
                         <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
                         <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
