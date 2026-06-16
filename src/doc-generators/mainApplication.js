@@ -3,7 +3,7 @@ import { courts } from '../helpers/datasets'
 
 const normalize = text => (text || '').trim()
 
-export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) => {
+export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], documentCreatorInitializer) => {
 
     const { p, li, font, setLineHeight, resetNumbering, noPageBreak, complete, save } = documentCreatorInitializer()
 
@@ -11,7 +11,7 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
     const letter = 'section-marker'
 
     // TODO do it differently
-    const city = normalize(step_2.a_1).split('\n').at(-1).split(' ').slice(1).join(' ') || '......................'
+    const city = normalize(step_4.a_1).split('\n').at(-1).split(' ').slice(1).join(' ') || '......................'
     p(city + ', ' + (new Date).toLocaleDateString('pl-PL', { dateStyle: 'long' }), {
         align: 'right',
         spaceAfter: 6,
@@ -23,10 +23,10 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         align: 'left',
     }
 
-    if (step_2.a_3) {
-        p(step_2.a_3, top)
+    if (step_4.a_3) {
+        p(step_4.a_3, top)
         p('Wydział Cywilny', top)
-        p(courts[step_2.a_3].address, {
+        p(courts[step_4.a_3].address, {
             ...top,
             mayBreak: true,
         })
@@ -42,28 +42,28 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
             spaceBefore: 5,
         })
     })
-    p([step_2.a_5, step_2.a_6].map(normalize).join(' '), top)
-    p(normalize(step_2.a_1), {
+    p([step_4.a_5, step_4.a_6].map(normalize).join(' '), top)
+    p(normalize(step_4.a_1), {
         ...top,
         mayBreak: true,
     })
-    p('PESEL ' + (step_2.a_0 ? normalize(step_2.a_0) : '......................'), top)
-    if (step_2.a_4) {
-        p((step_2.a_4_0 ? normalize(step_2.a_4_0) : '') + (step_2.a_4_1 ? ('\ntel. ' + normalize(step_2.a_4_1)) : ''), {
+    p('PESEL ' + (step_4.a_0 ? normalize(step_4.a_0) : '......................'), top)
+    if (step_4.a_4) {
+        p((step_4.a_4_0 ? normalize(step_4.a_4_0) : '') + (step_4.a_4_1 ? ('\ntel. ' + normalize(step_4.a_4_1)) : ''), {
             ...top,
             mayBreak: true,
         })
     }
 
-    if (step_2.a_2) {
+    if (step_4.a_2) {
         font({ style: 'bold' }, () => {
             p('Pełnomocnik do doręczeń', {
                 ...top,
                 spaceBefore: 5,
             })
         })
-        p(normalize(step_2.a_2_0) || '......................', top)
-        p(normalize(step_2.a_2_1), {
+        p(normalize(step_4.a_2_0) || '......................', top)
+        p(normalize(step_4.a_2_3), {
             ...top,
             mayBreak: true,
         })
@@ -88,7 +88,7 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
     p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego wnoszę o:', {
         spaceBefore: 12,
     })
-    li(nb, 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[step_0.a_0] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ (normalize(step_2.a_9) || '......................') +' za nr '+ (normalize(step_2.a_8) || '......................') +', w ten sposób, żeby:')
+    li(nb, 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[step_0.a_0] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ (normalize(step_4.a_10) || '......................') +' za nr '+ (normalize(step_4.a_9) || '......................') +', w ten sposób, żeby:')
 
     const firstItem = ({
         K:'błędnie wpisana w akcie płeć oznaczona jako męska (mężczyzna) została zmieniona na prawidłową – żeńską (kobieta);',
@@ -107,7 +107,7 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         })
     }
 
-    const name = normalize(step_2.a_5) || '......................'
+    const name = normalize(step_4.a_5) || '......................'
     if (step_0.a_1) {
         const newName = normalize(step_0.a_1_0) || '......................'
         li(nb, (name.includes(' ') ? ('imiona '+name+' zostały') : ('imię '+name+' zostało')) + ' zmienione na '+(newName.includes(' ')?'imiona ':'imię ')+newName+';', {
@@ -115,7 +115,7 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         })
     }
     if (step_0.a_2) {
-        li(nb, 'nazwisko '+normalize(step_2.a_6)+' zostało zmienione na '+normalize(step_0.a_2_0)+'; ', {
+        li(nb, 'nazwisko '+normalize(step_4.a_6)+' zostało zmienione na '+normalize(step_0.a_2_0)+'; ', {
             level: 2,
         })
     }
@@ -138,44 +138,44 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         }
         return '......................;'
     }
-    if (step_1.a_2_0) {
-        li(nb, 'opinii psychologa – na fakt stwierdzenia u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia mi formalnej diagnozy '+diagnosis(step_1.a_2_0_0, step_1.a_2_0_1), {
+    if (step_3.a_2_0) {
+        li(nb, 'opinii psychologa – na fakt stwierdzenia u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia mi formalnej diagnozy '+diagnosis(step_3.a_2_0_0, step_3.a_2_0_1), {
             level: 2,
         })
     }
-    if (step_1.a_2_1) {
-        li(nb, 'opinii psychologa-seksuologa – na fakt stwierdzenia u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia mi formalnej diagnozy '+diagnosis(step_1.a_2_1_0, step_1.a_2_1_1), {
+    if (step_3.a_2_1) {
+        li(nb, 'opinii psychologa-seksuologa – na fakt stwierdzenia u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia mi formalnej diagnozy '+diagnosis(step_3.a_2_1_0, step_3.a_2_1_1), {
             level: 2,
         })
     }
-    if (step_1.a_3_0) {
-        li(nb, 'zaświadczenia lekarza psychiatry – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia mi formalnej diagnozy '+diagnosis(step_1.a_3_0_0, step_1.a_3_0_1), {
+    if (step_3.a_3_0) {
+        li(nb, 'zaświadczenia lekarza psychiatry – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia mi formalnej diagnozy '+diagnosis(step_3.a_3_0_0, step_3.a_3_0_1), {
             level: 2,
         })
     }
-    if (step_1.a_3_1) {
-        li(nb, 'zaświadczenia lekarza seksuologa – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia mi formalnej diagnozy '+diagnosis(step_1.a_3_1_0, step_1.a_3_1_1), {
+    if (step_3.a_3_1) {
+        li(nb, 'zaświadczenia lekarza seksuologa – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia mi formalnej diagnozy '+diagnosis(step_3.a_3_1_0, step_3.a_3_1_1), {
             level: 2,
         })
     }
-    if (step_1.a_4) {
+    if (step_3.a_4) {
         li(nb, 'zaświadczenia lekarskiego – na fakt wdrożenia u mnie terapii hormonalnej;', {
             level: 2,
         })
     }
-    if (step_1.a_5) {
+    if (step_3.a_5) {
         li(nb, 'dokumentu zatytułowanego |Zalecenia Polskiego Towarzystwa Seksuologicznego dotyczące opieki nad zdrowiem dorosłych osób transpłciowych – stanowisko panelu ekspertów| – na fakt aktualnych polskich standardów opieki nad osobami transpłciowymi, wymogów diagnostycznych niezbędnych do postawienia diagnozy F64.0, spełniania przeze mnie kryteriów diagnostycznych;', {
             level: 2,
             italicSep: '|',
         })
     }
-    if (!step_0.a_1 && step_1.a_7) {
+    if (!step_0.a_1 && step_3.a_7) {
         li(nb, 'decyzji o zmianie imienia – na fakt zmiany imienia w związku z trwałym poczuciem przynależności do płci '+({ K: 'żeńskiej;', M: 'męskiej;' }[step_0.a_0] || '.......;'), {
             level: 2,
         })
     }
-    if (step_1.a_8) {
-        li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS' }[step_1.a_8_0] || '......................')+' – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[step_0.a_0] || '.......')+' w otoczeniu;', {
+    if (step_3.a_8) {
+        li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS' }[step_3.a_8_0] || '......................')+' – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[step_0.a_0] || '.......')+' w otoczeniu;', {
             level: 2,
         })
     }
@@ -186,7 +186,7 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         })
     }
 
-    if (step_1.a_6) {
+    if (step_3.a_6) {
         p('Jednocześnie przedkładam jako załącznik wydaną przez Rzecznika Praw Obywatelskich publikację |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, zawierającą szereg specjalistycznych informacji dotyczących praw osób transpłciowych oraz aktualnych standardów orzeczniczych w sprawach o ustalenie płci.', {
             italicSep: '|',
             spaceBefore: 8,
@@ -194,8 +194,8 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
     }
 
     let text = 'Na wstępie wyjaśniam, że zdaję sobie sprawę z metrykalnego oznaczenia mojej płci jako '+({ K: 'męskiej', M: 'żeńskiej' }[step_0.a_0] || '.......')+', jednak wskazuję, że w codziennym życiu funkcjonuję jako '+({ K: 'kobieta', M: 'mężczyzna' }[step_0.a_0] || '.......')+'. W związku z tym, że tożsamość płciowa jest jednym z dóbr osobistych człowieka, we wniosku będę używać '+({ K: 'żeńskich', M: 'męskich' }[step_0.a_0] || '.......')+' form gramatycznych.'
-    if (step_3.a_3) {
-        text += ' Jednocześnie wskazuję, że na co dzień używam imienia '+ (normalize(step_3.a_3_0) || '....... ') +'.'
+    if (step_6.a_3) {
+        text += ' Jednocześnie wskazuję, że na co dzień używam imienia '+ (normalize(step_6.a_3_0) || '....... ') +'.'
     }
     p(text, {
         spaceBefore: 6,
@@ -210,9 +210,9 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         p('TWIERDZENIA FAKTYCZNE')
     })
 
-    text = 'Kierownik Urzędu Stanu Cywilnego w '+(normalize(step_2.a_9) || '........')
-    text += ' zarejestrował moje urodzenie w dniu '+(step_2.a_7 ? (new Date(step_2.a_7)).toLocaleDateString('pl-PL', { dateStyle: 'long' }) : '........')
-    text += ' w akcie o numerze '+(normalize(step_2.a_8) || '..................... ')+'. '
+    text = 'Kierownik Urzędu Stanu Cywilnego w '+(normalize(step_4.a_10) || '........')
+    text += ' zarejestrował moje urodzenie w dniu '+(step_4.a_7 ? (new Date(step_4.a_7)).toLocaleDateString('pl-PL', { dateStyle: 'long' }) : '........')
+    text += ' w akcie o numerze '+(normalize(step_4.a_9) || '..................... ')+'. '
     text += 'Moja płeć została tam oznaczona jako '+({ K: 'męska', M: 'żeńska' }[step_0.a_0] || '.......')+', w oparciu o ocenę mojej budowy anatomicznej przez personel medyczny. '
     text += 'Nadano mi '+(name.includes(' ') ? 'imiona ' : 'imię ')+name+'.'
     p(text)
@@ -221,14 +221,14 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         p('Dowód: odpis aktu urodzenia')
     })
 
-    p(normalize(step_3.a_0) || '......................', {
+    p(normalize(step_6.a_0) || '......................', {
         mayBreak: true,
     })
     p('U osób transpłciowych występuje niezgodność pomiędzy płcią przypisaną przy urodzeniu a tożsamością płciową, czyli głębokim wewnętrznym przeżywaniem własnej płci. Ta rozbieżność może prowadzić do dysforii, czyli uczucia dyskomfortu wynikającego z rozdźwięku pomiędzy różnymi aspektami naszej płci (cechami płciowymi naszego ciała, tym jak wyglądamy, tym jak odbierają nas inni). Nasilona dysforia może wiązać się z poważnymi negatywnymi skutkami dla zdrowia psychicznego osoby transpłciowej. Formalnie u osób transpłciowych diagnozuje się „transseksualizm” według nomenklatury ICD-10 (F64.0). Według najnowszej nomenklatury ICD-11, nie wszędzie jeszcze wdrożonej, formalnie diagnozuje się „niezgodność płciową” (HA60), którą zdefiniowano jako utrzymującą się wyraźną niezgodność między doświadczaną przez osobę płcią oraz płcią przypisaną. Stan „niezgodności płciowej” został wyjęty z obszaru dotyczącego zaburzeń psychicznych, a przeniesiony do obszaru dotyczącego zdrowia seksualnego. Sama transpłciowość w tym ujęciu nie jest już stanem „patologicznym”, „chorobą” czy „zaburzeniem”. Po uzgodnieniu płci w toku tranzycji medycznej i/lub społecznej, w tym prawnej, niezgodność ta zanika.')
 
     text = 'W związku z głęboko przeżywanym poczuciem identyfikacji z płcią '+({ K: 'żeńską', M: 'męską' }[step_0.a_0] || '.......')+' i występującą jednocześnie dysforią, '+({ K: 'rozpoczęłam', M: 'rozpocząłem' }[step_0.a_0] || 'rozpocz_ł_m')+' formalną diagnostykę u lekarzy specjalistów, w wyniku której '+({ K: 'otrzymałam', M: 'otrzymałem' }[step_0.a_0] || 'otrzymał_m')+' diagnozę '
-    const isAnyF64 = (step_1.a_2_0 && step_1.a_2_0_0) || (step_1.a_2_1 && step_1.a_2_1_0) || (step_1.a_3_0 && step_1.a_3_0_0) || (step_1.a_3_1 && step_1.a_3_1_0)
-    const isAnyHA60 = (step_1.a_2_0 && step_1.a_2_0_1) || (step_1.a_2_1 && step_1.a_2_1_1) || (step_1.a_3_0 && step_1.a_3_0_1) || (step_1.a_3_1 && step_1.a_3_1_1)
+    const isAnyF64 = (step_3.a_2_0 && step_3.a_2_0_0) || (step_3.a_2_1 && step_3.a_2_1_0) || (step_3.a_3_0 && step_3.a_3_0_0) || (step_3.a_3_1 && step_3.a_3_1_0)
+    const isAnyHA60 = (step_3.a_2_0 && step_3.a_2_0_1) || (step_3.a_2_1 && step_3.a_2_1_1) || (step_3.a_3_0 && step_3.a_3_0_1) || (step_3.a_3_1 && step_3.a_3_1_1)
     if (isAnyF64 && isAnyHA60) {
         text += 'transseksualizmu (F64.0) / niezgodności płciowej (HA60).'
     } else if (isAnyF64) {
@@ -241,9 +241,9 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
     // TODO "psychiatrę-seksuologa" case
     text += ' Proces diagnostyczny został przeprowadzony '
     const specialists = []
-    if (step_1.a_3_0) specialists.push('lekarza psychiatrę')
-    if (step_1.a_3_1) specialists.push('lekarza seksuologa')
-    if (step_1.a_2_0 || step_1.a_2_1) specialists.push('psychologa')
+    if (step_3.a_3_0) specialists.push('lekarza psychiatrę')
+    if (step_3.a_3_1) specialists.push('lekarza seksuologa')
+    if (step_3.a_2_0 || step_3.a_2_1) specialists.push('psychologa')
     if (!specialists.length) specialists.push('......................')
     specialists.forEach((specialist, i) => {
         text += 'przez '+specialist
@@ -255,12 +255,12 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         }
     })
     text += ', zgodnie z wytycznymi Polskiego Towarzystwa Seksuologicznego. W toku tego procesu przekazano mi wszystkie informacje niezbędne do wyrażenia przeze mnie świadomej zgody na wdrożenie leczenia hormonalnego, a także wykluczono wtórne (np. wynikające z zaburzeń psychicznych) pochodzenie dysforii płciowej / niezgodności płciowej. Specjaliści przeprowadzili podmiotowe badania psychologiczne'
-    text += step_3.a_2 ? ', wywiad i diagnostykę opartę o specjalistyczne, standaryzowane narzędzia. ' : ' i wywiad. '
+    text += step_6.a_2 ? ', wywiad i diagnostykę opartę o specjalistyczne, standaryzowane narzędzia. ' : ' i wywiad. '
     text += 'Proces ten pozwolił na stwierdzenie, że występująca u mnie niezgodność płci jest trwała. W opinii psychologicznej zwrócono uwagę, że brak tranzycji medycznej i prawnej przyczynia się do trudności w obszarze zdrowia psychicznego i zarekomendowano dalszą prawną zmianę oznaczenia płci celem poprawy mojego funkcjonowania.'
     p(text)
 
-    p('Od '+(step_3.a_1 ? ((['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'][+step_3.a_1[0] - 1] || '') + ' ' + (step_3.a_1[1] || '.......')) : '......................')+' wdrożono u mnie leczenie hormonalne. To oznacza, że przyjmuję hormony, których celem jest '+({ K: 'feminizacja', M: 'maskulinizacja' }[step_0.a_0] || '......................')+' mojego ciała. Zmiany, które temu towarzyszą, są przeze mnie odbierane pozytywnie.')
-    p('W sferze społecznej '+({ some: 'w niektórych obszarach', all: 'w większości obszarów' }[step_3.a_4] || '......................')+' funkcjonuję zgodnie z moją '+({ K: 'żeńską ', M: 'męską ' }[step_0.a_0] || '')+'tożsamością płciową. Moja rodzina, osoby bliskie, koledzy i koleżanki, '+(step_3.a_3 ? ('znają mnie jako '+step_3.a_3_0+' i ') : '')+'używają wobec mnie '+({ K: 'żeńskich', M: 'męskich' }[step_0.a_0] || '.......')+' form gramatycznych.')
+    p('Od '+(step_6.a_1 ? ((['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'][+step_6.a_1[0] - 1] || '') + ' ' + (step_6.a_1[1] || '.......')) : '......................')+' wdrożono u mnie leczenie hormonalne. To oznacza, że przyjmuję hormony, których celem jest '+({ K: 'feminizacja', M: 'maskulinizacja' }[step_0.a_0] || '......................')+' mojego ciała. Zmiany, które temu towarzyszą, są przeze mnie odbierane pozytywnie.')
+    p('W sferze społecznej '+({ some: 'w niektórych obszarach', all: 'w większości obszarów' }[step_6.a_4] || '......................')+' funkcjonuję zgodnie z moją '+({ K: 'żeńską ', M: 'męską ' }[step_0.a_0] || '')+'tożsamością płciową. Moja rodzina, osoby bliskie, koledzy i koleżanki, '+(step_6.a_3 ? ('znają mnie jako '+step_6.a_3_0+' i ') : '')+'używają wobec mnie '+({ K: 'żeńskich', M: 'męskich' }[step_0.a_0] || '.......')+' form gramatycznych.')
     p('Brak zmiany oznaczenia płci oraz imienia powoduje u mnie duże trudności w codziennym funkcjonowaniu. We wszystkich przypadkach w których muszę używać danych zawartych w akcie urodzenia lub okazywać dowód tożsamości, moja tożsamość jest kwestionowana z uwagi na wygląd, odpowiadający typowym wyobrażeniom o '+({ K: 'kobiecym', M: 'męskim' }[step_0.a_0] || '.......')+' wyglądzie. Zmusza mnie to też do ujawniania osobom postronnym, że jestem osobą transpłciową, co głęboko ingeruje w moją prywatność i pozbawia mnie szansy na decydowanie o tym, kto będzie wiedzieć o mojej transpłciowości. Brak zmiany oznaczenia płci pozbawia mnie więc sprawczości i decyzyjności w jednym z kluczowych aspektów mojego życia. Co więcej, brak zmiany danych wpływa też na możliwość podjęcia dalszych kroków w tranzycji medycznej. Utrudnia też znalezienie i utrzymanie pracy. Osoby transpłciowe są grupą najczęściej dyskryminowaną na rynku pracy wśród społeczności LGBT+. Dopóki moje dane metrykalne są inne niż zgodne z moją tożsamością płciową, jestem nieustannie zmuszona do ujawniania pracodawcom swojej tożsamości, co obniża szansę na bycie '+({ K: 'zatrudnioną.', M: 'zatrudnionym.' }[step_0.a_0] || 'zatrudnion_.'))
     p('Powyższe okoliczności wskazują jednoznacznie, że w moim przypadku poczucie przynależności do płci '+({ K: 'żeńskiej', M: 'męskiej' }[step_0.a_0] || '.......')+' jest trwałe i że uwzględnienie niniejszego wniosku jest uzasadnione.')
 
@@ -411,12 +411,12 @@ export default ([step_0, step_1, step_2, step_3], documentCreatorInitializer) =>
         step_0.a_3 ? 'oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania' : 'dowód uiszczenia opłaty sądowej od wniosku',
         'odpis aktu urodzenia',
     ]
-    if (step_1.a_2_0) attachments.push('opinia psychologiczna')
-    if (step_1.a_2_1) attachments.push('opinia psychologiczna')
-    if (step_1.a_3_0) attachments.push('zaświadczenie lekarza psychiatry')
-    if (step_1.a_3_1) attachments.push('zaświadczenie lekarza seksuologa')
-    if (step_1.a_5) attachments.push('dokument zatytułowany |Zalecenia Polskiego Towarzystwa Seksuologicznego dotyczące opieki nad zdrowiem dorosłych osób transpłciowych – stanowisko panelu ekspertów|')
-    if (step_1.a_6) attachments.push('dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich')
+    if (step_3.a_2_0) attachments.push('opinia psychologiczna')
+    if (step_3.a_2_1) attachments.push('opinia psychologiczna')
+    if (step_3.a_3_0) attachments.push('zaświadczenie lekarza psychiatry')
+    if (step_3.a_3_1) attachments.push('zaświadczenie lekarza seksuologa')
+    if (step_3.a_5) attachments.push('dokument zatytułowany |Zalecenia Polskiego Towarzystwa Seksuologicznego dotyczące opieki nad zdrowiem dorosłych osób transpłciowych – stanowisko panelu ekspertów|')
+    if (step_3.a_6) attachments.push('dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich')
 
     const lastAttachment = attachments.pop()
     attachments.forEach(attachment => {

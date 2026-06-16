@@ -35,9 +35,9 @@ export default defineStore('form', () => {
     }
 
     const answerStatuses = computed(() => steps.map(
-        ({ questions }, i) => questions.flatMap(
+        ({ questions, showIf }, i) => !showIf || showIf(answers.value) ? questions.flatMap(
             (q, j) => validateAnswer(q, i, 'a_'+j, answers.value)
-        )
+        ) : ['valid']
     ))
 
     const anyAnswers = computed(() => answerStatuses.value.some(

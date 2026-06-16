@@ -149,6 +149,10 @@ hr {
     padding-inline: 2rem;
 }
 
+.invisible {
+    visibility: hidden;
+}
+
 .top-bar {
     font-size: 14px;
     padding-block: 0.5rem;
@@ -674,7 +678,7 @@ a {
         }
 
         &:active {
-            text-decoration-color: light-dark($teal-800, $emerald-300);
+            text-decoration-color: light-dark($teal-800, $emerald-700);
         }
     }
 
@@ -897,14 +901,13 @@ a {
         }
     }
 
-    .input-with-prefix {
+    .input-with-prefix,
+    .input-with-suffix {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
         background-color: light-dark($gray-100, $gray-900);
         border-radius: 4px;
         border: 1px solid light-dark($gray-400, $gray-600);
-        max-width: 36em;
         box-sizing: border-box;
 
         span {
@@ -914,10 +917,29 @@ a {
 
         input {
             border: none;
-            border-radius: 0 3px 3px 0;
             flex-grow: 1;
         }
     }
+
+    .input-with-prefix {
+        max-width: 36em;
+        flex-wrap: wrap;
+
+        input {
+            border-radius: 0 3px 3px 0;
+        }
+    }
+
+    .input-with-suffix {
+        max-width: 18em;
+
+        input {
+            border-radius: 3px 0 0 3px;
+            min-width: 0;
+            flex-basis: 0;
+        }
+    }
+
 
     label:hover .input-with-prefix {
         border: 1px solid light-dark($gray-500, $gray-500);
@@ -956,14 +978,133 @@ a {
         }
     }
 
+    .repeater {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
+
+        &.has-nested-repeater {
+            gap: 1em;
+        }
+
+        &-label {
+            margin-bottom: -0.25em;
+        }
+
+        .buttons-group {
+            align-self: center;
+        }
+
+        > .btn {
+            padding: 0.5em 1em;
+            align-self: start;
+            background-color: light-dark($gray-50, $gray-800);
+
+            &:hover {
+                background-color: light-dark($white, $gray-750);
+            }
+
+            &:active {
+                background-color: light-dark($gray-100, $gray-900);
+            }
+        }
+
+        > .btn-primary {
+            align-self: start;
+        }
+
+        &-row {
+            display: flex;
+            gap: 1em;
+            align-items: end;
+            border-radius: 6px;
+            padding: 0.75em;
+
+            .radio-buttons {
+                margin-bottom: 0.5em;
+            }
+
+            .btn {
+                padding: 0.4em;
+
+                &:last-child {
+                    margin-left: 0.5em;
+                    padding: 0.5em 0.6em;
+                }
+
+                &:active {
+                    background-color: light-dark($gray-200, $gray-950);
+                }
+
+                &:disabled {
+                    background-color: transparent;
+                    border-color: light-dark($gray-200, $gray-800);
+                    color: light-dark($gray-300, $gray-700);
+                }
+            }
+        }
+
+        &:not(.has-nested-repeater) .repeater-row {
+            background-color: light-dark($white, $gray-900);
+        }
+
+        &.has-nested-repeater > .repeater-row {
+            border: 1px solid light-dark($gray-300, $gray-750);
+            flex-wrap: wrap;
+
+            > :nth-last-child(2) {
+                flex-basis: 100%;
+                order: 100;
+            }
+
+            > :last-child {
+                order: 99;
+                align-self: start;
+
+                .btn {
+                    background-color: light-dark($gray-50, $gray-800);
+
+                    &:hover {
+                        background-color: light-dark($white, $gray-750);
+                    }
+
+                    &:active {
+                        background-color: light-dark($gray-100, $gray-900);
+                    }
+
+                    &:disabled {
+                        background-color: transparent;
+                    }
+                }
+            }
+        }
+
+        &-subfield {
+            flex-grow: 1;
+
+            .input-with-suffix input {
+                width: 6em;
+                flex-grow: 1;
+            }
+        }
+    }
+
     .step-title {
         margin-bottom: 0.5em;
         scroll-margin: 2em;
     }
 
-    .help-text {
+    .help-text,
+    .repeater-subfield > label > span:first-child {
         color: light-dark($gray-700, $gray-400);
         font-size: 0.75em;
+    }
+
+    .repeater-subfield > label > span:first-child {
+        margin-top: -0.25em;
+    }
+
+    .help-text {
         margin-top: 1em;
         white-space: pre-wrap;
     }

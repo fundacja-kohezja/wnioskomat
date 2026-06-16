@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia'
 
 import useFormStore from '../stores/form'
 import MonthPicker from './MonthPicker.vue'
+import RepeaterField from './RepeaterField.vue'
 
 const props = defineProps({
     question: {
@@ -53,8 +54,15 @@ const validationError = computed(() => {
         v-bind="$attrs"
         :class="{ 'has-validation-error': validationError }"
     >
+        <RepeaterField
+            v-if="question.type === 'repeater'"
+            :question="question"
+            :step="step"
+            :answer-number="answerNumber"
+            v-model="value"
+        />
         <label
-            v-if="question.type === 'checkbox'"
+            v-else-if="question.type === 'checkbox'"
             class="checkbox"
         >
             <input
@@ -81,13 +89,20 @@ const validationError = computed(() => {
             v-else-if="question.type === 'text'"
             class="text-input"
         >
-            <span>{{ t(labelId) }}</span>
+            <span v-if="question.hasLabel !== false">{{ t(labelId) }}</span>
             <span
                 v-if="question.prefix"
                 class="input-with-prefix"
             >
                 <span>{{ question.prefix }}</span>
                 <input type="text" v-model="value" />
+            </span>
+            <span
+                v-else-if="question.suffix"
+                class="input-with-suffix"
+            >
+                <input type="text" v-model="value" />
+                <span>{{ question.suffix }}</span>
             </span>
             <input
                 v-else
@@ -101,7 +116,7 @@ const validationError = computed(() => {
             v-else-if="question.type === 'textarea'"
             class="text-input"
         >
-            <span>{{ t(labelId) }}</span>
+            <span v-if="question.hasLabel !== false">{{ t(labelId) }}</span>
             <textarea v-model.lazy="value" rows="4" :lang="question.alwaysPl ? 'pl' : undefined"></textarea>
         </label>
         <fieldset v-else-if="question.type === 'month'">
