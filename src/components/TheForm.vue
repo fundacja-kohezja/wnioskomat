@@ -56,7 +56,7 @@ watch(currentIndex, index => {
         nextTick(() => heading.value.scrollIntoView({ block: 'nearest' }))
         return
     }
-    if (!stepStatuses.value.every(status => status === 'completed')) {
+    if (anyInvalid.value || anyIncomplete.value) {
         openConfirmation()
         currentIndex.value = steps.length
         return
@@ -66,14 +66,14 @@ watch(currentIndex, index => {
 
 const prevStep = () => {
     currentIndex.value--
-    while (steps[currentIndex.value].showIf && !steps[currentIndex.value].showIf(answers.value)) {
+    while (steps[currentIndex.value]?.showIf && !steps[currentIndex.value].showIf(answers.value)) {
         currentIndex.value--
     }
 }
 
 const nextStep = () => {
     currentIndex.value++
-    while (steps[currentIndex.value].showIf && !steps[currentIndex.value].showIf(answers.value)) {
+    while (steps[currentIndex.value]?.showIf && !steps[currentIndex.value].showIf(answers.value)) {
         currentIndex.value++
     }
 }

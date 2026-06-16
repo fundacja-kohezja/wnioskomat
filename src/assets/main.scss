@@ -1232,10 +1232,6 @@ a {
     gap: 0.5em;
     margin-top: 1.25em;
 
-    + .generated-doc {
-        margin-top: 1.25em;
-    }
-
     svg {
         flex-shrink: 0;
         color: light-dark($gray-400, $gray-500);
@@ -1245,7 +1241,7 @@ a {
 .generated-doc {
     background-color: light-dark($white, $gray-900);
     padding: 1em;
-    margin-top: 2em;
+    margin-top: 1.25em;
     border-radius: 6px;
 
     .buttons {
@@ -1260,11 +1256,8 @@ a {
 
 .doc-title {
     font-size: 1.1em;
-    display: flex;
-    align-items: center;
     margin-bottom: 1em;
     font-weight: 500;
-    gap: 0.5em;
 }
 
 .further-steps {

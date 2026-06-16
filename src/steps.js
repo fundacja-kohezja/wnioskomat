@@ -534,7 +534,7 @@ export default [
                             },
                             { // HA60
                                 type: 'checkbox',
-                                showIf: a => a[1].a_3_1,
+                                showIf:  answers => answers[3].a_3_1,
                                 filled: (a, answers) => answers[3].a_3_1_0 || a,
                             },
                         ],

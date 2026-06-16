@@ -1,6 +1,6 @@
 <template>
     <ol class="further-steps">
-        <li>Wydrukuj wniosek i podpisz go własnoręcznie</li>
+        <li>Wydrukuj dokumenty i podpisz je – własnoręcznie i czytelnie</li>
         <li>
             <h4>Dostarcz wniosek do sądu</h4>
             <details>

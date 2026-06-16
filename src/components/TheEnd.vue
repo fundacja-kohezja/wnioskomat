@@ -7,7 +7,9 @@ import FurtherStepsEn from './further-steps/FurtherStepsEn.vue'
 import FurtherStepsUk from './further-steps/FurtherStepsUk.vue'
 import useFormStore from '../stores/form'
 import usePrefsStore from '../stores/prefs'
-import generateDoc from '../doc-generators/mainApplication'
+import generateMainDoc from '../doc-generators/mainApplication'
+import generateDocForUnderage from '../doc-generators/underageApplication'
+import generateProxyDoc from '../doc-generators/serviceProxy'
 import { initPdf } from '../doc-generators/pdf'
 import { initDocx } from '../doc-generators/docx'
 
@@ -17,8 +19,28 @@ const { t } = useI18n()
 const { answers, anyInvalid, anyIncomplete } = storeToRefs(useFormStore())
 const { selectedLang } = storeToRefs(usePrefsStore())
 
-const savePdf = generateDoc(answers.value, initPdf)
-const saveDocx = generateDoc(answers.value, initDocx)
+const documents = []
+if (answers.value[4].a_8) {
+    documents.push({
+        label: 'main_application',
+        pdf: generateDocForUnderage(answers.value, initPdf),
+        docx: generateDocForUnderage(answers.value, initDocx),
+    })
+} else {
+    documents.push({
+        label: 'main_application',
+        pdf: generateMainDoc(answers.value, initPdf),
+        docx: generateMainDoc(answers.value, initDocx),
+    })
+}
+
+if (answers.value[4].a_2) {
+    documents.push({
+        label: 'service_proxy',
+        pdf: generateProxyDoc(answers.value, initPdf),
+        docx: generateProxyDoc(answers.value, initDocx),
+    })
+}
 
 // TODO load these dynamically?
 const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsUk }
@@ -38,23 +60,20 @@ const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsU
                     {{ t('warning_generated_0') }}{{ anyInvalid && anyIncomplete ? t('warning_generated_1') : anyInvalid ? t('warning_generated_2') : t('warning_generated_3') }}{{ t('warning_generated_4') }}
                 </span>
             </div>
-            <div class="generated-doc">
+            <div v-for="({ label, pdf, docx }) of documents" class="generated-doc">
                 <div class="doc-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                    </svg>
-                    {{ t('main_application') }}
+                    {{ t(label) }}
                 </div>
                 <!-- <button>Podgląd</button> -->
                 <div class="buttons">
-                    <button @click="savePdf(t('main_application'))" class="btn-primary">
+                    <button v-if="pdf" @click="pdf(t(label))" class="btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
                         <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
                         <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
                         </svg>
                         {{ t('download_pdf') }}
                     </button>
-                    <button @click="saveDocx(t('main_application'))" class="btn">
+                    <button v-if="docx" @click="docx(t(label))" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
                         <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
                         <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />

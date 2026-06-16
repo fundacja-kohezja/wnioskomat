@@ -35,22 +35,24 @@ export default defineStore('form', () => {
     }
 
     const answerStatuses = computed(() => steps.map(
-        ({ questions, showIf }, i) => !showIf || showIf(answers.value) ? questions.flatMap(
+        ({ questions }, i) => questions.flatMap(
             (q, j) => validateAnswer(q, i, 'a_'+j, answers.value)
-        ) : ['valid']
+        )
     ))
 
     const anyAnswers = computed(() => answerStatuses.value.some(
         statuses => statuses.some(status => status !== 'unfilled')
     ))
 
-    const anyInvalid = computed(() => answerStatuses.value.some(
-        statuses => statuses.some(status => status === 'invalid')
-    ))
+    const anyInvalid = computed(() => answerStatuses.value
+        .filter((_, i) => !steps[i].showIf || steps[i].showIf(answers.value))
+        .some(statuses => statuses.some(status => status === 'invalid'))
+    )
 
-    const anyIncomplete = computed(() => answerStatuses.value.some(
-        statuses => statuses.some(status => status === 'unfilled')
-    ))
+    const anyIncomplete = computed(() => answerStatuses.value
+        .filter((_, i) => !steps[i].showIf || steps[i].showIf(answers.value))
+        .some(statuses => statuses.some(status => status === 'unfilled'))
+    )
 
 
     const exportAnswers = (filename) => {
@@ -71,9 +73,17 @@ export default defineStore('form', () => {
     }
 }, {
     persist: {
-        // TODO data needs to be validated upon hydration as user can put anything in localStorage
         onPersistError: () => {
             // TODO this doesn't work for now, but it should when new version of PiniaPluginPersistedstate releases
         },
+        afterHydrate: (ctx) => {
+            // TODO data needs to be validated upon hydration as user can put anything in localStorage
+            // this is the stub of the validation, but it certainly will need to be expanded
+            steps.forEach((_, i) => {
+                if (!ctx.store.answers[i]) {
+                    ctx.store.answers[i] = {}
+                }
+            })
+        }
     }
 })
