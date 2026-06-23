@@ -40,7 +40,7 @@ reader.onload = () => {
     }
 
     // TODO expand validation
-    if (!Array.isArray(parsedResult) || parsedResult.length < steps.length) {
+    if (!Array.isArray(parsedResult)) {
         report(t('malformed'))
         return
     }

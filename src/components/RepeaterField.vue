@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import AnswerInput from './AnswerInput.vue'
@@ -40,11 +40,17 @@ const swap = (i, j) => {
     value.value[j] = first
 }
 
+onMounted(() => {
+    if (!Array.isArray(value.value)) {
+        value.value = []
+    }
+})
+
 </script>
 
 <template>
 <div class="repeater" :class="{ 'has-nested-repeater': question.hasNestedRepeater }">
-    <div class="repeater-label">{{ t(labelId) }}</div>
+    <div v-if="question.hasLabel !== false" class="repeater-label">{{ t(labelId) }}</div>
     <template v-if="value">
         <div
             v-for="(items, i) of value"
@@ -53,6 +59,7 @@ const swap = (i, j) => {
             <AnswerInput
                 v-for="(field, j) of question.fields"
                 class="repeater-subfield"
+                :class="{ 'has-suffix-input': field.suffix }"
                 :question="field"
                 :step="step"
                 :answer-number="answerNumber+'_'+j"
@@ -100,7 +107,7 @@ const swap = (i, j) => {
     </template>
     <button
         type="button"
-        :class="question.hasNestedRepeater ? 'btn' : 'btn-primary'"
+        :class="question.hasNestedRepeater ? 'btn-secondary' : 'btn'"
         @click="add"
     >
         {{ t(labelId+'_add') }}

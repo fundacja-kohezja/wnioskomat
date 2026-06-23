@@ -46,6 +46,7 @@ export default [
             },
             { // nieruchomość w której mieszka?
                 type: 'checkbox',
+                hasDescription: true,
                 subquestions: [
                     { // opis
                         type: 'textarea',
@@ -55,6 +56,7 @@ export default [
             },
             { // nieruchomość rolna?
                 type: 'checkbox',
+                hasDescription: true,
                 subquestions: [
                     { // opis
                         type: 'textarea',
@@ -65,6 +67,7 @@ export default [
             },
             { // inne nieruchomości?
                 type: 'checkbox',
+                hasDescription: true,
                 subquestions: [
                     { // opis
                         type: 'textarea',
@@ -186,6 +189,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_0,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -197,6 +201,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_1,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -208,6 +213,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_2,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -219,6 +225,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_3,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -230,6 +237,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_4,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -241,6 +249,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_5,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -252,6 +261,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_6,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -263,6 +273,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_7,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -274,6 +285,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_8,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -285,6 +297,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_9,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -296,6 +309,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_10,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -307,6 +321,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_11,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -318,6 +333,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_12,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -329,6 +345,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_13,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -340,6 +357,7 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_14,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
@@ -351,17 +369,29 @@ export default [
                         hasLabel: false,
                         suffix: 'zł miesięcznie',
                         showIf: answers => answers[2].a_15,
+                        valid: [a => !isNaN(Number(a))],
                     }
                 ],
             },
-            { // inne TODO repeater
+            { // inne
                 type: 'checkbox',
+                hasDescription: true,
                 subquestions: [
                     {
-                        type: 'textarea',
+                        type: 'repeater',
                         hasLabel: false,
-                        hasDescription: true,
                         showIf: answers => answers[2].a_16,
+                        fields: [
+                            {
+                                type: 'text',
+                                suffix: 'zł miesięcznie',
+                                valid: [a => !isNaN(Number(a))],
+                            },
+                            {
+                                type: 'text',
+                                prefix: 'na…',
+                            }
+                        ]
                     }
                 ],
             },
@@ -407,14 +437,22 @@ export default [
                     }
                 ],
             },
-            { // inne TODO repeater
+            { // inne
                 type: 'checkbox',
+                hasDescription: true,
                 subquestions: [
                     {
-                        type: 'textarea',
+                        type: 'repeater',
                         hasLabel: false,
-                        hasDescription: true,
                         showIf: answers => answers[2].a_21,
+                        fields: [
+                            {
+                                type: 'text',
+                            },
+                            {
+                                type: 'text',
+                            }
+                        ]
                     }
                 ],
             },

@@ -28,7 +28,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     if (step_4.a_3) {
         p(step_4.a_3, top)
         p('Wydział Cywilny', top)
-        p(courts[step_4.a_3].address, {
+        p(courts[step_4.a_3]?.address || '', { // TODO ability to manually provide court address
             ...top,
             mayBreak: true,
         })

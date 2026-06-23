@@ -898,6 +898,7 @@ a {
 
         textarea {
             resize: vertical;
+            font-family: inherit;
         }
     }
 
@@ -984,15 +985,19 @@ a {
         gap: 0.75em;
 
         &.has-nested-repeater {
-            gap: 1em;
+            gap: 1.25em;
         }
 
-        &-label {
-            margin-bottom: -0.25em;
+        .text-input {
+            gap: 0.25em
         }
 
         .buttons-group {
             align-self: center;
+
+            .btn:last-child {
+                margin-left: 0.5em;
+            }
         }
 
         > .btn {
@@ -1009,8 +1014,9 @@ a {
             }
         }
 
-        > .btn-primary {
+        > .btn-secondary {
             align-self: start;
+            padding-block: 0.5em;
         }
 
         &-row {
@@ -1018,7 +1024,7 @@ a {
             gap: 1em;
             align-items: end;
             border-radius: 6px;
-            padding: 0.75em;
+            padding: 0.5em;
 
             .radio-buttons {
                 margin-bottom: 0.5em;
@@ -1026,11 +1032,6 @@ a {
 
             .btn {
                 padding: 0.4em;
-
-                &:last-child {
-                    margin-left: 0.5em;
-                    padding: 0.5em 0.6em;
-                }
 
                 &:active {
                     background-color: light-dark($gray-200, $gray-950);
@@ -1045,11 +1046,12 @@ a {
         }
 
         &:not(.has-nested-repeater) .repeater-row {
-            background-color: light-dark($white, $gray-900);
+            background-color: light-dark($gray-50, $gray-900);
         }
 
         &.has-nested-repeater > .repeater-row {
-            border: 1px solid light-dark($gray-300, $gray-750);
+            border: 1px solid light-dark($gray-350, $gray-700);
+            padding: 1em;
             flex-wrap: wrap;
 
             > :nth-last-child(2) {
@@ -1081,6 +1083,10 @@ a {
 
         &-subfield {
             flex-grow: 1;
+
+            &.has-suffix-input {
+                max-width: 18em;
+            }
 
             .input-with-suffix input {
                 width: 6em;

@@ -1,9 +1,9 @@
 import { jsPDF } from 'jspdf'
 
-import './fonts/TeXGyreTermes-normal'
-import './fonts/TeXGyreTermes-bold'
-import './fonts/TeXGyreTermes-italic'
-// import './fonts/TeXGyreTermes-bolditalic' // Unnecessary for now
+import './fonts/TeXGyreTermes/TeXGyreTermes-normal'
+import './fonts/TeXGyreTermes/TeXGyreTermes-bold'
+import './fonts/TeXGyreTermes/TeXGyreTermes-italic'
+// import './fonts/TeXGyreTermes/TeXGyreTermes-bolditalic' // Unnecessary for now
 
 export function initPdf() {
     const doc = new jsPDF

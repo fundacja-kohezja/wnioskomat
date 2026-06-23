@@ -10,6 +10,7 @@ import usePrefsStore from '../stores/prefs'
 import generateMainDoc from '../doc-generators/mainApplication'
 import generateDocForUnderage from '../doc-generators/underageApplication'
 import generateProxyDoc from '../doc-generators/serviceProxy'
+import generateStatement from '../doc-generators/statementOfMeans'
 import { initPdf } from '../doc-generators/pdf'
 import { initDocx } from '../doc-generators/docx'
 
@@ -39,6 +40,13 @@ if (answers.value[4].a_2) {
         label: 'service_proxy',
         pdf: generateProxyDoc(answers.value, initPdf),
         docx: generateProxyDoc(answers.value, initDocx),
+    })
+}
+
+if (answers.value[0].a_3) {
+    documents.push({
+        label: 'statement_of_means',
+        pdf: generateStatement(answers.value),
     })
 }
 
