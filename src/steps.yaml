@@ -1,0 +1,461 @@
+- title: 'O co wnioskujesz?'
+  displayAsListInSummary: true
+  questions:
+      - label: 'Zmiana oznaczenia płci na:'
+        type: radio_featured
+        options:
+            K: 'K'
+            M: 'M'
+      - label: 'Zmiana imienia/imion'
+        type: checkbox
+        description: 'Jeśli nie zmieniał_ś jeszcze imienia w USC, możesz o to zawnioskować przy okazji zmiany oznaczenia płci. Jeśli sąd przychyli się do wniosku, znacznie przyspieszy to wyrabianie nowych dokumentów.'
+        subquestions:
+            - label: 'Jakie chcesz mieć imię/imiona?'
+              showIf: {}
+      - label: 'Zmiana nazwiska'
+        type: checkbox
+        description: 'Przydatne, jeśli masz nazwisko z końcówką wskazującą płeć.'
+        subquestions:
+            - label: 'Jakie chcesz mieć nazwisko?'
+              showIf: {}
+      - label: 'Zwolnienie z kosztów sądowych'
+        type: checkbox
+        description: 'Złożenie wniosku wymaga zapłacenia 100 zł opłaty sądowej. Możesz zawnioskować o zwolenienie z tego kosztu, jednak wydłuży to procedurę i będzie wymagało wypełnienia dwóch dodatkowych kroków, w których opiszesz swoją sytuację finansową. Nie musisz przejmować się kosztami, które mogą powstać w trakcie postępowania (np. jeśli sąd powoła biegłego), w takiej sytuacji można zawnioskować o zwolnienie z kosztów sądowych później.'
+
+- title: 'Majątek i dochody'
+  description: 'Tu wprowadzisz dane o swoim majątku i źródłach dochodu, które posłużą do wygenerowania oświadczenia o stanie majątkowym.'
+  showIf: { step: 0, answer: a_3 }
+  questions:
+      - label: 'Prowadzę działalność gospodarczą'
+        type: checkbox
+        subquestions:
+            - label: 'Mój NIP'
+              showIf: {}
+      - label: 'Nieruchomość, w której mieszkam, jest moją własnością'
+        type: checkbox
+        description: 'Zaznacz również, jeśli masz ją we współwłasności, np. odziedziczoną z rodzeństwem'
+        subquestions:
+            - label: 'Adres, powierzchnia działki/domu/mieszkania w m², szacunkowa wartość, ewentualny udział'
+              type: textarea
+              showIf: {}
+      - label: 'Posiadam nieruchomość rolną'
+        type: checkbox
+        description: 'Zaznacz również, jeśli masz ją we współwłasności'
+        subquestions:
+            - label: 'Adres, powierzchnia w hektarach, szacunkowa wartość, sposób rolniczego wykorzystania'
+              type: textarea
+              description: 'Jeśli jest to gospodarstwo rolne, wskaż też osobno powierzchnię gruntów rolnych, leśnych, liczbę budynków, liczbę i rodzaj urządzeń służących do produkcji oraz liczbę i rodzaj inwentarza żywego'
+              showIf: {}
+      - label: 'Posiadam jakąś inną nieruchomość niż wymienione powyżej'
+        type: checkbox
+        description: 'Zaznacz również, jeśli masz ją we współwłasności'
+        subquestions:
+            - label: 'Adres, powierzchnia w hektarach lub m², szacunkowa wartość, sposób wykorzystania'
+              type: textarea
+              showIf: {}
+      - label: 'Mam oszczędności'
+        type: checkbox
+        description: 'Chodzi tu o większe odłożone kwoty, nie pieniądze, które są aktualnie na koncie i które zostaną wydane'
+        subquestions:
+            - label: 'Wysokość i waluta kwot znajdujących się na rachunkach bankowych oraz pieniędzy w gotówce'
+              type: textarea
+              showIf: {}
+      - label: 'Posiadam papiery wartościowe lub inne prawa majątkowe'
+        type: checkbox
+        description: 'Np. udziały, polisy inwestycyjne, jednostki uczestnictwa w funduszach inwestycyjnych, polisolokaty'
+        subquestions:
+            - label: 'Podaj jakie oraz ich wartość'
+              type: textarea
+              showIf: {}
+      - label: 'Ktoś jest mi winien pieniądze'
+        type: checkbox
+        subquestions:
+            - label: 'Kwoty i terminy, w jakim powinny być zapłacone'
+              type: textarea
+              showIf: {}
+      - label: 'Posiadam rzeczy warte więcej niż 5 tysięcy złotych'
+        type: checkbox
+        description: 'Np. samochód, urządzenia elektroniczne, sprzęt RTV i AGD'
+        subquestions:
+            - label: 'Nazwy, rodzaj/typ, rok produkcji, szacunkowa wartość'
+              type: textarea
+              showIf: {}
+      - heading: 'Dochody i źródła utrzymania'
+        label: 'Moje źródła dochodów'
+        type: repeater
+        addLabel: 'Dodaj źródło dochodu'
+        fields:
+            - label: 'Rodzaj dochodu'
+              datalist: incomeTypes
+            - label: 'Kwota (na rękę)'
+              suffix: 'zł'
+            - type: radio
+              options:
+                  M: 'miesięcznie'
+                  R: 'rocznie'
+      - label: 'Mieszkam z bliskimi osobami, z którymi prowadzę gospodarstwo domowe'
+        type: checkbox
+        description: 'Chodzi o osoby z rodziny lub osobę partnerską, nie o współlokatorów.'
+      - label: 'Członkowie Twojego gospodarstwa domowego i ich źródła dochodów'
+        type: repeater
+        addLabel: 'Dodaj osobę'
+        hasNestedRepeater: true
+        showIf: { answer: a_9 }
+        fields:
+            - label: 'Imię i nazwisko'
+            - label: 'Data urodzenia'
+              type: date
+            - label: 'Rodzaj stosunku, jaki was łączy'
+              placeholder: 'np. matka, brat, partner'
+            - label: 'Źródła dochodów'
+              type: repeater
+              addLabel: 'Dodaj źródło dochodu'
+              fields:
+                  - label: 'Rodzaj dochodu'
+                    datalist: incomeTypes
+                  - label: 'Kwota (na rękę)'
+                    suffix: 'zł'
+                  - type: radio
+                    options:
+                        M: 'miesięcznie'
+                        R: 'rocznie'
+
+- title: 'Koszty utrzymania'
+  description: 'W tej części zadeklarujesz ponoszone wydatki na życie. Do wniosku nie trzeba dołączać żadnych potwierdzeń, ale musisz liczyć się z tym, że sąd może później zobowiązać Cię do dostarczenia dowodów.'
+  showIf: { step: 0, answer: a_3 }
+  questions:
+      - heading: 'Twoje stałe miesięczne wydatki'
+        subheading: 'Zaznacz te, które Cię dotyczą i uzupełnij kwoty.'
+        label: 'czynsz najmu'
+        type: checkbox
+        filledIfAny: [a_0, a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, a_10, a_11, a_12, a_13, a_14, a_15, a_16, a_16]
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'opłaty eksploatacyjne'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'gaz'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'prąd'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'ogrzewanie'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'Internet'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'opłata od nieruchomości'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'ubezpieczenie nieruchomości'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'wywóz śmieci'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'wyżywienie'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'środki czystości'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'odzież i obuwie'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'kosmetyki i środki higieny osobistej'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'bilet miesięczny'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'paliwo'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'wydatki na zwierzęta'
+        type: checkbox
+        subquestions:
+            - { suffix: 'zł miesięcznie', validation: number, showIf: {} }
+      - label: 'inne'
+        type: checkbox
+        description: 'Możesz wymienić wszystko, co przyjdzie Ci do głowy'
+        subquestions:
+            - type: repeater
+              addLabel: 'Dodaj stały miesięczny wydatek'
+              showIf: {}
+              fields:
+                  - label: 'Kwota'
+                    suffix: 'zł miesięcznie'
+                    validation: number
+                  - label: 'Na co?'
+                    prefix: 'na…'
+      - heading: 'Twoje stałe wydatki, ponoszone rzadziej niż raz w miesiącu'
+        subheading: 'Zaznacz te, które Cię dotyczą i wpisz kwotę wydatku wraz z określeniem jak często go ponosisz, np. „średnio 3000 zł rocznie”'
+        label: 'koszty utrzymania samochodu'
+        type: checkbox
+        subquestions:
+            - showIf: {}
+      - label: 'dentysta'
+        type: checkbox
+        subquestions:
+            - showIf: {}
+      - label: 'wizyty lekarskie'
+        type: checkbox
+        subquestions:
+            - showIf: {}
+      - label: 'stale przyjmowane leki'
+        type: checkbox
+        subquestions:
+            - showIf: {}
+      - label: 'inne'
+        type: checkbox
+        description: 'Wymień wszystko, co przyjdzie Ci do głowy'
+        subquestions:
+            - type: repeater
+              addLabel: 'Dodaj stały wydatek'
+              showIf: {}
+              fields:
+                  - label: 'Rodzaj wydatku'
+                  - label: 'Kwota wydatku z określeniem jak często go ponosisz'
+      - heading: 'Dodatkowe informacje o wydatkach'
+        label: 'Chcę dopisać dodatkowe informacje do pola ze stałymi wydatkami'
+        type: checkbox
+        description: 'Dowolny tekst, który znajdzie się pod pozycjami stałych wydatków. Możesz tu np. doprecyzować, że wymienone wydatki pokrywają potrzeby nie tylko Twoje, ale też innych członków dospodarstwa domowego, np. „Podane koszty wyżywienia, odzieży, obuwia i kosmetyków dotyczą wydatków na całą rodzinę.”'
+        subquestions:
+            - label: 'Opis tych wydatków'
+              type: textarea
+              showIf: {}
+      - heading: 'Uwagi o Twojej sytuacji'
+        label: 'Chcę przekazać sądowi dodatkowe informacje o mojej sytuacji'
+        type: checkbox
+        description: 'Możesz chcieć np. wyłumaczyć skąd wynika wysokość niektórych ponoszonych wydatków albo dlaczego, mimo tego, że twój członek rodziny osiąga dochody, nie może ci pomóc finansowo.'
+        subquestions:
+            - type: textarea
+              description: "Przykład:\nMieszkamy z moją mamą, która jest osobą z niepełnosprawnością ruchową i ma niską rentę. Całość tej renty pokrywa koszty związane z rehabilitacją, leczeniem oraz ¼ opłat eksploatacyjnych za mieszkanie. Mama płaci z niej również za jedzenie i inne drobne wydatki. Poza tym wspieramy ją w bieżącym utrzymaniu.\nZe względu na wychowywanie dziecka, nie jestem w stanie prowadzić swojej działalności gospodarczej na dotychczasową skalę, co wiąże się z niższymi dochodami. Dodatkowo podjęłam bezpłatne studia, które mają podnieść moje kwalifikacje. Jednak czas poświęcany na studia uniemożliwia mi większe zaangażowanie w rozwój działalności."
+              showIf: {}
+
+- title: 'Potrzebne dokumenty'
+  displayAsListInSummary: true
+  description: 'Zaznacz, które dokumenty zamierzasz załączyć. Im więcej, tym lepiej – zwiększa to szansę na szybsze rozpatrzenie sprawy. Niektóre z nich są zawsze wymagane, dlatego nie można ich odznaczyć.'
+  questions:
+      - label: 'Skrócony odpis aktu urodzenia'
+        type: checkbox
+        description: 'Można go pobrać w dowolnym urzędzie stanu cywilnego lub przez platformę ePUAP.'
+        initialValue: true
+        isDisabled: true
+      - label: 'Dowód uiszczenia opłaty sądowej (100 zł)'
+        type: checkbox
+        description: 'Opłatę sądową można wnieść przelewem na numer konta podany na stronie internetowej sądu, osobiście w kasie sądu lub kupując znak sądowy na kwotę 100 zł na '
+        descLink: 'https://oplaty.ms.gov.pl/znaki-oplaty-sadowej/zakup'
+        descLinkText: 'stronie ministerstwa'
+        initialValue: true
+        isDisabled: true
+        showIf: { step: 0, answer: a_3, value: false }
+      - label: 'Przynajmniej jedna z opinii psychologicznych'
+        type: checkbox
+        description: 'Zaznacz posiadane opinie i postawione w nich diagnozy'
+        initialValue: true
+        isDisabled: true
+        subquestions:
+            - label: 'Psychologa'
+              type: checkbox
+              filledIfAny: [a_2_0, a_2_1]
+              subquestions:
+                  - label: 'F64.0 (wg. ICD-10)'
+                    type: checkbox
+                    filledIfAny: [a_2_0_0, a_2_0_1]
+                    showIf: {}
+                  - label: 'HA60 (wg. ICD-11)'
+                    type: checkbox
+                    filledIfAny: [a_2_0_0, a_2_0_1]
+                    showIf: {}
+            - label: 'Psychologa-seksuologa'
+              type: checkbox
+              filledIfAny: [a_2_0, a_2_1]
+              subquestions:
+                  - label: 'F64.0 (wg. ICD-10)'
+                    type: checkbox
+                    filledIfAny: [a_2_1_0, a_2_1_1]
+                    showIf: {}
+                  - label: 'HA60 (wg. ICD-11)'
+                    type: checkbox
+                    filledIfAny: [a_2_1_0, a_2_1_1]
+                    showIf: {}
+      - label: 'Przynajmniej jedno z zaświadczeń od lekarza'
+        type: checkbox
+        description: 'Zaznacz posiadane zaświadczenia i postawione w nich diagnozy'
+        initialValue: true
+        isDisabled: true
+        subquestions:
+            - label: 'Psychiatry'
+              type: checkbox
+              filledIfAny: [a_3_0, a_3_1]
+              subquestions:
+                  - label: 'F64.0 (wg. ICD-10)'
+                    type: checkbox
+                    filledIfAny: [a_3_0_0, a_3_0_1]
+                    showIf: {}
+                  - label: 'HA60 (wg. ICD-11)'
+                    type: checkbox
+                    filledIfAny: [a_3_0_0, a_3_0_1]
+                    showIf: {}
+            - label: 'Seksuologa'
+              type: checkbox
+              filledIfAny: [a_3_0, a_3_1]
+              subquestions:
+                  - label: 'F64.0 (wg. ICD-10)'
+                    type: checkbox
+                    filledIfAny: [a_3_1_0, a_3_1_1]
+                    showIf: {}
+                  - label: 'HA60 (wg. ICD-11)'
+                    type: checkbox
+                    filledIfAny: [a_3_1_0, a_3_1_1]
+                    showIf: {}
+      - label: 'Zaświadczenie lekarskie o wdrożeniu terapii hormonalnej'
+        type: checkbox
+      - label: 'Zalecenia Polskiego Towarzystwa Seksuologicznego'
+        type: checkbox
+        description: 'Wielu sędziów nie ma dobrego rozeznania w kwestii transpłciowości, dlatego warto pokierować ich we właściwą stronę odpowiednim dokumentem. Do pobrania stąd: '
+        descLink: 'https://pts-seksuologia.pl/sites/strona/118/zalecenia-pts-dotyczace-opieki-nad-zdrowiem-doroslych-osob-transplciowych--stanowisko-panelu-ekspertow'
+        descLinkText: 'Zalecenia PTS dotyczące opieki nad zdrowiem dorosłych osób transpłciowych'
+      - label: 'Publikacja „Postępowania w sprawach o uzgodnienie płci. Przewodnik” wydana przez Rzecznika Praw Obywatelskich'
+        type: checkbox
+        description: 'Jest to bardzo obszerny dokument, ale warto go załączyć. Koszty można ograniczyć, drukując 4 strony tekstu na jednej stronie arkusza papieru dwustronnie. Upewnij się, że drukujesz najnowszą edycję – z 2024 r. (zwróć uwagę czy tytuł się zgadza).'
+      - label: 'Decyzja o zmianie imienia'
+        type: checkbox
+        description: 'Jeśli zmienił_ś już imię w USC, to dobrze jest załączyć decyzję jako jeden z dowodów na trwałość poczucia przynależności do swojej płci. Zamiast dokumentu z decyzją, możesz alternatywnie załączyć zupełny odpis aktu urodzenia – w przeciwieństwie do skróconego, wynika z niego zmiana imienia.'
+        showIf: { step: 0, answer: a_1, value: false }
+      - label: 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci'
+        type: checkbox
+        description: 'Dokumenty pokazujące trwałą indetyfikację z daną płcią – mogą być to zrzuty ekranu z facebooka/instagrama, zdjęcie identyfikatora z miejsca pracy, wydruki z portalu USOS.'
+        subquestions:
+            - type: radio
+              showIf: {}
+              options:
+                  A: 'wydruk z portali społecznościowych'
+                  B: 'identyfikator z miejsca pracy'
+                  C: 'wydruk z portalu USOS'
+
+- title: 'Dane do wniosku'
+  questions:
+      - label: 'Twój PESEL'
+        validation: pesel
+      - label: 'Twój adres zamieszkania'
+        type: textarea
+        description: 'Wpisz adres, pod którym faktycznie mieszkasz i możesz odbierać korespondencję, ponieważ na ten adres przyjdzie odpowiedź z sądu. To nie musi być adres zameldowania. Jeśli jest to jest niejednoznaczne, np. mieszkasz w akademiku i jeździsz do domu rodzinnego w weekendy, do Ciebie należy decyzja, które z tych miejsc uznasz za swój adres zamieszkania.'
+      - label: 'Chcę mieć pełnomocnika do doręczeń'
+        type: checkbox
+        description: 'Jeśli nie możesz odbierać korespondencji osobiście (np. dlatego że mieszkasz za granicą), możesz wyznaczyć osobę, która będzie to robić w Twoim imieniu.'
+        subquestions:
+            - label: 'Imię i nazwisko pełnomocnika do doręczeń'
+              showIf: {}
+            - label: 'Udzielam pełnomocnictwa…'
+              description: 'Wpisz to samo imię i nazwisko, co powyżej, tylko odpowiednio odmienione'
+              placeholder: 'Janowi Kowalskiemu'
+              showIf: {}
+            - label: 'PESEL pełnomocnika do doręczeń'
+              validation: pesel
+              showIf: {}
+            - label: 'Adres pełnomocnika do doręczeń'
+              type: textarea
+              showIf: {}
+      - heading: 'Wybór sądu'
+        subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla Twojego miejsca zamieszkania, czyli adresu, który wpisał_ś powyżej. Jeśli nie masz pewności, możesz zadzownić do Biura Obsługi Interesantów w najbliższym sądzie rejonowym i dopytać, czy to właśnie tam złożyć wniosek, czy gdzieś indziej.'
+        label: 'Znajdź wpisując miejscowość/dzielnicę'
+        datalist: courts
+      - heading: 'Dane kontaktowe'
+        label: 'Chcę podać swoje dane kontaktowe'
+        type: checkbox
+        description: 'Nie jest to konieczne, ale może ułatwić kontakt z sądem'
+        subquestions:
+            - label: 'Adres e-mail'
+              validation: email
+              showIf: {}
+            - label: 'Numer telefonu'
+              showIf: {}
+      - heading: 'Dane z aktu urodzenia'
+        label: 'Imię/imiona'
+      - label: 'Nazwisko'
+      - label: 'Data urodzenia'
+        type: date
+        validation: underage
+      - label: 'Składam wniosek przed ukończeniem 18 lat'
+        type: checkbox
+        description: 'Pojawi się dodatkowy krok, w którym podasz dane swoich rodziców.'
+      - label: 'Numer aktu'
+        description: 'W przypadku odpisu zupełnego aktu numer znajdziesz na górze, jako „oznaczenie aktu…”. W przypadku odpisu skróconego aktu numer znajdziesz na dole, w rubryce „informacje o odpisie”, obok „podpis jest zgodny z treścią aktu o oznaczeniu…”.'
+        placeholder: 'XXXXXXX/XX/AU/XXXX/XXXXXX'
+      - label: 'Urząd, który wydał dokument'
+        prefix: 'Urząd Stanu Cywilnego w…'
+
+- title: 'Dane rodziców'
+  description: 'Wniosek zostanie wygenerowany w taki sposób, by złożyli go Twoi rodzice w Twoim imieniu – tylko w taki sposób można go złożyć przed osiągnięciem pełnoletności.'
+  showIf: { step: 4, answer: a_8 }
+  questions:
+      - heading: 'Dane pierwszego rodzica'
+        label: 'Imię i nazwisko'
+      - label: 'PESEL'
+        validation: pesel
+      - label: 'Adres zamieszkania'
+        type: textarea
+      - label: 'Chcę podać dane kontaktowe'
+        type: checkbox
+        description: 'Nie jest to konieczne, ale może ułatwić kontakt z sądem'
+        subquestions:
+            - label: 'Adres e-mail'
+              validation: email
+              showIf: {}
+            - label: 'Numer telefonu'
+              showIf: {}
+      - heading: 'Dane drugiego rodzica'
+        label: 'Imię i nazwisko'
+      - label: 'PESEL'
+        validation: pesel
+      - label: 'Adres zamieszkania'
+        type: textarea
+      - label: 'Chcę podać dane kontaktowe'
+        type: checkbox
+        description: 'Nie jest to konieczne, ale może ułatwić kontakt z sądem'
+        subquestions:
+            - label: 'Adres e-mail'
+              validation: email
+              showIf: {}
+            - label: 'Numer telefonu'
+              showIf: {}
+
+- title: 'Opis doświadczeń'
+  displayWithHeadingInSummary: false
+  questions:
+      - label: 'Opisz krótko początki Twojego doświadczenia transpłciowości'
+        type: textarea
+        description: "Przykład: \nOkoło […] roku życia zaczęło pojawiać się u mnie poczucie rozbieżności pomiędzy płcią przypisaną mi przy urodzeniu a moją tożsamością płciową. Doprowadziło to do wykształcenia się u mnie dysforii, której towarzyszyło obniżenie nastroju."
+      - label: 'Od kiedy jesteś w terapii hormonalnej?'
+        type: month
+      - label: 'Poddano mnie badaniom psychologicznym'
+        type: checkbox
+        description: 'Jeśli psycholog, u którego był_ś, pracuje w modelu świadomej zgody, prawdopodobnie nie poddano cię żadnym badaniom psychologicznym, wówczas możesz odznaczyć to pole.'
+      - label: 'Chcę ujawnić sądowi imię, którego używam na co dzień'
+        type: checkbox
+        subquestions:
+            - label: 'Imię, jakim się posługujesz'
+              showIf: {}
+      - label: 'W sferze społecznej funkcjonuję zgodnie z moją tożsamością płciową'
+        type: radio
+        options:
+            some: 'w niektórych obszarach'
+            all: 'w większości obszarów'

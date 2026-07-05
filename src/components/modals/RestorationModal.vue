@@ -5,7 +5,6 @@ import { storeToRefs } from 'pinia'
 
 import BaseModal from './BaseModal.vue'
 import useFormStore from '@/stores/form'
-import steps from '../../steps'
 
 const emit = defineEmits(['confirm'])
 

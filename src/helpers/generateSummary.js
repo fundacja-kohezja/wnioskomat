@@ -1,3 +1,5 @@
+import steps from '../steps.yaml'
+
 export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => {
     const summary = []
 
@@ -8,7 +10,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => 
     summary.push({
         type: 'list',
         items: [
-            [t('s_1'), step_0.a_0 ? t('q_0_0_'+step_0.a_0) : '…'],
+            [t('s_1'), step_0.a_0 ? steps[0].questions[0].options[step_0.a_0] : '…'],
             ...(step_0.a_1 ? [
                 [t('s_2'), step_0.a_1_0 || '…'],
             ] : []),
@@ -86,7 +88,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => 
         (step_3.a_7 ? attached : unattached).push(t('s_23'))
     }
     if (step_3.a_8) {
-        attached.push(step_3.a_8_0 ? t('q_3_8_0_'+step_3.a_8_0) : t('s_24'))
+        attached.push(step_3.a_8_0 ? steps[3].questions[8].subquestions[0].options[step_3.a_8_0] : t('s_24'))
     } else {
         unattached.push(t('s_25'))
     }
@@ -124,10 +126,10 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => 
         type: 'paragraphs',
         items: [
             [t('s_39'), step_6.a_1 ? (step_6.a_1[0] ? t(['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][step_6.a_1[0]-1]) : '') + ' ' + (step_6.a_1[1] || '…') : '…'],
-            ...(step_6.a_2 ? [[t('q_3_2')]] : []),
-            [t('s_40'), step_6.a_4 ? t('q_6_4_'+step_6.a_4) : '…'],
+            ...(step_6.a_2 ? [[t('s_40')]] : []),
+            [t('s_41'), step_6.a_4 ? steps[6].questions[4].options[step_6.a_4] : '…'],
             ...(step_6.a_3 ? [
-                [t('s_41'), step_6.a_3_0 || '…']
+                [t('s_42'), step_6.a_3_0 || '…']
             ] : []),
         ],
     })

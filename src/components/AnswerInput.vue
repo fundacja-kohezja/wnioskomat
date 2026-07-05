@@ -4,6 +4,9 @@ import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 
 import useFormStore from '../stores/form'
+import { isShown } from '../helpers/misc'
+import validators from '../helpers/validation'
+import datasets from '../helpers/datasets'
 import MonthPicker from './MonthPicker.vue'
 import RepeaterField from './RepeaterField.vue'
 
@@ -27,17 +30,15 @@ const value = defineModel()
 const { answers } = storeToRefs(useFormStore())
 const { t } = useI18n()
 
-const labelId = computed(() => 'q_' + props.step + '_' + props.answerNumber.slice(2))
-
 const validationError = computed(() => {
     if (!value.value) return
 
-    const validators = props.question.valid
-    if (!validators) return
+    const validation = props.question.validation
+    if (!validation) return
 
-    for (const i in validators) {
-        if (!validators[i](value.value)) {
-            return t(labelId.value+'_invalid_'+i)
+    for (const i in validators[validation]) {
+        if (!validators[validation][i](value.value)) {
+            return t('validation_'+validation+'_'+i)
         }
     }
 })
@@ -45,12 +46,12 @@ const validationError = computed(() => {
 </script>
 
 <template>
-    <div v-if="question.hasHeading || question.hasSubheading">
-        <h3 v-if="question.hasHeading" class="section-heading">{{ t(labelId+'_heading') }}</h3>
-        <p v-if="question.hasSubheading" class="help-text">{{ t(labelId+'_subheading') }}</p>
+    <div v-if="question.heading || question.subheading">
+        <h3 v-if="question.heading" class="section-heading">{{ question.heading }}</h3>
+        <p v-if="question.subheading" class="help-text">{{ question.subheading }}</p>
     </div>
     <div
-        v-show="!question.showIf || question.showIf(answers)"
+        v-show="!question.showIf || isShown(question.showIf, answers, step, answerNumber)"
         v-bind="$attrs"
         :class="{ 'has-validation-error': validationError }"
     >
@@ -76,20 +77,20 @@ const validationError = computed(() => {
                 type="checkbox"
                 v-model="value"
             />
-            <span>{{ t(labelId) }}</span>
+            <span>{{ question.label }}</span>
         </label>
         <label
             v-else-if="question.type === 'date'"
             class="text-input"
         >
-            <span>{{ t(labelId) }}</span>
+            <span>{{ question.label }}</span>
             <input type="date" v-model="value" />
         </label>
         <label
-            v-else-if="question.type === 'text'"
+            v-else-if="question.type === undefined"
             class="text-input"
         >
-            <span v-if="question.hasLabel !== false">{{ t(labelId) }}</span>
+            <span v-if="question.label">{{ question.label }}</span>
             <span
                 v-if="question.prefix"
                 class="input-with-prefix"
@@ -108,7 +109,7 @@ const validationError = computed(() => {
                 v-else
                 type="text"
                 v-model.lazy.trim="value"
-                :list="question.datalist ? (labelId+'_datalist') : undefined"
+                :list="question.datalist ? ('q_'+step+'_'+answerNumber+'_datalist') : undefined"
                 :placeholder="question.placeholder"
             />
         </label>
@@ -116,30 +117,30 @@ const validationError = computed(() => {
             v-else-if="question.type === 'textarea'"
             class="text-input"
         >
-            <span v-if="question.hasLabel !== false">{{ t(labelId) }}</span>
-            <textarea v-model.lazy="value" rows="4" :lang="question.alwaysPl ? 'pl' : undefined"></textarea>
+            <span v-if="question.label">{{ question.label }}</span>
+            <textarea v-model.lazy="value" rows="4"></textarea>
         </label>
         <fieldset v-else-if="question.type === 'month'">
-            <legend v-if="question.hasLabel !== false">{{ t(labelId) }}</legend>
+            <legend v-if="question.label">{{ question.label }}</legend>
             <MonthPicker v-model="value" />
         </fieldset>
         <fieldset v-else-if="question.type === 'radio' || question.type === 'radio_featured'">
-            <legend v-if="question.hasLabel !== false">{{ t(labelId) }}</legend>
+            <legend v-if="question.label">{{ question.label }}</legend>
             <div class="radio-buttons" :class="{ featured: question.type === 'radio_featured' }">
-                <label class="radio-button" v-for="option of question.options">
+                <label class="radio-button" v-for="(optionLabel, option) in question.options">
                     <input type="radio" v-model="value" :value="option" />
-                    <span>{{ t(labelId+'_'+option) }}</span>
+                    <span>{{ optionLabel }}</span>
                 </label>
             </div>
         </fieldset>
-        <datalist v-if="question.datalist" :id="labelId+'_datalist'">
-            <option v-for="item of question.datalist" :value="item"></option>
+        <datalist v-if="question.datalist" :id="'q_'+step+'_'+answerNumber+'_datalist'">
+            <option v-for="item of datasets[question.datalist]" :value="item"></option>
         </datalist>
         <div v-if="validationError" class="validation-message">{{ validationError }}</div>
-        <p v-if="question.hasDescription" class="help-text">
-            {{ t(labelId+'_desc') }}
-            <a v-if="question.hasLinkInDescription" :href="t(labelId+'_desc_link')" target="_blank">
-                {{ t(labelId+'_desc_link_text') }}
+        <p v-if="question.description" class="help-text">
+            {{ question.description }}
+            <a v-if="question.descLink" :href="question.descLink" target="_blank">
+                {{ question.descLinkText }}
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
                     <path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" />
                     <path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" />

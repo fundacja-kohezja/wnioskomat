@@ -1,25 +1,29 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import steps from '../steps'
+import steps from '../steps.yaml'
+import { isShown } from '../helpers/misc'
+import validators from '../helpers/validation'
 
 const initAnswers = () => steps.map(() => ({}))
 
 const validateAnswer = (q, i, id, answers) => {
     const subanswers = q.subquestions ? q.subquestions.flatMap((q, j) => validateAnswer(q, i, id+'_'+j, answers)) : []
 
-    if (q.showIf && !q.showIf(answers)) {
+    if (q.showIf && !isShown(q.showIf, answers, i, id)) {
         return subanswers
     }
     const answer = answers[i][id]
-    if (!q.filled && q.type === 'checkbox' && answer === undefined) {
+    if (!q.filledIfAny && q.type === 'checkbox' && answer === undefined) {
         return subanswers
     }
-    const isFilled = q.filled || (q.type === 'checkbox' ? () => true : a => a)
+    const isFilled = q.filledIfAny
+        ? (_, answers) => q.filledIfAny.some(answerNb => answers[i][answerNb])
+        : (q.type === 'checkbox' ? () => true : q.type === 'month' ? (([month, year] = []) => month && year) : a => a)
     if (!isFilled(answer, answers)) {
         return ['unfilled', ...subanswers]
     }
-    if (!q.valid || q.valid.every(validator => validator(answer))) {
+    if (!q.validation || validators[q.validation].every(validator => validator(answer))) {
         return ['valid', ...subanswers]
     }
     return ['invalid', ...subanswers]
@@ -45,12 +49,12 @@ export default defineStore('form', () => {
     ))
 
     const anyInvalid = computed(() => answerStatuses.value
-        .filter((_, i) => !steps[i].showIf || steps[i].showIf(answers.value))
+        .filter((_, i) => !steps[i].showIf || isShown(steps[i].showIf, answers.value))
         .some(statuses => statuses.some(status => status === 'invalid'))
     )
 
     const anyIncomplete = computed(() => answerStatuses.value
-        .filter((_, i) => !steps[i].showIf || steps[i].showIf(answers.value))
+        .filter((_, i) => !steps[i].showIf || isShown(steps[i].showIf, answers.value))
         .some(statuses => statuses.some(status => status === 'unfilled'))
     )
 

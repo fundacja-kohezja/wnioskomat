@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import AnswerInput from './AnswerInput.vue'
@@ -22,8 +22,6 @@ const props = defineProps({
 const value = defineModel()
 
 const { t } = useI18n()
-
-const labelId = computed(() => 'q_' + props.step + '_' + props.answerNumber.slice(2))
 
 const add = () => {
     if (!value.value) {
@@ -50,7 +48,7 @@ onMounted(() => {
 
 <template>
 <div class="repeater" :class="{ 'has-nested-repeater': question.hasNestedRepeater }">
-    <div v-if="question.hasLabel !== false" class="repeater-label">{{ t(labelId) }}</div>
+    <div v-if="question.label" class="repeater-label">{{ question.label }}</div>
     <template v-if="value">
         <div
             v-for="(items, i) of value"
@@ -110,7 +108,7 @@ onMounted(() => {
         :class="question.hasNestedRepeater ? 'btn-secondary' : 'btn'"
         @click="add"
     >
-        {{ t(labelId+'_add') }}
+        {{ question.addLabel }}
     </button>
 </div>
 </template>

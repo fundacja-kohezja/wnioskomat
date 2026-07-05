@@ -8,7 +8,8 @@ import { useModal } from 'vue-final-modal'
 import useFormStore from '../stores/form'
 import AnswerInput from './AnswerInput.vue'
 import DataSummary from './DataSummary.vue'
-import steps from '../steps'
+import steps from '../steps.yaml'
+import { isShown } from '../helpers/misc'
 import ConfirmInvalid from './modals/ConfirmInvalid.vue'
 import ConfirmIncomplete from './modals/ConfirmIncomplete.vue'
 
@@ -66,14 +67,14 @@ watch(currentIndex, index => {
 
 const prevStep = () => {
     currentIndex.value--
-    while (steps[currentIndex.value]?.showIf && !steps[currentIndex.value].showIf(answers.value)) {
+    while (steps[currentIndex.value]?.showIf && !isShown(steps[currentIndex.value].showIf, answers.value)) {
         currentIndex.value--
     }
 }
 
 const nextStep = () => {
     currentIndex.value++
-    while (steps[currentIndex.value]?.showIf && !steps[currentIndex.value].showIf(answers.value)) {
+    while (steps[currentIndex.value]?.showIf && !isShown(steps[currentIndex.value].showIf, answers.value)) {
         currentIndex.value++
     }
 }
@@ -86,7 +87,7 @@ const nextStep = () => {
             <button class="nav-link" @click="emit('goToStart')">{{ t('start') }}</button>
             <ol>
                 <template v-for="(step, index) of steps">
-                    <li v-if="!step.showIf || step.showIf(answers)" :class="{ current: currentIndex === index }" :aria-current="currentIndex === index ? true : undefined">
+                    <li v-if="!step.showIf || isShown(step.showIf, answers)" :class="{ current: currentIndex === index }" :aria-current="currentIndex === index ? true : undefined">
                         <span class="step">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" :class="stepStatuses[index]">
                                 <title>{{ t('step_'+stepStatuses[index]) }}</title>
@@ -95,7 +96,7 @@ const nextStep = () => {
                                 <line v-if="stepStatuses[index] === 'partial'" stroke-linecap="round" x1="9" y1="12" x2="15" y2="12" stroke-width="1.5" class="dash" />
                                 <path v-if="stepStatuses[index] === 'invalid'" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.25m0 3.5h.008v.008H12v-.008Z" stroke-width="2" class="exclamation" />
                             </svg>
-                            <button class="nav-link" @click="currentIndex = index">{{ t('step_'+index) }}</button>
+                            <button class="nav-link" @click="currentIndex = index">{{ step.title }}</button>
                         </span>
                     </li>
                 </template>
@@ -105,8 +106,8 @@ const nextStep = () => {
         <div class="questions">
             <div class="step-title" ref="heading">
                 <template v-if="currentIndex < steps.length">
-                    <h2>{{ t('step_'+currentIndex) }}</h2>
-                    <p v-if="currentStep.hasDescription" class="step-description">{{ t('step_'+currentIndex+'_desc') }}</p>
+                    <h2>{{ currentStep.title }}</h2>
+                    <p v-if="currentStep.description" class="step-description">{{ currentStep.description }}</p>
                 </template>
                 <h2 v-else>{{ t('summary') }}</h2>
             </div>

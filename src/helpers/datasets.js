@@ -1277,3 +1277,8 @@ export const courts = {
         coordinates: [49.687732, 19.197632],
     },
 }
+
+export default {
+    incomeTypes: ['umowa o pracę', 'umowa zlecenie', 'działalność gospodarcza', 'renta', 'alimenty', 'dochody z najmu'],
+    courts: Object.keys(courts),
+}
