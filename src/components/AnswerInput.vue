@@ -37,7 +37,7 @@ const validationError = computed(() => {
     if (!validation) return
 
     for (const i in validators[validation]) {
-        if (!validators[validation][i](value.value)) {
+        if (!validators[validation][i](value.value, answers.value)) {
             return t('validation_'+validation+'_'+i)
         }
     }
@@ -158,4 +158,10 @@ const validationError = computed(() => {
             />
         </template>
     </div>
+    <details v-if="question.extraInfo">
+        <summary>{{ question.extraInfo.title }}</summary>
+        <p v-for="paragraph of question.extraInfo.content">
+            {{ paragraph }}
+        </p>
+    </details>
 </template>

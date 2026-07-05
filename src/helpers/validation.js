@@ -19,7 +19,8 @@ export default {
     ],
 
     underage: [
+        a => new Date > new Date(a),
         // about 18 years, no need to be precise here
-        a => new Date - new Date(a) < 1000*60*60*24*366*18,
+        (a, answers) => (!answers[0].a_3 && new Date - new Date(a) > 1000*60*60*24*366*18) || answers[0].a_3,
     ],
 }

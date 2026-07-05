@@ -23,7 +23,7 @@ const validateAnswer = (q, i, id, answers) => {
     if (!isFilled(answer, answers)) {
         return ['unfilled', ...subanswers]
     }
-    if (!q.validation || validators[q.validation].every(validator => validator(answer))) {
+    if (!q.validation || validators[q.validation].every(validator => validator(answer, answers))) {
         return ['valid', ...subanswers]
     }
     return ['invalid', ...subanswers]

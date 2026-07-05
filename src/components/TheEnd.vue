@@ -99,7 +99,7 @@ const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsU
                 </button>
             </nav>
         </div>
-        <div class="questions">
+        <div class="further-steps-wrap">
             <h3>{{ t('further_steps') }}</h3>
             <component :is="furtherSteps[selectedLang]" />
         </div>

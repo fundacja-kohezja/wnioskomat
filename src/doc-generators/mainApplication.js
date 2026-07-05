@@ -90,7 +90,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego wnoszę o:', {
         spaceBefore: 12,
     })
-    li(nb, 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[step_0.a_0] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ (normalize(step_4.a_10) || '......................') +' za nr '+ (normalize(step_4.a_9) || '......................') +', w ten sposób, żeby:')
+    li(nb, 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[step_0.a_0] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ (normalize(step_4.a_9) || '......................') +' za nr '+ (normalize(step_4.a_8) || '......................') +', w ten sposób, żeby:')
 
     const firstItem = ({
         K:'błędnie wpisana w akcie płeć oznaczona jako męska (mężczyzna) została zmieniona na prawidłową – żeńską (kobieta);',
@@ -212,9 +212,9 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         p('TWIERDZENIA FAKTYCZNE')
     })
 
-    text = 'Kierownik Urzędu Stanu Cywilnego w '+(normalize(step_4.a_10) || '........')
+    text = 'Kierownik Urzędu Stanu Cywilnego w '+(normalize(step_4.a_9) || '........')
     text += ' zarejestrował moje urodzenie w dniu '+(step_4.a_7 ? (new Date(step_4.a_7)).toLocaleDateString('pl-PL', { dateStyle: 'long' }) : '........')
-    text += ' w akcie o numerze '+(normalize(step_4.a_9) || '..................... ')+'. '
+    text += ' w akcie o numerze '+(normalize(step_4.a_8) || '..................... ')+'. '
     text += 'Moja płeć została tam oznaczona jako '+({ K: 'męska', M: 'żeńska' }[step_0.a_0] || '.......')+', w oparciu o ocenę mojej budowy anatomicznej przez personel medyczny. '
     text += 'Nadano mi '+(name.includes(' ') ? 'imiona ' : 'imię ')+name+'.'
     p(text)

@@ -8,7 +8,7 @@
             M: 'M'
       - label: 'Zmiana imienia/imion'
         type: checkbox
-        description: 'Jeśli nie zmieniał_ś jeszcze imienia w USC, możesz o to zawnioskować przy okazji zmiany oznaczenia płci. Jeśli sąd przychyli się do wniosku, znacznie przyspieszy to wyrabianie nowych dokumentów.'
+        description: 'Jeśli nie zmieniał_ś jeszcze imienia w USC, możesz o to zawnioskować przy okazji zmiany oznaczenia płci. Jeśli sąd przychyli się do wniosku, znacznie przyspieszy to wyrabianie nowych dokumentów.'
         subquestions:
             - label: 'Jakie chcesz mieć imię/imiona?'
               showIf: {}
@@ -18,13 +18,28 @@
         subquestions:
             - label: 'Jakie chcesz mieć nazwisko?'
               showIf: {}
-      - label: 'Zwolnienie z kosztów sądowych'
+      - heading: 'Osoby niepełnoletnie'
+        label: 'Składam wniosek przed ukończeniem 18 lat, za pośrednictwem rodziców'
         type: checkbox
-        description: 'Złożenie wniosku wymaga zapłacenia 100 zł opłaty sądowej. Możesz zawnioskować o zwolenienie z tego kosztu, jednak wydłuży to procedurę i będzie wymagało wypełnienia dwóch dodatkowych kroków, w których opiszesz swoją sytuację finansową. Nie musisz przejmować się kosztami, które mogą powstać w trakcie postępowania (np. jeśli sąd powoła biegłego), w takiej sytuacji można zawnioskować o zwolnienie z kosztów sądowych później.'
+        extraInfo:
+            title: 'Więcej informacji o przypadku osób niepełnoletnich'
+            content:
+                - 'Przed ukończeniem 18. roku życia nie można samodzielnie złożyć wniosku. Jeśli jesteś osobą niepełnoletnią, przed sądem muszą reprezentować Cię rodzice i to oni podpisują i składają wniosek. W kolejnych krokach podasz ich dane – Wnioskomat wszystko uwzględni i wygeneruje odpowiednio przygotowane dokumenty.'
+                - 'Jeśli jesteś w sytuacji, w której tylko jedno z Twoich rodziców zgadza się na postępowanie, a drugie nie, zmiana oznaczenia płci nadal jest możliwa, ale sprawa robi się trudniejsza – Wnioskomat nie jest przygotowany do takich przypadków, rekomendujemy wtedy kontakt z prawnikiem.'
+      - heading: 'Koszty sądowe'
+        subheading: 'Złożenie wniosku wymaga zapłacenia 100 zł opłaty sądowej. Możesz zawnioskować o zwolenienie z tego kosztu, pod warunkiem, że rzeczywiście Cię na to nie stać – będzie trzeba to wykazać w oświadczeniu majątkowym.'
+        label: 'Chcę zawnioskować o zwolnienie z kosztów sądowych'
+        type: checkbox
+        extraInfo:
+            title: 'Więcej o kosztach sądowych'
+            content:
+                - 'Możesz poprosić sąd o zwolenie z kosztów sądowych, jednak w przypadku kwoty 100 zł uzyskanie zwoleniania jest mało prawdopodobne i udaje się tylko w wyjątkowych przypadkach. Dodatkowo złożenie takiego wniosku wydłuży postępowanie.'
+                - 'Jeśli stać Cię na opłatę sądową, ale boisz się kosztów opinii biegłego, pamiętaj, że wniosek o zwolnienie od kosztów można złożyć również w trakcie postępowania, nawet wtedy, gdy sąd już wydał postanowienie o dopuszczeniu dowodu z opinii biegłego i wezwał Cię do uiszczenia zaliczki. Wnioskomat jest przygotowany na taką sytuację i pozwala wygenerować wniosek o zwolenie z kosztów sądowych w trakcie postępowania.'
+                - 'Jeśli zdecydujesz się zawnioskować o zwolenie z kosztów sądowych, we Wnioskomacie pojawią się dwa dodatkowe kroki do wypełnienia, w których opiszesz swoją sytuację finansową – zostanie z nich wygenerowane oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania, które dołącza się do wniosku.'
 
 - title: 'Majątek i dochody'
   description: 'Tu wprowadzisz dane o swoim majątku i źródłach dochodu, które posłużą do wygenerowania oświadczenia o stanie majątkowym.'
-  showIf: { step: 0, answer: a_3 }
+  showIf: { step: 0, answer: a_4 }
   questions:
       - label: 'Prowadzę działalność gospodarczą'
         type: checkbox
@@ -122,7 +137,7 @@
 
 - title: 'Koszty utrzymania'
   description: 'W tej części zadeklarujesz ponoszone wydatki na życie. Do wniosku nie trzeba dołączać żadnych potwierdzeń, ale musisz liczyć się z tym, że sąd może później zobowiązać Cię do dostarczenia dowodów.'
-  showIf: { step: 0, answer: a_3 }
+  showIf: { step: 0, answer: a_4 }
   questions:
       - heading: 'Twoje stałe miesięczne wydatki'
         subheading: 'Zaznacz te, które Cię dotyczą i uzupełnij kwoty.'
@@ -265,7 +280,7 @@
         descLinkText: 'stronie ministerstwa'
         initialValue: true
         isDisabled: true
-        showIf: { step: 0, answer: a_3, value: false }
+        showIf: { step: 0, answer: a_4, value: false }
       - label: 'Przynajmniej jedna z opinii psychologicznych'
         type: checkbox
         description: 'Zaznacz posiadane opinie i postawione w nich diagnozy'
@@ -394,9 +409,6 @@
       - label: 'Data urodzenia'
         type: date
         validation: underage
-      - label: 'Składam wniosek przed ukończeniem 18 lat'
-        type: checkbox
-        description: 'Pojawi się dodatkowy krok, w którym podasz dane swoich rodziców.'
       - label: 'Numer aktu'
         description: 'W przypadku odpisu zupełnego aktu numer znajdziesz na górze, jako „oznaczenie aktu…”. W przypadku odpisu skróconego aktu numer znajdziesz na dole, w rubryce „informacje o odpisie”, obok „podpis jest zgodny z treścią aktu o oznaczeniu…”.'
         placeholder: 'XXXXXXX/XX/AU/XXXX/XXXXXX'
@@ -405,7 +417,7 @@
 
 - title: 'Dane rodziców'
   description: 'Wniosek zostanie wygenerowany w taki sposób, by złożyli go Twoi rodzice w Twoim imieniu – tylko w taki sposób można go złożyć przed osiągnięciem pełnoletności.'
-  showIf: { step: 4, answer: a_8 }
+  showIf: { step: 0, answer: a_3 }
   questions:
       - heading: 'Dane pierwszego rodzica'
         label: 'Imię i nazwisko'
