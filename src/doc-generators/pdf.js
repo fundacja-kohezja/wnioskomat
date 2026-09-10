@@ -26,6 +26,9 @@ export function initPdf() {
     const setFontStyle = style => {
         fontStyle = style
         switch(style) {
+            case 'bold-italic':
+                doc.setFont('TeXGyreTermes', 'italic', 'bold')
+                break
             case 'bold':
                 doc.setFont('TeXGyreTermes', 'normal', 'bold')
                 break
@@ -93,9 +96,7 @@ export function initPdf() {
         }
     }
 
-    const newPage = () => {
-        if (dryRun) return
-
+    const attachFootnotes = () => {
         if (pageFootnotes.length) {
             doc.line(margin, y, margin + 50, y, 'S')
             y += 6
@@ -126,6 +127,11 @@ export function initPdf() {
             })
         }
         pageFootnotes = []
+    }
+
+    const newPage = () => {
+        if (dryRun) return
+        attachFootnotes()
         doc.addPage()
         y = margin
         h = 297
@@ -142,19 +148,19 @@ export function initPdf() {
         dryRun = true
         content()
         dryRun = false
+        y = currentY
         if (y > h - margin) {
             newPage()
-        } else {
-            y = currentY
         }
         content()
     }
 
-    const textToLines = (text, formatSeparator, type, w = maxWidth, footnotes) => {
+    const textToLines = (text, italicSep, boldSep, w = maxWidth, footnotes) => {
         const lines = [{ textWidth: 0, words: [] }]
         let line = 0
         let x = 0
-        let isFormatted = false
+        let isItalic = false
+        let isBold = false
         const startNewLine = (dontJustify = false) => {
             lines[line].textWidth = x
             lines[line].dontJustify = dontJustify
@@ -167,17 +173,23 @@ export function initPdf() {
                 word = word.slice(1)
             }
             let wordWidth = 0
-            word.split(formatSeparator).forEach((part, i) => {
+            word.split(italicSep).forEach((part, i) => {
                 if (i > 0) {
-                    isFormatted = !isFormatted
-                    setFontStyle(isFormatted ? type : 'normal')
+                    isItalic = !isItalic
+                    setFontStyle(isItalic && isBold ? 'bold-italic' : isItalic ? 'italic' : isBold ? 'bold' : 'normal')
                 }
-                if (footnotes) {
-                    footnotes.forEach(footnote => {
-                        part = part.replace(footnote, 'a') // 'a' glyph has roughly the same width as smaller number
-                    })
-                }
-                wordWidth += doc.getStringUnitWidth(part) * unitFactor
+                part.split(boldSep).forEach((part, j) => {
+                    if (j > 0) {
+                        isBold = !isBold
+                        setFontStyle(isItalic && isBold ? 'bold-italic' : isItalic ? 'italic' : isBold ? 'bold' : 'normal')
+                    }
+                    if (footnotes) {
+                        footnotes.forEach(footnote => {
+                            part = part.replace(footnote, 'a'.repeat(footnote.length - 2)) // 'a' glyph has roughly the same width as smaller number
+                        })
+                    }
+                    wordWidth += doc.getStringUnitWidth(part) * unitFactor
+                })
             })
             if (x + wordWidth > w) {
                 startNewLine()
@@ -190,8 +202,9 @@ export function initPdf() {
         return lines
     }
 
-    const renderLines = (lines, { align = 'justify', shift = 0, formatSeparator, inlineFormat, w = maxWidth, doExtra = () => {}, footnotes, footnotesFormat = {} }) => {
-        let isFormatted = false
+    const renderLines = (lines, { align = 'justify', shift = 0, italicSep, boldSep, w = maxWidth, doExtra = () => {}, footnotes, footnotesFormat = {} }) => {
+        let isItalic = false
+        let isBold = false
 
         const renderLine = ({ textWidth, words }) => {
             if (dryRun) {
@@ -208,14 +221,14 @@ export function initPdf() {
 
                     if (!pageFootnotes.length) h -= 6
                     font({ size: 8, lh: 1.15, style: 'normal' }, () => {
-                        const lines = doc.splitTextToSize('   '+footnotes[footnote], maxWidth)
+                        const lines = doc.splitTextToSize(' ' + '  '.repeat(footnote.length - 2)+footnotes[footnote], maxWidth)
                         const height = (lines.length + 0.5) * fontSize * lineHeightFactor / (72/25.4)
                         h -= height
                         if (h - y - margin < 0) { // for edge case when reference is in the line at the bottom of the page
                             newPage()
                             h -= height
                         }
-                        pageFootnotes.push({ lines, height, number: footnote[1], format: footnotesFormat[footnote] })
+                        pageFootnotes.push({ lines, height, number: footnote.slice(1, -1), format: footnotesFormat[footnote] })
                     })
                 })
             }
@@ -240,7 +253,7 @@ export function initPdf() {
                                 font({ size: 8 }, () => {
                                     doc.text(inside, x + x2, y - 1.5)
                                 })
-                                x2 += doc.getStringUnitWidth('a') * unitFactor
+                                x2 += doc.getStringUnitWidth('a'.repeat(inside.length)) * unitFactor
                                 doc.text(after, x + x2, y)
                                 x2 += doc.getStringUnitWidth(after) * unitFactor
                             })
@@ -253,15 +266,21 @@ export function initPdf() {
                     renderWord = (text, x) => doc.text(text, x, y)
                 }
 
-                if (formatSeparator && word.text.includes(formatSeparator)) {
+                if ((boldSep || italicSep) && (word.text.includes(boldSep) || word.text.includes(italicSep))) {
                     let x2 = 0
-                    word.text.split(formatSeparator).forEach((part, i) => {
+                    word.text.split(boldSep).forEach((part, i) => {
                         if (i > 0) {
-                            isFormatted = !isFormatted
-                            setFontStyle(isFormatted ? inlineFormat : 'normal')
+                            isBold = !isBold
+                            setFontStyle(isItalic && isBold ? 'bold-italic' : isItalic ? 'italic' : isBold ? 'bold' : 'normal')
                         }
-                        renderWord(part, x + x2)
-                        x2 += doc.getStringUnitWidth(part) * unitFactor
+                        part.split(italicSep).forEach((part, j) => {
+                            if (j > 0) {
+                                isItalic = !isItalic
+                                setFontStyle(isItalic && isBold ? 'bold-italic' : isItalic ? 'italic' : isBold ? 'bold' : 'normal')
+                            }
+                            renderWord(part, x + x2)
+                            x2 += doc.getStringUnitWidth(part) * unitFactor
+                        })
                     })
                 } else {
                     renderWord(word.text, x)
@@ -304,12 +323,12 @@ export function initPdf() {
             }
             y += lines.length * fontSize * lineHeightFactor / unitFactor
         } else {
-            const lines = textToLines(text, italicSep || boldSep, boldSep ? 'bold' : 'italic', width, footnotes && Object.keys(footnotes))
+            const lines = textToLines(text, italicSep, boldSep, width, footnotes && Object.keys(footnotes))
             renderLines(lines, {
                 align,
                 shift,
-                formatSeparator: italicSep || boldSep,
-                inlineFormat: boldSep ? 'bold' : 'italic',
+                italicSep,
+                boldSep,
                 w: width,
                 doExtra,
                 footnotes,
@@ -335,7 +354,9 @@ export function initPdf() {
         doc.save(filename+'.pdf')
     }
 
-    const complete = () => {} // noop
+    const complete = () => {
+        attachFootnotes()
+    }
 
     return { p, li, font, setLineHeight, resetNumbering, noPageBreak, complete, save }
 }

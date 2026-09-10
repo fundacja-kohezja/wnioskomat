@@ -114,7 +114,7 @@ const nextStep = () => {
             <form v-if="currentIndex < steps.length">
                 <AnswerInput
                     v-for="(q, i) of currentStep.questions"
-                    v-model="answers[currentIndex]['a_'+i]"
+                    v-model="answers[currentIndex][q.name]"
                     :question="q"
                     :step="currentIndex"
                     :answer-number="'a_'+i"

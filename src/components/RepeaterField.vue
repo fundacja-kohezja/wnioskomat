@@ -25,9 +25,9 @@ const { t } = useI18n()
 
 const add = () => {
     if (!value.value) {
-        value.value = [[]]
+        value.value = [{}]
     } else {
-        value.value.push([])
+        value.value.push({})
     }
 }
 
@@ -61,7 +61,7 @@ onMounted(() => {
                 :question="field"
                 :step="step"
                 :answer-number="answerNumber+'_'+j"
-                v-model="items[j]"
+                v-model="items[field.name]"
             />
             <div class="buttons-group">
                 <button

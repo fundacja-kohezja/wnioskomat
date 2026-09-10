@@ -5,13 +5,20 @@ const normalize = text => (text || '').trim()
 
 export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], documentCreatorInitializer) => {
 
+    const a = {
+        ...step_0,
+        ...step_3,
+        ...step_4,
+        ...step_5,
+        ...step_6,
+    }
+
     const { p, li, font, setLineHeight, resetNumbering, noPageBreak, complete, save } = documentCreatorInitializer()
 
     const nb = 'basic-numbering'
     const letter = 'section-marker'
 
-    // TODO do it differently
-    const city = normalize(step_4.a_1).split('\n').at(-1).split(' ').slice(1).join(' ') || '......................'
+    const city = normalize(a.city) || '......................'
     p(city + ', ' + (new Date).toLocaleDateString('pl-PL', { dateStyle: 'long' }), {
         align: 'right',
         spaceAfter: 6,
@@ -23,10 +30,10 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         align: 'left',
     }
 
-    if (step_4.a_3) {
-        p(step_4.a_3, top)
+    if (a.chosen_court) {
+        p(a.chosen_court, top)
         p('Wydział Cywilny', top)
-        p(courts[step_4.a_3].address, {
+        p(courts[a.chosen_court].address, {
             ...top,
             mayBreak: true,
         })
@@ -37,72 +44,88 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     }
 
     font({ style: 'bold' }, () => {
-        p({K: 'Wnioskodawczyni:', M: 'Wnioskodawca:'}[step_0.a_0] || '', {
+        p({K: 'Wnioskodawczyni:', M: 'Wnioskodawca:'}[a.new_mark] || '', {
             ...top,
             spaceBefore: 5,
         })
     })
-    p([step_4.a_5, step_4.a_6].map(normalize).join(' '), top)
-    p(normalize(step_4.a_1), {
+    p([a.birth_name, a.birth_surname].map(normalize).join(' '), top)
+    p([a.address_1, a.address_2, (a.zip_code || '........') + ' ' + (a.city || '...................')]
+        .map(normalize)
+        .filter(x => x)
+        .join('\n'),
+    {
         ...top,
         mayBreak: true,
     })
-    p('PESEL ' + (step_4.a_0 ? normalize(step_4.a_0) : '......................'), top)
-    if (step_4.a_4) {
-        p((step_4.a_4_0 ? normalize(step_4.a_4_0) : '') + (step_4.a_4_1 ? ('\ntel. ' + normalize(step_4.a_4_1)) : ''), {
+    p('PESEL ' + (normalize(a.pesel) || '......................'), top)
+    if (a.has_contact_info) {
+        p([normalize(a.email), normalize(a.phone) ? ('tel. ' + normalize(a.phone)) : ''].filter(x => x).join('\n'), {
             ...top,
             mayBreak: true,
         })
     }
 
-    p({K: 'Reprezentowana przez', M: 'Reprezentowany przez'}[step_0.a_0] || 'Reprezentowan_ przez', {
+    p({K: 'Reprezentowana przez', M: 'Reprezentowany przez'}[a.new_mark] || 'Reprezentowan_ przez', {
         ...top,
         spaceBefore: 5,
     })
-    p('1.  ' + (normalize(step_5.a_0) || '......................'), top)
-    p('PESEL ' + (step_5.a_1 ? normalize(step_5.a_1) : '......................'), {
+    p('1.  ' + (normalize(a.parent_1_name) || '......................'), top)
+    p('PESEL ' + (normalize(a.parent_1_pesel) || '......................'), {
         ...top,
         shift: 105,
     })
-    p(normalize(step_5.a_2) || '......................', {
+    p([a.parent_1_address_1, a.parent_1_address_2, (a.parent_1_zip_code || '........') + ' ' + (a.parent_1_city || '...................')]
+        .map(normalize)
+        .filter(x => x)
+        .join('\n'),
+    {
         ...top,
         shift: 105,
         mayBreak: true,
     })
-    if (step_5.a_3) {
-        p((step_5.a_3_0 ? normalize(step_5.a_3_0) : '') + (step_5.a_3_1 ? ('\ntel. ' + normalize(step_5.a_3_1)) : ''), {
+    if (a.parent_1_has_contact_info) {
+        p([normalize(a.parent_1_email), normalize(a.parent_1_phone) ? ('tel. ' + normalize(a.parent_1_phone)) : ''].filter(x => x).join('\n'), {
             ...top,
             shift: 105,
             mayBreak: true,
         })
     }
-    p('2.  ' + (normalize(step_5.a_4) || '......................'), top)
-    p('PESEL ' + (step_5.a_5 ? normalize(step_5.a_5) : '......................'), {
+    p('2.  ' + (normalize(a.parent_2_name) || '......................'), top)
+    p('PESEL ' + (normalize(a.parent_2_pesel) || '......................'), {
         ...top,
         shift: 105,
     })
-    p(normalize(step_5.a_6) || '......................', {
+    p([a.parent_2_address_1, a.parent_2_address_2, (a.parent_2_zip_code || '........') + ' ' + (a.parent_2_city || '...................')]
+        .map(normalize)
+        .filter(x => x)
+        .join('\n'),
+    {
         ...top,
         shift: 105,
         mayBreak: true,
     })
-    if (step_5.a_7) {
-        p((step_5.a_7_0 ? normalize(step_5.a_7_0) : '') + (step_5.a_7_1 ? ('\ntel. ' + normalize(step_5.a_7_1)) : ''), {
+    if (a.parent_2_has_contact_info) {
+        p([normalize(a.parent_2_email), normalize(a.parent_2_phone) ? ('tel. ' + normalize(a.parent_2_phone)) : ''].filter(x => x).join('\n'), {
             ...top,
             shift: 105,
             mayBreak: true,
         })
     }
 
-    if (step_4.a_2) {
+    if (a.has_proxy) {
         font({ style: 'bold' }, () => {
             p('Pełnomocnik do doręczeń', {
                 ...top,
                 spaceBefore: 5,
             })
         })
-        p(normalize(step_4.a_2_0) || '......................', top)
-        p(normalize(step_4.a_2_3), {
+        p(normalize(a.proxy_name) || '......................', top)
+        p([a.proxy_address_1, a.proxy_address_2, (a.proxy_zip_code || '........') + ' ' + (a.proxy_city || '...................')]
+            .map(normalize)
+            .filter(x => x)
+            .join('\n'),
+        {
             ...top,
             mayBreak: true,
         })
@@ -112,9 +135,8 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         p('WNIOSEK O SPROSTOWANIE AKTU URODZENIA', {
             align: 'center',
             spaceBefore: 16,
-            spaceAfter: 0,
         })
-        if (step_0.a_3) {
+        if (a.is_exemption) {
             p('wraz z wnioskiem o zwolnienie od obowiązku ponoszenia kosztów sądowych', {
                 align: 'center',
                 spaceAfter: 0,
@@ -124,17 +146,17 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
 
     setLineHeight(1.5)
 
-    p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego, działając jako przedstawiciele ustawowi małoletniej osoby o danych '+([step_4.a_5, step_4.a_6].map(normalize).join(' ') || '......................')+' (dalej jako '+({K: 'Wnioskodawczyni', M: 'Wnioskodawca'}[step_0.a_0] || '......................')+') wnosimy o:', {
+    p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego, działając jako przedstawiciele ustawowi małoletniej osoby o danych '+([a.birth_name, a.birth_surname].map(normalize).join(' ') || '......................')+' (dalej jako '+({K: 'Wnioskodawczyni', M: 'Wnioskodawca'}[a.new_mark] || '......................')+') wnosimy o:', {
         spaceBefore: 12,
     })
-    li(nb, 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[step_0.a_0] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ (normalize(step_4.a_10) || '......................') +' za nr '+ (normalize(step_4.a_9) || '......................') +', w ten sposób, żeby:')
+    li(nb, 'sprostowanie aktu urodzenia '+({K: 'Wnioskodawczyni', M: 'Wnioskodawcy'}[a.new_mark] || '......................')+' zarejestrowanego w Urzędzie Stanu Cywilnego w '+ (normalize(a.birth_certificate_issuer) || '......................') +' za nr '+ (normalize(a.birth_certificate_id) || '......................') +', w ten sposób, żeby:')
 
     const firstItem = ({
         K:'błędnie wpisana w akcie płeć oznaczona jako męska (mężczyzna) została zmieniona na prawidłową – żeńską (kobieta);',
         M:'błędnie wpisana w akcie płeć oznaczona jako żeńska (kobieta) została zmieniona na prawidłową – męską (mężczyzna);',
-    }[step_0.a_0] || '......................')
+    }[a.new_mark] || '......................')
 
-    if (step_0.a_1 || step_0.a_2) {
+    if (a.is_new_firstname || a.is_new_surname) {
         li(nb, firstItem, {
             level: 2,
         })
@@ -146,26 +168,26 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         })
     }
 
-    const name = normalize(step_4.a_5) || '......................'
-    if (step_0.a_1) {
-        const newName = normalize(step_0.a_1_0) || '......................'
+    const name = normalize(a.birth_name) || '......................'
+    if (a.is_new_firstname) {
+        const newName = normalize(a.new_firstname) || '......................'
         li(nb, (name.includes(' ') ? ('imiona '+name+' zostały') : ('imię '+name+' zostało')) + ' zmienione na '+(newName.includes(' ')?'imiona ':'imię ')+newName+';', {
             level: 2,
         })
     }
-    if (step_0.a_2) {
-        li(nb, 'nazwisko '+normalize(step_4.a_6)+' zostało zmienione na '+normalize(step_0.a_2_0)+'; ', {
+    if (a.is_new_surname) {
+        li(nb, 'nazwisko '+normalize(a.birth_surname)+' zostało zmienione na '+normalize(a.new_surname)+'; ', {
             level: 2,
         })
     }
     li(nb, 'rozpoznanie sprawy na posiedzeniu niejawnym;')
     li(nb, 'rozpoznanie niniejszej sprawy w trybie pilnym, zgodnie z § 2 pkt 5 lit. x Rozporządzenia Ministra Sprawiedliwości z dnia 18 czerwca 2019 r. Regulamin urzędowania sądów powszechnych;')
     li(nb, 'dopuszczenie i przeprowadzenie dowodu z dokumentów:')
-    const part0 = { K: 'Wnioskodawczyni', M: 'Wnioskodawcy' }[step_0.a_0] || '......................'
-    li(nb, 'odpisu aktu urodzenia – na fakt oznaczenia płci '+part0+' w akcie urodzenia jako '+({K: 'męskiej;', M: 'żeńskiej;'}[step_0.a_0] || '.......;'), {
+    const part0 = { K: 'Wnioskodawczyni', M: 'Wnioskodawcy' }[a.new_mark] || '......................'
+    li(nb, 'odpisu aktu urodzenia – na fakt oznaczenia płci '+part0+' w akcie urodzenia jako '+({K: 'męskiej;', M: 'żeńskiej;'}[a.new_mark] || '.......;'), {
         level: 2,
     })
-    const part1 = { K: 'żeńską', M: 'męską' }[step_0.a_0] || '.......'
+    const part1 = { K: 'żeńską', M: 'męską' }[a.new_mark] || '.......'
     const diagnosis = (F64, HA60) => {
         if (F64 && HA60) {
             return 'transseksualizmu – F64.0 według nomenklatury ICD-10, a według nomenklatury ICD-11 niezgodności płciowej – HA60;'
@@ -178,64 +200,64 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         }
         return '......................;'
     }
-    if (step_3.a_2_0) {
-        li(nb, 'opinii psychologa – na fakt stwierdzenia u '+part0+' trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia '+({ K: 'jej', M: 'mu' }[step_0.a_0] || '....')+' formalnej diagnozy '+diagnosis(step_3.a_2_0_0, step_3.a_2_0_1), {
+    if (a.psychologist) {
+        li(nb, 'opinii psychologa – na fakt stwierdzenia u '+part0+' trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia '+({ K: 'jej', M: 'mu' }[a.new_mark] || '....')+' formalnej diagnozy '+diagnosis(a.psychologist_f64, a.psychologist_ha60), {
             level: 2,
         })
     }
-    if (step_3.a_2_1) {
-        li(nb, 'opinii psychologa-seksuologa – na fakt stwierdzenia u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia '+({ K: 'jej', M: 'mu' }[step_0.a_0] || '....')+' formalnej diagnozy '+diagnosis(step_3.a_2_1_0, step_3.a_2_1_1), {
+    if (a.psychologist_sexologist) {
+        li(nb, 'opinii psychologa-seksuologa – na fakt stwierdzenia u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia '+({ K: 'jej', M: 'mu' }[a.new_mark] || '....')+' formalnej diagnozy '+diagnosis(a.psychologist_sexologist_f64, a.psychologist_sexologist_ha60), {
             level: 2,
         })
     }
-    if (step_3.a_3_0) {
-        li(nb, 'zaświadczenia lekarza psychiatry – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia '+({ K: 'jej', M: 'mu' }[step_0.a_0] || '....')+' formalnej diagnozy '+diagnosis(step_3.a_3_0_0, step_3.a_3_0_1), {
+    if (a.psychiatrist) {
+        li(nb, 'zaświadczenia lekarza psychiatry – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia '+({ K: 'jej', M: 'mu' }[a.new_mark] || '....')+' formalnej diagnozy '+diagnosis(a.psychiatrist_f64, a.psychiatrist_ha60), {
             level: 2,
         })
     }
-    if (step_3.a_3_1) {
-        li(nb, 'zaświadczenia lekarza seksuologa – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia '+({ K: 'jej', M: 'mu' }[step_0.a_0] || '....')+' formalnej diagnozy '+diagnosis(step_3.a_3_1_0, step_3.a_3_1_1), {
+    if (a.sexologist) {
+        li(nb, 'zaświadczenia lekarza seksuologa – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', wykluczenia wtórnego pochodzenia niezgodności płciowej, postawienia '+({ K: 'jej', M: 'mu' }[a.new_mark] || '....')+' formalnej diagnozy '+diagnosis(a.sexologist_f64, a.sexologist_ha60), {
             level: 2,
         })
     }
-    if (step_3.a_4) {
+    if (a.hrt_certificate) {
         li(nb, 'zaświadczenia lekarskiego – na fakt wdrożenia u '+part0+' terapii hormonalnej;', {
             level: 2,
         })
     }
-    if (step_3.a_5) {
-        li(nb, 'dokumentu zatytułowanego |Ramowe zalecenia dotyczące procesu opieki nad zdrowiem nastoletnich osób transpłciowych (T) i niebinarnych (NB) doświadczających dysforii płciowej — stanowisko panelu ekspertów| – na fakt aktualnych polskich standardów opieki nad nastoletnimi osobami transpłciowymi, wymogów diagnostycznych niezbędnych do postawienia diagnozy F64.0 lub HA60, spełniania przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[step_0.a_0] || '......................')+' kryteriów diagnostycznych;', {
+    if (a.pts_guidelines) {
+        li(nb, 'dokumentu zatytułowanego |Ramowe zalecenia dotyczące procesu opieki nad zdrowiem nastoletnich osób transpłciowych (T) i niebinarnych (NB) doświadczających dysforii płciowej — stanowisko panelu ekspertów| – na fakt aktualnych polskich standardów opieki nad nastoletnimi osobami transpłciowymi, wymogów diagnostycznych niezbędnych do postawienia diagnozy F64.0 lub HA60, spełniania przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[a.new_mark] || '......................')+' kryteriów diagnostycznych;', {
             level: 2,
             italicSep: '|',
         })
     }
-    if (!step_0.a_1 && step_3.a_7) {
-        li(nb, 'decyzji o zmianie imienia – na fakt zmiany imienia w związku z trwałym poczuciem przynależności do płci '+({ K: 'żeńskiej;', M: 'męskiej;' }[step_0.a_0] || '.......;'), {
+    if (!a.is_new_firstname && a.name_change_confirmation) {
+        li(nb, 'decyzji o zmianie imienia – na fakt zmiany imienia w związku z trwałym poczuciem przynależności do płci '+({ K: 'żeńskiej;', M: 'męskiej;' }[a.new_mark] || '.......;'), {
             level: 2,
         })
     }
-    if (step_3.a_8) {
-        li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS' }[step_3.a_8_0] || '......................')+' – na fakt występowania u '+part0+' trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[step_0.a_0] || '.......')+' w otoczeniu;', {
+    if (a.proving_documents) {
+        li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS' }[a.proving_documents_type] || '......................')+' – na fakt występowania u '+part0+' trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[a.new_mark] || '.......')+' w otoczeniu;', {
             level: 2,
         })
     }
 
-    if (step_0.a_3) {
+    if (a.is_exemption) {
         li(nb, 'wnosimy o zwolnienie nas od obowiązku ponoszenia kosztów procesu w całości, ponieważ nie jesteśmy w stanie ich ponieść bez uszczerbku utrzymania koniecznego dla siebie i rodziny.', {
             spaceBefore: 3,
         })
     }
 
-    if (step_3.a_6) {
+    if (a.long_guidelines) {
         p('Jednocześnie przedkładamy jako załącznik wydaną przez Rzecznika Praw Obywatelskich publikację |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, zawierającą szereg specjalistycznych informacji dotyczących praw osób transpłciowych oraz aktualnych standardów orzeczniczych w sprawach o ustalenie płci.', {
             italicSep: '|',
             spaceBefore: 8,
         })
     }
 
-    let text = 'Na wstępie wyjaśniamy, że zdajemy sobie sprawę z metrykalnego oznaczenia płci naszego dziecka jako '+({ K: 'męskiej', M: 'żeńskiej' }[step_0.a_0] || '.......')+', jednak wskazuję, że w codziennym życiu '+({ K: 'córka', M: 'syn' }[step_0.a_0] || '......')+' funkcjonuje jako '+({ K: 'kobieta', M: 'mężczyzna' }[step_0.a_0] || '.......')+'. W związku z tym, że tożsamość płciowa jest jednym z dóbr osobistych człowieka, we wniosku będzimy używać '+({ K: 'żeńskich', M: 'męskich' }[step_0.a_0] || '.......')+' form gramatycznych.'
-    if (step_6.a_3) {
-        text += ' Jednocześnie wskazujemy, że na co dzień '+({ K: 'córka', M: 'syn' }[step_0.a_0] || '......')+' używa imienia '+ (normalize(step_6.a_3_0) || '....... ') +'.'
+    let text = 'Na wstępie wyjaśniamy, że zdajemy sobie sprawę z metrykalnego oznaczenia płci naszego dziecka jako '+({ K: 'męskiej', M: 'żeńskiej' }[a.new_mark] || '.......')+', jednak wskazuję, że w codziennym życiu '+({ K: 'córka', M: 'syn' }[a.new_mark] || '......')+' funkcjonuje jako '+({ K: 'kobieta', M: 'mężczyzna' }[a.new_mark] || '.......')+'. W związku z tym, że tożsamość płciowa jest jednym z dóbr osobistych człowieka, we wniosku będzimy używać '+({ K: 'żeńskich', M: 'męskich' }[a.new_mark] || '.......')+' form gramatycznych.'
+    if (a.has_common_name) {
+        text += ' Jednocześnie wskazujemy, że na co dzień '+({ K: 'córka', M: 'syn' }[a.new_mak] || '......')+' używa imienia '+ (normalize(a.common_name) || '....... ') +'.'
     }
     p(text, {
         spaceBefore: 6,
@@ -250,27 +272,27 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         p('TWIERDZENIA FAKTYCZNE')
     })
 
-    text = ({K: 'Wnioskodawczyni urodziła', M: 'Wnioskodawca urodził'}[step_0.a_0] || '......................')
-    text += ' się '+(step_4.a_7 ? (new Date(step_4.a_7)).toLocaleDateString('pl-PL', { dateStyle: 'long' }) : '........')+' r. w '+(normalize(step_4.a_10) || '........')
-    text += ' jako dziecko '+(step_5.a_0 ? normalize(step_5.a_0).split(' ')[0] : '........')+' oraz '+(step_5.a_4 ? normalize(step_5.a_4).split(' ')[0] : '........')
-    text += '. Kierownik Urzędu Stanu Cywilnego w '+(normalize(step_4.a_10) || '........')
-    text += ' zarejestrował '+({ K: 'jej', M: 'jego' }[step_0.a_0] || '.......')+' urodzenie w akcie o numerze '+(normalize(step_4.a_9) || '..................... ')+'. '
-    text += ({ K: 'Jej', M: 'Jego' }[step_0.a_0] || '.......')+' płeć została tam oznaczona jako '+({ K: 'męska', M: 'żeńska' }[step_0.a_0] || '.......')+', w oparciu o ocenę budowy anatomicznej przez personel medyczny. '
-    text += 'Nadano '+({ K: 'jej', M: 'mu' }[step_0.a_0] || '.......')+' '+(name.includes(' ') ? 'imiona ' : 'imię ')+name+'.'
+    text = ({K: 'Wnioskodawczyni urodziła', M: 'Wnioskodawca urodził'}[a.new_mark] || '......................')
+    text += ' się '+(a.birth_date ? (new Date(a.birth_date)).toLocaleDateString('pl-PL', { dateStyle: 'long' }) : '........')+' r. w '+(normalize(a.birth_certificate_issuer) || '........')
+    text += ' jako dziecko '+(a.parent_1_name ? normalize(a.parent_1_name).split(' ')[0] : '........')+' oraz '+(a.parent_2_name ? normalize(a.parent_2_name).split(' ')[0] : '........')
+    text += '. Kierownik Urzędu Stanu Cywilnego w '+(normalize(a.birth_certificate_issuer) || '........')
+    text += ' zarejestrował '+({ K: 'jej', M: 'jego' }[a.new_mark] || '.......')+' urodzenie w akcie o numerze '+(normalize(a.birth_certificate_id) || '..................... ')+'. '
+    text += ({ K: 'Jej', M: 'Jego' }[a.new_mark] || '.......')+' płeć została tam oznaczona jako '+({ K: 'męska', M: 'żeńska' }[a.new_mark] || '.......')+', w oparciu o ocenę budowy anatomicznej przez personel medyczny. '
+    text += 'Nadano '+({ K: 'jej', M: 'mu' }[a.new_mark] || '.......')+' '+(name.includes(' ') ? 'imiona ' : 'imię ')+name+'.'
     p(text)
 
     font({ style: 'italic' }, () => {
         p('Dowód: odpis aktu urodzenia')
     })
 
-    p(normalize(step_6.a_0) || '......................', {
+    p(normalize(a.experience) || '......................', {
         mayBreak: true,
     })
     p('U osób transpłciowych występuje niezgodność pomiędzy płcią przypisaną przy urodzeniu a tożsamością płciową, czyli głębokim wewnętrznym przeżywaniem własnej płci. Ta rozbieżność może prowadzić do dysforii, czyli uczucia dyskomfortu wynikającego z rozdźwięku pomiędzy różnymi aspektami naszej płci (cechami płciowymi naszego ciała, tym jak wyglądamy, tym jak odbierają nas inni). Nasilona dysforia może wiązać się z poważnymi negatywnymi skutkami dla zdrowia psychicznego osoby transpłciowej. Formalnie u osób transpłciowych diagnozuje się „transseksualizm” według nomenklatury ICD-10 (F64.0). Według najnowszej nomenklatury ICD-11, nie wszędzie jeszcze wdrożonej, formalnie diagnozuje się „niezgodność płciową” (HA60), którą zdefiniowano jako utrzymującą się wyraźną niezgodność między doświadczaną przez osobę płcią oraz płcią przypisaną. Stan „niezgodności płciowej” został wyjęty z obszaru dotyczącego zaburzeń psychicznych, a przeniesiony do obszaru dotyczącego zdrowia seksualnego. Sama transpłciowość w tym ujęciu nie jest już stanem „patologicznym”, „chorobą” czy „zaburzeniem”. Po uzgodnieniu płci w toku tranzycji medycznej i/lub społecznej, w tym prawnej, niezgodność ta zanika. W okresie dzieciństwa stawia się diagnozę F 64.2. (w przypadku ICD-10 – zaburzenia identyfikacji płciowej w dzieciństwie) lub HA61 (w przypadku ICD-11 – niezgodność płciowa w dzieciństwie). Jednak diagnostyka w okresie dojrzewania powinna się już zakończyć diagnozą analogiczną jak dla osób dorosłych.')
 
-    text = 'W związku z głęboko przeżywanym poczuciem identyfikacji z płcią '+({ K: 'żeńską', M: 'męską' }[step_0.a_0] || '.......')+' i występującą jednocześnie dysforią, '+({ K: 'Wnioskodawczyni przy wsparciu rodziców rozpoczęła', M: 'Wnioskodawca przy wsparciu rodziców rozpoczął' }[step_0.a_0] || '........... przy wsparciu rodziców rozpocz_ł_')+' formalną diagnostykę u lekarzy specjalistów, w wyniku której '+({ K: 'otrzymała', M: 'otrzymał' }[step_0.a_0] || 'otrzymał_')+' diagnozę '
-    const isAnyF64 = (step_3.a_2_0 && step_3.a_2_0_0) || (step_3.a_2_1 && step_3.a_2_1_0) || (step_3.a_3_0 && step_3.a_3_0_0) || (step_3.a_3_1 && step_3.a_3_1_0)
-    const isAnyHA60 = (step_3.a_2_0 && step_3.a_2_0_1) || (step_3.a_2_1 && step_3.a_2_1_1) || (step_3.a_3_0 && step_3.a_3_0_1) || (step_3.a_3_1 && step_3.a_3_1_1)
+    text = 'W związku z głęboko przeżywanym poczuciem identyfikacji z płcią '+({ K: 'żeńską', M: 'męską' }[a.new_mark] || '.......')+' i występującą jednocześnie dysforią, '+({ K: 'Wnioskodawczyni przy wsparciu rodziców rozpoczęła', M: 'Wnioskodawca przy wsparciu rodziców rozpoczął' }[a.new_mark] || '........... przy wsparciu rodziców rozpocz_ł_')+' formalną diagnostykę u lekarzy specjalistów, w wyniku której '+({ K: 'otrzymała', M: 'otrzymał' }[a.new_mark] || 'otrzymał_')+' diagnozę '
+    const isAnyF64 = (a.psychologist && a.psychologist_f64) || (a.psychologist_sexologist && a.psychologist_sexologist_f64) || (a.psychiatrist && a.psychiatrist_f64) || (a.sexologist && a.sexologist_f64)
+    const isAnyHA60 = (a.psychologist && a.psychologist_ha60) || (a.psychologist_sexologist && a.psychologist_sexologist_ha60) || (a.psychiatrist && a.psychiatrist_ha60) || (a.sexologist && a.sexologist_ha60)
     if (isAnyF64 && isAnyHA60) {
         text += 'transseksualizmu (F64.0) / niezgodności płciowej (HA60).'
     } else if (isAnyF64) {
@@ -283,9 +305,9 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     // TODO "psychiatrę-seksuologa" case
     text += ' Proces diagnostyczny został przeprowadzony '
     const specialists = []
-    if (step_3.a_3_0) specialists.push('lekarza psychiatrę')
-    if (step_3.a_3_1) specialists.push('lekarza seksuologa')
-    if (step_3.a_2_0 || step_3.a_2_1) specialists.push('psychologa')
+    if (a.psychiatrist) specialists.push('lekarza psychiatrę')
+    if (a.sexologist) specialists.push('lekarza seksuologa')
+    if (a.psychologist || a.psychologist_sexologist) specialists.push('psychologa')
     if (!specialists.length) specialists.push('......................')
     specialists.forEach((specialist, i) => {
         text += 'przez '+specialist
@@ -296,15 +318,15 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
             text += ', '
         }
     })
-    text += ', zgodnie z zaleceniami panelu ekspertów. W toku tego procesu przekazano wszystkie informacje niezbędne do wyrażenia przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[step_0.a_0] || '')+' świadomej zgody, a także wykluczono wtórne (np. wynikające z zaburzeń psychicznych) pochodzenie dysforii płciowej / niezgodności płciowej. Specjaliści przeprowadzili podmiotowe badania psychologiczne'
-    text += step_6.a_2 ? ', wywiad i diagnostykę opartę o specjalistyczne, standaryzowane narzędzia. ' : ' i wywiad. '
+    text += ', zgodnie z zaleceniami panelu ekspertów. W toku tego procesu przekazano wszystkie informacje niezbędne do wyrażenia przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[a.new_mark] || '')+' świadomej zgody, a także wykluczono wtórne (np. wynikające z zaburzeń psychicznych) pochodzenie dysforii płciowej / niezgodności płciowej. Specjaliści przeprowadzili podmiotowe badania psychologiczne'
+    text += a.has_assessment ? ', wywiad i diagnostykę opartę o specjalistyczne, standaryzowane narzędzia. ' : ' i wywiad. '
     text += 'Proces ten pozwolił na stwierdzenie, że występująca u '+part0+' niezgodność płci jest trwała. W opinii psychologicznej zwrócono uwagę, że brak tranzycji medycznej i prawnej przyczynia się do trudności w obszarze zdrowia psychicznego i zarekomendowano dalszą prawną zmianę oznaczenia płci celem poprawy funkcjonowania '+part0+'.'
     p(text)
 
-    p('Od '+(step_6.a_1 ? ((['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'][+step_6.a_1[0] - 1] || '') + ' ' + (step_6.a_1[1] || '.......')) : '......................')+' wdrożono u '+part0+' leczenie hormonalne. To oznacza, że przyjmuje '+({ K: 'ona', M: 'on' }[step_0.a_0] || '')+' hormony, których celem jest '+({ K: 'feminizacja jej', M: 'maskulinizacja jego' }[step_0.a_0] || '......................')+' ciała. Zmiany, które temu towarzyszą, są przez '+({ K: 'nią', M: 'niego' }[step_0.a_0] || '.......')+' odbierane pozytywnie.')
-    p('W sferze społecznej '+({ some: 'w niektórych obszarach', all: 'w większości obszarów' }[step_6.a_4] || '......................')+({ K: ' Wnioskodawczyni', M: ' Wnioskodawca' }[step_0.a_0] || '.......')+' funkcjonuje zgodnie z '+({ K: 'jej żeńską tożsamością płciową. Wnioskodawczyni jest traktowana jako kobieta w rodzinie, wśród bliskich i przyjaciół. W szkole Wnioskodawczyni funkcjonuje jako dziewczyna.', M: 'jego męską tożsamością płciową. Wnioskodawca jest traktowany jako mężczyzna w rodzinie, wśród bliskich i przyjaciół. W szkole Wnioskodawca funkcjonuje jako chłopak.' }[step_0.a_0] || '......................')+(step_6.a_3 ? (' Na co dzień używa imienia '+step_6.a_3_0+'.') : ''))
-    p('Brak zmiany oznaczenia płci'+(step_0.a_1 ? ' oraz imienia' : '')+' powoduje u '+part0+' duże trudności w codziennym funkcjonowaniu. We wszystkich przypadkach w których musi używać danych zawartych w akcie urodzenia lub okazywać legitymację szkolną, '+({ K: 'jej', M: 'jego' }[step_0.a_0] || '.......')+' tożsamość jest kwestionowana z uwagi na wygląd, odpowiadający typowym wyobrażeniom o '+({ K: 'kobiecym', M: 'męskim' }[step_0.a_0] || '.......')+' wyglądzie. Zmusza '+({ K: 'ją', M: 'go' }[step_0.a_0] || '....')+' to do ujawniania osobom postronnym, że jest osobą transpłciową, co głęboko ingeruje w '+({ K: 'jej', M: 'jego' }[step_0.a_0] || '.......')+' prywatność i pozbawia '+({ K: 'ją', M: 'go' }[step_0.a_0] || '.......')+' szansy na decydowanie o tym, kto będzie wiedzieć o '+({ K: 'jej', M: 'jego' }[step_0.a_0] || '.......')+' transpłciowości. Brak zmiany oznaczenia płci pozbawia '+({ K: 'ją', M: 'go' }[step_0.a_0] || '.......')+' więc sprawczości i decyzyjności w jednym z kluczowych aspektów '+({ K: 'jej', M: 'jego' }[step_0.a_0] || '.......')+' życia. Co więcej, brak zmiany danych wpływa też na możliwość podjęcia dalszych kroków w tranzycji medycznej. Utrudnia też możliwość funkcjonowania zgodnie z tożsamością płciową w toku nauki. Wszystkie oficjalne dokumenty, jak świadectwa, legitymacja szkolna, muszą być wystawiane na dane metrykalne.')
-    p('Powyższe okoliczności wskazują jednoznacznie, że w przypadku '+({ K: 'małoletniej', M: 'małoletniego' }[step_0.a_0] || '.......')+' poczucie przynależności do płci '+({ K: 'żeńskiej', M: 'męskiej' }[step_0.a_0] || '.......')+' jest trwałe i że uwzględnienie niniejszego wniosku jest uzasadnione.')
+    p('Od '+(a.hrt_since ? ((['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'][+a.hrt_since[0] - 1] || '') + ' ' + (a.hrt_since[1] || '.......')) : '......................')+' wdrożono u '+part0+' leczenie hormonalne. To oznacza, że przyjmuje '+({ K: 'ona', M: 'on' }[a.new_mark] || '')+' hormony, których celem jest '+({ K: 'feminizacja jej', M: 'maskulinizacja jego' }[a.new_mark] || '......................')+' ciała. Zmiany, które temu towarzyszą, są przez '+({ K: 'nią', M: 'niego' }[a.new_mark] || '.......')+' odbierane pozytywnie.')
+    p('W sferze społecznej '+({ some: 'w niektórych obszarach', all: 'w większości obszarów' }[a.areas] || '......................')+({ K: ' Wnioskodawczyni', M: ' Wnioskodawca' }[a.new_mark] || '.......')+' funkcjonuje zgodnie z '+({ K: 'jej żeńską tożsamością płciową. Wnioskodawczyni jest traktowana jako kobieta w rodzinie, wśród bliskich i przyjaciół. W szkole Wnioskodawczyni funkcjonuje jako dziewczyna.', M: 'jego męską tożsamością płciową. Wnioskodawca jest traktowany jako mężczyzna w rodzinie, wśród bliskich i przyjaciół. W szkole Wnioskodawca funkcjonuje jako chłopak.' }[a.new_mark] || '......................')+(a.has_common_name ? (' Na co dzień używa imienia '+a.common_name+'.') : ''))
+    p('Brak zmiany oznaczenia płci'+(a.is_new_firstname ? ' oraz imienia' : '')+' powoduje u '+part0+' duże trudności w codziennym funkcjonowaniu. We wszystkich przypadkach w których musi używać danych zawartych w akcie urodzenia lub okazywać legitymację szkolną, '+({ K: 'jej', M: 'jego' }[a.new_mark] || '.......')+' tożsamość jest kwestionowana z uwagi na wygląd, odpowiadający typowym wyobrażeniom o '+({ K: 'kobiecym', M: 'męskim' }[a.new_mark] || '.......')+' wyglądzie. Zmusza '+({ K: 'ją', M: 'go' }[a.new_mark] || '....')+' to do ujawniania osobom postronnym, że jest osobą transpłciową, co głęboko ingeruje w '+({ K: 'jej', M: 'jego' }[a.new_mark] || '.......')+' prywatność i pozbawia '+({ K: 'ją', M: 'go' }[a.new_mark] || '.......')+' szansy na decydowanie o tym, kto będzie wiedzieć o '+({ K: 'jej', M: 'jego' }[a.new_mark] || '.......')+' transpłciowości. Brak zmiany oznaczenia płci pozbawia '+({ K: 'ją', M: 'go' }[a.new_mark] || '.......')+' więc sprawczości i decyzyjności w jednym z kluczowych aspektów '+({ K: 'jej', M: 'jego' }[a.new_mark] || '.......')+' życia. Co więcej, brak zmiany danych wpływa też na możliwość podjęcia dalszych kroków w tranzycji medycznej. Utrudnia też możliwość funkcjonowania zgodnie z tożsamością płciową w toku nauki. Wszystkie oficjalne dokumenty, jak świadectwa, legitymacja szkolna, muszą być wystawiane na dane metrykalne.')
+    p('Powyższe okoliczności wskazują jednoznacznie, że w przypadku '+({ K: 'małoletniej', M: 'małoletniego' }[a.new_mark] || '.......')+' poczucie przynależności do płci '+({ K: 'żeńskiej', M: 'męskiej' }[a.new_mark] || '.......')+' jest trwałe i że uwzględnienie niniejszego wniosku jest uzasadnione.')
 
     font({ style: 'bold' }, () => {
         p('STAN PRAWNY', {
@@ -371,7 +393,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     })
     p('W lutym 2025 r. w wersji angielskiej, a w maju 2025 r. w wersji polskiej, ukazały się polskie |Ramowe zalecenia dotyczące procesu opieki nad zdrowiem nastoletnich osób transpłciowych (T) i niebinarnych (NB) doświadczających dysforii płciowej – stanowisko panelu ekspertów|{6}. Jak wynika z treści dokumentu, jego autorzy nie uzależniają ani diagnostyki ani wdrożenia leczenia hormonalnego od wieku dziecka, wskazując, że decyzje kliniczne muszą być zawsze dostosowane do sytuacji danej osoby. W kwestii diagnostyki zalecenia wskazują na konieczność przejścia przez diagnozę, którą mają przeprowadzić specjaliści. #Ma to być multidyscyplinarny zespół składający się ze współpracujących ze sobą psychiatry dzieci i młodzieży oraz psychologa wykwalifikowanego w obszarze niezgodności płciowej.# Zalecenia wskazują, że preferowani są lekarze i psychologowie będący również seksuologami, ale nie jest to bezwzględny wymóg. #Współistniejące problemy ze zdrowiem psychicznym nie są traktowane jako przeciwwskazanie do tranzycji#, o ile osoba otrzymuje już odpowiednią opiekę psychologiczną lub same te objawy uznane są w trakcie diagnozy za spowodowane dysforią płciową. #Przeciwwskazaniem nie jest też bycie osobą neuroatypową#. Diagnoza psychologiczna może obejmować testy psychologiczne, o ile są one dopasowane do potrzeb i sytuacji konkretnej osoby. Podjęcie się psychoterapii nie powinno stanowić wymogu dla interwencji medycznych poza konkretnymi, uzasadnionymi przypadkami. Jednoznacznie potępione zostają próby oddziaływania na tożsamość płciową. |Zalecenia| wskazują, że tempo i rozłożenie w czasie wizyt diagnostycznych powinno być dostosowane do potrzeb danej osoby pacjenckiej, jednakże, o ile nie ma jasnych przeciwwskazań, #ta część diagnostyki nie powinna trwać powyżej 6 miesięcy#. Co więcej, autorzy dokumentu otwarcie wskazują na możliwość powstania sytuacji, w których #przedłużanie procesu diagnostycznego może samo w sobie stanowić zagrożenie dla zdrowia#{7}.', {
         italicSep: '|',
-        // boldSep: '#', TODO
+        boldSep: '#',
         footnotes: {
             '{6}': 'https://tranzycja.pl/media/docs/standardy/Ramowe-zalecenia-dotyczace-procesu-opieki-nad-zdrowiem-nastoletnich-osob-transplciowych-i-niebinarnych-2025.pdf',
             '{7}': 'https://tranzycja.pl/publikacje/zalecenia-dotyczace-opieki-afirmujacej-plec-dla-osob-niepelnoletnich-nasze-stanowisko/',
@@ -379,7 +401,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     })
     p('Wykazanie przez osobę transpłciową, że dysponuje diagnozą postawioną przez ekspertów zgodnie z zaleceniami panelu ekspertów, jest wystarczające do stwierdzenia trwałości jej poczucia przynależności do płci, której ustalenia się domaga, a tym samym jest wystarczające do wydania postanowienia uwzględniającego wniosek.')
     font({ style: 'bold' }, () => {
-        li(letter, 'Uzasadnienie wniosku o rozpoznanie sprawy na posiedzeniu niejawnym na podstawie dokumentacji przedstawionej przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[step_0.a_0] || '.......')+', bez powoływania biegłego.', {
+        li(letter, 'Uzasadnienie wniosku o rozpoznanie sprawy na posiedzeniu niejawnym na podstawie dokumentacji przedstawionej przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[a.new_mark] || '.......')+', bez powoływania biegłego.', {
             spaceAfter: 3,
         })
     })
@@ -410,35 +432,35 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
             spaceAfter: 3,
         })
     })
-    p('Zgodnie z aktualnym brzmieniem § 2 pkt 5 lit. x Rozporządzenia Ministra Sprawiedliwości z dnia 18 czerwca 2019 r. Regulamin urzędowania sądów powszechnych, sprawy o ustalenie płci metrykalnej (art. 189 k.p.c.) są sprawami pilnymi. Przepis ten został wprowadzony Rozporządzeniem Ministra Sprawiedliwości z dnia 26 września 2024 r. zmieniającym rozporządzenie – Regulamin urzędowania sądów powszechnych i wszedł w życie z dniem 16 października 2024 roku. Prawodawca trafnie zatem dostrzegł, że sprawy o uzgodnienie płci metrykalnej, z uwagi na swoją specyfikę, zazwyczaj mają pilny charakter. Nie inaczej jest na gruncie niniejszej spawy. Postępowanie dotyczy bowiem najbardziej żywotnych interesów '+part0+' oraz '+ ({ K: 'jej', M: 'jego' }[step_0.a_0] || '.......') +' codziennego funkcjonowania. Zaznaczyć należy, że funkcjonuje '+({ K: 'ona', M: 'on' }[step_0.a_0] || '.......')+' w ramach odczuwanej tożsamości płciowej, co pozostaje w rozdźwięku z płcią metrykalną uwidocznioną w dokumentach.')
+    p('Zgodnie z aktualnym brzmieniem § 2 pkt 5 lit. x Rozporządzenia Ministra Sprawiedliwości z dnia 18 czerwca 2019 r. Regulamin urzędowania sądów powszechnych, sprawy o ustalenie płci metrykalnej (art. 189 k.p.c.) są sprawami pilnymi. Przepis ten został wprowadzony Rozporządzeniem Ministra Sprawiedliwości z dnia 26 września 2024 r. zmieniającym rozporządzenie – Regulamin urzędowania sądów powszechnych i wszedł w życie z dniem 16 października 2024 roku. Prawodawca trafnie zatem dostrzegł, że sprawy o uzgodnienie płci metrykalnej, z uwagi na swoją specyfikę, zazwyczaj mają pilny charakter. Nie inaczej jest na gruncie niniejszej spawy. Postępowanie dotyczy bowiem najbardziej żywotnych interesów '+part0+' oraz '+ ({ K: 'jej', M: 'jego' }[a.new_mark] || '.......') +' codziennego funkcjonowania. Zaznaczyć należy, że funkcjonuje '+({ K: 'ona', M: 'on' }[a.new_mark] || '.......')+' w ramach odczuwanej tożsamości płciowej, co pozostaje w rozdźwięku z płcią metrykalną uwidocznioną w dokumentach.')
     p('Choć literalnie przepis dotyczy postępowań o ustalenie płci, to wykładnia celowościowa i funkcjonalna w sposób oczywisty nakazują go stosować do postępowań o sprostowanie aktu urodzenia osób transpłciowych. Intencja prawodawcy i cel przepisu są tu bowiem całkowicie jednoznaczne. Przy nowelizacji tego przepisu nie można było zakładać, że zmieni się tryb postępowania. Należy ponadto podkreślić, że uznanie niniejszej sprawy za sprawę pilną pozostaje w zgodzie ze standardami międzynarodowymi nakazującymi szybkie rozpoznanie spraw o zmianę oznaczenia płci.')
 
-    if (step_0.a_1 || step_0.a_2) {
+    if (a.is_new_firstname || a.is_new_surname) {
         const texts = []
-        if (step_0.a_1) {
+        if (a.is_new_firstname) {
             texts.push(name.includes(' ') ? 'imion' : 'imienia')
         }
-        if (step_0.a_2) {
+        if (a.is_new_surname) {
             texts.push('nazwiska')
         }
         const text = texts.join(' i ')
         font({ style: 'bold' }, () => {
-            li(letter, 'Możliwość wydania rozstrzygnięcia w przedmiocie '+ text +' '+({ K: 'Wnioskodawczyni', M: 'Wnioskodawcy' }[step_0.a_0] || '.......')+'.', {
+            li(letter, 'Możliwość wydania rozstrzygnięcia w przedmiocie '+ text +' '+({ K: 'Wnioskodawczyni', M: 'Wnioskodawcy' }[a.new_mark] || '.......')+'.', {
                 spaceAfter: 3,
             })
         })
-        p('Z kolei w kwestii żądania zmiany '+text+({ K: 'Wnioskodawczyni', M: 'Wnioskodawcy' }[step_0.a_0] || '.......')+' na aktualnie używane, należy wskazać w pierwszej kolejności, że nie jest to żądanie wysuwane ani opierane na przesłankach wynikających z ustawy z dnia 17 października 2008 roku o zmianie imienia i nazwiska, a przesłanki te nie stoją na przeszkodzie rozstrzygnięciu w tym przedmiocie. Potrzeba i konieczność dostosowania imion lub nazwiska do oznaczenia płci koreluje bowiem z żądaniem ustalenia odmiennej płci, niż przypisana przy urodzeniu, i tylko z niego wynika. Uwzględnienie wniosku tylko co do zmiany oznaczenia płci metrykalnej spowodowałoby, że '+({ K: 'Wnioskodawczyni', M: 'Wnioskodawca' }[step_0.a_0] || '.......')+' będzie z konieczności '+({ K: 'funkcjonowała', M: 'funkcjonował' }[step_0.a_0] || 'funkcjonować')+' przynajmniej przez pewien czas jako osoba o danych męskich, a jedynie żeńskim oznaczeniu płci i żeńskim numerze PESEL, co jest sytuacją bez precedensu i wysoce komplikowałoby codzienne funkcjonowanie.')
+        p('Z kolei w kwestii żądania zmiany '+text+({ K: ' Wnioskodawczyni', M: ' Wnioskodawcy' }[a.new_mark] || '.......')+' na aktualnie używane, należy wskazać w pierwszej kolejności, że nie jest to żądanie wysuwane ani opierane na przesłankach wynikających z ustawy z dnia 17 października 2008 roku o zmianie imienia i nazwiska, a przesłanki te nie stoją na przeszkodzie rozstrzygnięciu w tym przedmiocie. Potrzeba i konieczność dostosowania imion lub nazwiska do oznaczenia płci koreluje bowiem z żądaniem ustalenia odmiennej płci, niż przypisana przy urodzeniu, i tylko z niego wynika. Uwzględnienie wniosku tylko co do zmiany oznaczenia płci metrykalnej spowodowałoby, że '+({ K: 'Wnioskodawczyni', M: 'Wnioskodawca' }[a.new_mark] || '.......')+' będzie z konieczności '+({ K: 'funkcjonowała', M: 'funkcjonował' }[a.new_mark] || 'funkcjonować')+' przynajmniej przez pewien czas jako osoba o danych męskich, a jedynie żeńskim oznaczeniu płci i żeńskim numerze PESEL, co jest sytuacją bez precedensu i wysoce komplikowałoby codzienne funkcjonowanie.')
         p('W praktyce faktycznie brak zmiany imienia i nazwiska równolegle do zmiany oznaczenia płci i numeru PESEL powoduje, że osoby transpłciowe doświadczają wielu praktycznych trudności w okresie do czasu zmiany wszystkich danych i wydania nowego dowodu osobistego. Osoba nie posiada aktualnego dokumentu tożsamości, przestają działać systemy oparte o usługi cyfrowe obywatel.gov.pl (w tym ePUAP). Występują trudności w wystawieniu recept i ich realizowaniu. Przemawia to za koniecznością uzgodnienia od razu wszystkich danych.')
         p('Imiona i nazwiska są, oprócz oznaczenia płci, istotnymi danymi odróżniającymi osobę, a podstawa ich zmiany jest taka sama, jak w przypadku zmiany oznaczenia płci – czyli niezgodność płciowa. Orzeczenie sądowe żądane w niniejszym wniosku, będące krokiem na drodze do formalnej tranzycji osoby transpłciowej, winno – w braku pozytywnych uregulowań – dążyć do uzgodnienia wszystkich danych osobowych osoby transpłciowej zgodnie z obraną płcią.')
         p('Nie jest argumentem przemawiającym za niedopuszczalnością drogi sądowej w tym zakresie okoliczność, że istnieje uregulowana procedura administracyjna dotycząca zmiany imion i nazwisk, przewidziana w ustawie o zmianie imienia i nazwiska. Orzekający w tych sprawach organ administracji w osobie kierownika urzędu stanu cywilnego należy uznać za właściwy do korygowania danych osób transpłciowych wyłącznie wówczas, gdy wniosek kieruje się w trybie administracyjnym i w oparciu o owe „ważne powody”, wymienione w art. 4 odnośnej ustawy – niezwiązane ze zmianą oznaczenia płci. Nieenumeratywny katalog owych powodów odwołuje się jednak do sytuacji odmiennych rodzajowo, niż transpłciowość i zapadnięcie orzeczenia sądowego stwierdzającego, że wnioskodawca jest kobietą/mężczyzną zamiast płci przypisanej przy urodzeniu.')
-        p('Brak zatem podstawy do uznania, że w zakresie żądania zmiany imienia wniosek podlega odrzuceniu na zasadzie art. 199 § 1 pkt 1 k.p.c. w zw. z art. 13 § 2 k.p.c., a wobec obrania przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[step_0.a_0] || '.......')+' konkretnego imienia '+({ K: 'żeńskiego', M: 'męskiego' }[step_0.a_0] || '.......')+' –  jakie chce nosić po sprostowaniu aktu urodzenia poprzez ujawnienie tam płci '+({ K: 'żeńskiej', M: 'męskiej' }[step_0.a_0] || '.......')+' – i jakich w praktyce używa, istnieje możliwość orzeczenia także i w tym przedmiocie. Co więcej, wydanie postanowienia w takiej formule pozwoli na zapewnienie kompleksowego rozstrzygnięcia, całościowo regulującego sytuację dotyczącą danych osobowych '+part0+', bez zbędnego przedłużenia postępowania o osobną procedurę zmiany imienia i nazwiska.')
+        p('Brak zatem podstawy do uznania, że w zakresie żądania zmiany imienia wniosek podlega odrzuceniu na zasadzie art. 199 § 1 pkt 1 k.p.c. w zw. z art. 13 § 2 k.p.c., a wobec obrania przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[a.new_mark] || '.......')+' konkretnego imienia '+({ K: 'żeńskiego', M: 'męskiego' }[a.new_mark] || '.......')+' –  jakie chce nosić po sprostowaniu aktu urodzenia poprzez ujawnienie tam płci '+({ K: 'żeńskiej', M: 'męskiej' }[a.new_mark] || '.......')+' – i jakich w praktyce używa, istnieje możliwość orzeczenia także i w tym przedmiocie. Co więcej, wydanie postanowienia w takiej formule pozwoli na zapewnienie kompleksowego rozstrzygnięcia, całościowo regulującego sytuację dotyczącą danych osobowych '+part0+', bez zbędnego przedłużenia postępowania o osobną procedurę zmiany imienia i nazwiska.')
     }
     font({ style: 'bold' }, () => {
         li(letter, 'Tranzycja prawna jest zgodna z dobrem dziecka, a niepełnoletność '+part0+' nie stanowi przesłanki do odmowy uwzględnienia wniosku', {
             spaceAfter: 3,
         })
     })
-    p('Ze względu na młody wiek '+part0+', mogą pojawić się wątpliwości co do tego, czy '+({ K: 'kobieca', M: 'męska' }[step_0.a_0] || '.......')+' tożsamość płciowa jest trwała.')
+    p('Ze względu na młody wiek '+part0+', mogą pojawić się wątpliwości co do tego, czy '+({ K: 'kobieca', M: 'męska' }[a.new_mark] || '.......')+' tożsamość płciowa jest trwała.')
     p('Podkreślenia wymaga więc, że aktualna wiedza naukowa nie definiuje wieku, w którym można uzyskać świadomość własnej tożsamości płciowej oraz trwałość poczucia przynależności do danej płci, w szczególności nie wiąże jej z pełnoletnością osoby. Standardy Opieki nad Zdrowiem Osób Traspłciowych i Zróżnicowanych Genderowo przygotowane przez specjalistów i specjalistki z zakresu zdrowia psychicznego i medycyny skupionych w WPATH (Światowe Stowarzyszenie na rzecz Zdrowia Osób Transpłciowych){8} zawierają szereg zaleceń związanych z opieką nad niepełnoletnimi osobami, u których rozpoczęło się dojrzewanie płciowe. Wszelkie decyzje, w tym o ewentualnych interwencjach medycznych i włączeniu leczenia hormonalnego, powinny opierać się na ocenie zaawansowania dojrzewania płciowego i rozwoju poznawczo-emocjonalnego małoletniej osoby. W sytuacji zdiagnozowanej przez specjalistów dysforii płciowej, zalecane jest jednak wczesne zastosowanie hormonów hamujących dojrzewanie, gdyż może to pomóc w uniknięciu negatywnych społecznych i emocjonalnych konsekwencji dysforii płciowej bardziej efektywnie niż mogłoby to zrobić ich późniejsze zastosowanie.', {
         footnotes: {
             '{8}': '|WPATH Standards of Care for the Health of Transgender and Gender Diverse People, Version 8|; uwagi na temat osób małoletnich zaczynają się na stronie 43. Tłumaczenie własne',
@@ -467,11 +489,13 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     p('Nie ulega wątpliwości w niniejszej sprawie, że zapewnienie prawidłowego rozwoju fizycznego i psychicznego Wnioskodawcy wymaga uwzględnienia wniosku, co mieści się jednocześnie w ustawowym pojęciu dobra dziecka. Z załączonych do pozwu opinii specjalistów i specjalistek jednoznacznie wynika bowiem, że specjaliści zgodnie rekomendują kontynuację tranzycji medycznej, a także tranzycję prawną, tj. ustalenie płci metrykalnej na drodze sądowej, jako działania, które wpłynie pozytywnie na zdrowie psychiczne Wnioskodawcy i jego funkcjonowanie społeczne.')
     p('Należy przy tym zauważyć, że rozwój umysłowy, stan zdrowia i stopień dojrzałości dziecka pozwalają na uwzględnienie jego żądania – i również tutaj, rodzice z małoletnim współpracują i wsłuchują się w jego rozsądne żądania. Obowiązek zabezpieczenia przez Sąd najlepszego interesu dziecka stanowi zatem dodatkowy argument na rzecz uwzględnienia niniejszego wniosku.')
     p('Kończąc, podkreślić też trzeba, że jak wynika z badań prowadzonych poza Polską, akceptacja tożsamości płciowej u młodych osób transpłciowych i wprowadzanie afirmującej ich tożsamość płciową opieki medycznej i interwencji, np. w postaci blokerów hormonalnych, zmniejsza negatywne skutki w obszarze zdrowia psychicznego, zwłaszcza zmniejsza liczbę myśli samobójczych i samobójstw wśród tej grupy{10}. Jednocześnie ekspozycja na wrogi dyskurs wobec osób trans, który obecny jest m.in. w mediach, został w badaniach powiązany z negatywnymi skutkami w obszarze zdrowia psychicznego{11}. Uzyskanie wsparcia, w tym wsparcia związanego z afirmacją, akceptacją i brakiem negacji tożsamości płciowej młodzieży, zmniejsza ryzyko chorób psychicznych{12}.', {
-        '{10}': 'https://publications.aap.org/pediatrics/article/146/4/e20193600/79683/Mental-Health-and-Timing-of-Gender-Affirming-Care?autologincheck=redirected',
-        '{11}': 'https://pubmed.ncbi.nlm.nih.gov/30241721/',
-        '{12}': 'https://pubmed.ncbi.nlm.nih.gov/27707515/',
+        footnotes: {
+            '{10}': 'https://publications.aap.org/pediatrics/article/146/4/e20193600/79683/Mental-Health-and-Timing-of-Gender-Affirming-Care?autologincheck=redirected',
+            '{11}': 'https://pubmed.ncbi.nlm.nih.gov/30241721/',
+            '{12}': 'https://pubmed.ncbi.nlm.nih.gov/27707515/',
+        }
     })
-    if (step_0.a_3) {
+    if (a.is_exemption) {
         font({ style: 'bold' }, () => {
             li(letter, 'Wniosek o zwolnienie od kosztów.', {
                 spaceAfter: 3,
@@ -497,15 +521,15 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     p('Załączniki:')
     resetNumbering(nb)
     const attachments = [
-        step_0.a_3 ? 'oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania' : 'dowód uiszczenia opłaty sądowej od wniosku',
+        a.is_exemption ? 'oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania' : 'dowód uiszczenia opłaty sądowej od wniosku',
         'odpis aktu urodzenia',
     ]
-    if (step_3.a_2_0) attachments.push('opinia psychologiczna')
-    if (step_3.a_2_1) attachments.push('opinia psychologiczna')
-    if (step_3.a_3_0) attachments.push('zaświadczenie lekarza psychiatry')
-    if (step_3.a_3_1) attachments.push('zaświadczenie lekarza seksuologa')
-    if (step_3.a_5) attachments.push('zalecenia panelu ekspertów')
-    if (step_3.a_6) attachments.push('dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich')
+    if (a.psychologist) attachments.push('opinia psychologiczna')
+    if (a.psychologist_sexologist) attachments.push('opinia psychologiczna')
+    if (a.psychiatrist) attachments.push('zaświadczenie lekarza psychiatry')
+    if (a.sexologist) attachments.push('zaświadczenie lekarza seksuologa')
+    if (a.pts_guidelines) attachments.push('zalecenia panelu ekspertów')
+    if (a.long_guidelines) attachments.push('dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich')
 
     const lastAttachment = attachments.pop()
     attachments.forEach(attachment => {

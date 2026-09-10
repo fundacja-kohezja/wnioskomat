@@ -21,7 +21,7 @@ const { answers, anyInvalid, anyIncomplete } = storeToRefs(useFormStore())
 const { selectedLang } = storeToRefs(usePrefsStore())
 
 const documents = []
-if (answers.value[4].a_8) {
+if (answers.value[0].is_underage) {
     documents.push({
         label: 'main_application',
         pdf: generateDocForUnderage(answers.value, initPdf),
@@ -35,7 +35,7 @@ if (answers.value[4].a_8) {
     })
 }
 
-if (answers.value[4].a_2) {
+if (answers.value[4].has_proxy) {
     documents.push({
         label: 'service_proxy',
         pdf: generateProxyDoc(answers.value, initPdf),
@@ -43,7 +43,7 @@ if (answers.value[4].a_2) {
     })
 }
 
-if (answers.value[0].a_3) {
+if (answers.value[0].is_exemption) {
     documents.push({
         label: 'statement_of_means',
         pdf: generateStatement(answers.value),

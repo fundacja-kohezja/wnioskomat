@@ -904,6 +904,20 @@ a {
         }
     }
 
+    .is-row {
+        display: flex;
+        max-width: 36em;
+
+        > .text-input:first-child {
+            max-width: 8em;
+        }
+
+        .subquestion {
+            flex-grow: 1;
+            margin-top: 0;
+        }
+    }
+
     .input-with-prefix,
     .input-with-suffix {
         display: flex;

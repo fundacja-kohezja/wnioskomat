@@ -23,6 +23,7 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    parent: String,
 })
 
 const value = defineModel()
@@ -43,17 +44,24 @@ const validationError = computed(() => {
     }
 })
 
+const shown = computed(() => !props.question.showIf || isShown(
+    props.question.showIf,
+    answers.value,
+    props.step,
+    props.parent
+))
+
 </script>
 
 <template>
-    <div v-if="question.heading || question.subheading">
+    <div v-if="question.heading || question.subheading" v-show="shown">
         <h3 v-if="question.heading" class="section-heading">{{ question.heading }}</h3>
         <p v-if="question.subheading" class="help-text">{{ question.subheading }}</p>
     </div>
     <div
-        v-show="!question.showIf || isShown(question.showIf, answers, step, answerNumber)"
+        v-show="shown"
         v-bind="$attrs"
-        :class="{ 'has-validation-error': validationError }"
+        :class="{ 'has-validation-error': validationError, 'is-row': question.isRow }"
     >
         <RepeaterField
             v-if="question.type === 'repeater'"
@@ -154,7 +162,8 @@ const validationError = computed(() => {
                 :question="subquestion"
                 :step="step"
                 :answer-number="answerNumber+'_'+i"
-                v-model="answers[step][answerNumber+'_'+i]"
+                :parent="question.name"
+                v-model="answers[step][subquestion.name]"
             />
         </template>
     </div>

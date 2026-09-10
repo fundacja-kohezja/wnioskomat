@@ -1,5 +1,5 @@
-export const isShown = ({ step, answer, value = true }, answers, i, id) => {
+export const isShown = ({ step, answer, value = true }, answers, i, parent) => {
     if (step === undefined) step = i
-    if (answer === undefined) answer = id.slice(0, -2) // if answer is unspecified, assume parent answer
+    if (answer === undefined) answer = parent // if answer is unspecified, assume parent answer
     return answers[step][answer] === value
 }

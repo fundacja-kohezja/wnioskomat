@@ -9,6 +9,12 @@ const normalize = text => (text || '').trim()
 
 export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
 
+    const a = {
+        ...step_1,
+        ...step_2,
+        ...step_4,
+    }
+
     const doc = new jsPDF
 
     doc.setFontSize(9)
@@ -88,11 +94,11 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
     ])
     doc.setFont('TeXGyreTermes', 'normal', 'normal')
     doc.setFontSize(10)
-    doc.text(21, 176.5, normalize(step_4.a_3) + ', Wydział Cywilny, ' + normalize(courts[step_4.a_3]?.address || '').replace('\n', ', '), {
+    doc.text(21, 176.5, normalize(a.chosen_court) + ', Wydział Cywilny, ' + normalize(courts[a.chosen_court]?.address || '').replace('\n', ', '), {
         maxWidth: 168,
     })
     doc.setFontSize(11)
-    doc.text(21, 237, [step_4.a_5, step_4.a_6].map(normalize).join(' ') + ', ' + normalize(step_4.a_0) + (step_1.a_0 ? (', NIP ' + step_1.a_0_0) : ''),  {
+    doc.text(21, 237, [a.birth_name, a.birth_surname].map(normalize).join(' ') + ', ' + normalize(a.pesel) + (a.is_business ? (', NIP ' + a.tax_id) : ''),  {
         maxWidth: 168,
     })
 
@@ -152,32 +158,32 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
     doc.text(22, 224, '(należy podać adres, powierzchnię w hektarach lub w m2, szacunkową wartość i sposób wykorzystania)')
     doc.setFont('TeXGyreTermes', 'normal', 'normal')
     doc.setFontSize(10)
-    if (step_1.a_9) {
+    if (a.has_peers) {
         let y = 67;
-        (step_1.a_10 || []).forEach(([name, born, who], i) => {
+        (a.peers || []).forEach(({ peer_name, peer_birth, peer_relation }, i) => {
             if (i > 4) {
                 // TODO handle extra pages
                 return
             }
-            doc.text(21, y, normalize(name), {
+            doc.text(21, y, normalize(peer_name), {
                 maxWidth: 48,
             })
-            if (born) {
-                doc.text(71, y, (new Date(born)).toLocaleDateString('pl-PL', { dateStyle: 'long' }), {
+            if (peer_birth) {
+                doc.text(71, y, (new Date(peer_birth)).toLocaleDateString('pl-PL', { dateStyle: 'long' }), {
                     maxWidth: 48,
                 })
             }
-            doc.text(121, y, normalize(who), {
+            doc.text(121, y, normalize(peer_relation), {
                 maxWidth: 68,
             })
             y += 9
         })
     }
-    if (step_1.a_1) {
-        const text = doc.splitTextToSize(normalize(step_1.a_1_0).replace('\n', ' '), 168)
+    if (a.has_residential_property) {
+        const text = doc.splitTextToSize(normalize(a.residential_property_info).replace('\n', ' '), 168)
         if (text.length > 3) {
             doc.setFontSize(9)
-            doc.text(21, 163, normalize(step_1.a_1_0).replace('\n', ' '), {
+            doc.text(21, 163, normalize(a.residential_property_info).replace('\n', ' '), {
                 maxWidth: 168
             })
             doc.setFontSize(10)
@@ -187,11 +193,11 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
     } else {
         doc.text(21, 164, 'brak')
     }
-    if (step_1.a_2) {
-        const text = doc.splitTextToSize(normalize(step_1.a_2_0).replace('\n', ' '), 168)
+    if (a.has_farm_property) {
+        const text = doc.splitTextToSize(normalize(a.farm_property_info).replace('\n', ' '), 168)
         if (text.length > 3) {
             doc.setFontSize(9)
-            doc.text(21, 200, normalize(step_1.a_2_0).replace('\n', ' '), {
+            doc.text(21, 200, normalize(a.farm_property_info).replace('\n', ' '), {
                 maxWidth: 168
             })
             doc.setFontSize(10)
@@ -201,7 +207,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
     } else {
         doc.text(21, 201, 'brak')
     }
-    doc.text(21, 231, step_1.a_3 ? normalize(step_1.a_3_0) : 'brak', {
+    doc.text(21, 231, a.has_different_property ? normalize(a.different_property_info) : 'brak', {
         maxWidth: 168
     })
 
@@ -248,16 +254,16 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
     doc.text(22, 210, '(należy wpisać nazwę, rodzaj/typ, rok produkcji oraz szacunkową wartość każdego przedmiotu odrębnie)')
     doc.setFont('TeXGyreTermes', 'normal', 'normal')
     doc.setFontSize(10)
-    doc.text(21, 56, step_1.a_4 ? normalize(step_1.a_4_0) : 'brak', {
+    doc.text(21, 56, a.has_savings ? normalize(a.savings_info) : 'brak', {
         maxWidth: 168
     })
-    doc.text(21, 105, step_1.a_5 ? normalize(step_1.a_5_0) : 'brak', {
+    doc.text(21, 105, a.has_security ? normalize(a.security_info) : 'brak', {
         maxWidth: 168
     })
-    doc.text(21, 164, step_1.a_6 ? normalize(step_1.a_6_0) : 'brak', {
+    doc.text(21, 164, a.has_liabilites ? normalize(a.liabilities_info) : 'brak', {
         maxWidth: 168
     })
-    doc.text(21, 217, step_1.a_7 ? normalize(step_1.a_7_0) : 'brak', {
+    doc.text(21, 217, a.has_valuable_items ? normalize(a.valuable_items_info) : 'brak', {
         maxWidth: 168
     })
 
@@ -305,19 +311,19 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
     doc.setFont('TeXGyreTermes', 'normal', 'normal')
     doc.setFontSize(10)
     const incomes = [];
-    (step_1.a_8 || []).forEach(([what, amount, period]) => {
+    (a.income || []).forEach(({ income_type, income_amount, income_period }) => {
         incomes.push([
-            [step_4.a_5, step_4.a_6].map(normalize).join(' '),
-            normalize(what),
-            normalize(amount) + ({ M: ' zł miesięcznie', R: ' zł rocznie' }[period] || ' zł')
+            [a.birth_name, a.birth_surname].map(normalize).join(' '),
+            normalize(income_type),
+            normalize(income_amount) + ({ M: ' zł miesięcznie', R: ' zł rocznie' }[income_period] || ' zł')
         ])
     });
-    (step_1.a_10 || []).forEach(([name,,,personIncomes]) => {
-        personIncomes.forEach(([what, amount, period]) => {
+    (a.peers || []).forEach(({ peer_name, peer_income }) => {
+        peer_income.forEach(({ peer_income_type, peer_income_amount, peer_income_period }) => {
             incomes.push([
-                normalize(name),
-                normalize(what),
-                normalize(amount) + ({ M: ' zł miesięcznie', R: ' zł rocznie' }[period] || ' zł')
+                normalize(peer_name),
+                normalize(peer_income_type),
+                normalize(peer_income_amount) + ({ M: ' zł miesięcznie', R: ' zł rocznie' }[peer_income_period] || ' zł')
             ])
         })
     })
@@ -339,75 +345,75 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
         y += 18
     })
     let text = ''
-    const houseExpenses = []
-    if (step_2.a_0) houseExpenses.push('kwotę czyszu najmu ' + step_2.a_0_0 + ' zł miesięcznie')
-    if (step_2.a_1) houseExpenses.push('kwotę ' + step_2.a_1_0 + ' zł opłat eksploatacyjnych')
-    if (step_2.a_2) houseExpenses.push('koszt ' + step_2.a_2_0 + ' zł miesięcznie związany z dostawą gazu')
-    if (step_2.a_3) houseExpenses.push('kwotę ' + step_2.a_3_0 + ' zł miesięcznie za prąd')
-    if (step_2.a_4) houseExpenses.push('kwotę ' + step_2.a_4_0 + ' zł miesięcznie za ogrzewanie')
-    if (step_2.a_5) houseExpenses.push('kwotę ' + step_2.a_5_0 + ' zł miesięcznie za Internet')
-    if (step_2.a_6) houseExpenses.push('kwotę ' + (isNaN(Number(step_2.a_6_0)) ? '' : step_2.a_6_0 * 12) + ' zł rocznie tytułem opłaty od nieruchomości')
-    if (step_2.a_7) houseExpenses.push('kwotę ' + step_2.a_7_0 + ' zł miesięcznie tytułem ubezpieczenia nieruchomości')
-    if (step_2.a_8) houseExpenses.push('kwotę ' + step_2.a_8_0 + ' zł miesięcznie w związku z wywozem śmieci')
-    if (houseExpenses.length) {
-        text += 'Ponoszę stałe koszty utrzymania mieszkania, do których wliczam'
-        if (houseExpenses.length === 1) {
+    if (a.has_expenses_intro) text += (normalize(a.expenses_intro) + '\n\n')
+    const monthlyExpenses = []
+    if (a.is_rent_cost) monthlyExpenses.push('czysz najmu w wysokości ' + a.rent_cost + ' zł')
+    if (a.is_media_cost) monthlyExpenses.push(a.media_cost + ' zł opłat eksploatacyjnych')
+    if (a.is_internet_cost) monthlyExpenses.push(a.internet_cost + ' zł za Internet')
+    if (a.is_power_cost) monthlyExpenses.push(a.power_cost + ' zł za prąd')
+    if (a.is_gas_cost) monthlyExpenses.push(a.gas_cost + ' zł za dostawę gazu')
+    if (a.is_heating_cost) monthlyExpenses.push(a.heating_cost + ' zł za ogrzewanie')
+    if (a.is_disposal_cost) monthlyExpenses.push(a.disposal_cost + ' zł za wywóz śmieci')
+    if (a.is_property_tax_cost) monthlyExpenses.push(a.property_tax_cost + ' zł tytułem opłaty od nieruchomości')
+    if (a.is_property_insurance_cost) monthlyExpenses.push(a.property_insurance_cost + ' zł tytułem ubezpieczenia nieruchomości')
+    if (a.is_food_cost) monthlyExpenses.push('ok. ' + a.food_cost + ' zł kosztów wyżywienia')
+    if (a.is_cleaning_cost) monthlyExpenses.push('ok. ' + a.cleaning_cost + ' zł na środki czystości')
+    if (a.is_care_cost) monthlyExpenses.push('ok. ' + a.care_cost + ' zł na kosmetyki i inne środki higieny')
+    if (a.is_clothes_cost) monthlyExpenses.push('ok. ' + a.clothes_cost + ' zł na odzież i obuwie')
+    if (a.is_transport_cost) monthlyExpenses.push(a.transport_cost + ' zł za bilet miesięczny')
+    if (a.is_fuel_cost) monthlyExpenses.push(a.fuel_cost + ' zł za paliwo')
+    if (a.is_pet_cost) monthlyExpenses.push('ok. ' + a.pet_cost + ' zł kosztów utrzymania zwierzęcia')
+    if (a.is_different_monthly_cost && Array.isArray(a.monthly_cost)) {
+        a.monthly_cost.forEach(({ monthly_cost_amount, monthly_cost_type } = {}) => {
+            monthlyExpenses.push(normalize(monthly_cost_amount) + ' zł na ' + normalize(monthly_cost_type))
+        })
+    }
+    if (monthlyExpenses.length) {
+        text += 'Do moich stałych miesięcznych wydatków należy'
+        if (monthlyExpenses.length === 1) {
             text += ' '
-            text += houseExpenses[0]
+            text += monthlyExpenses[0]
             text += '.'
             text += '\n'
         } else {
             text += ':\n'
-            houseExpenses.forEach((item, i) => {
+            monthlyExpenses.forEach((item, i) => {
                 text += ' – '
                 text += item
-                text += (i === houseExpenses.length - 1 ? '.' : ',')
+                text += (i === monthlyExpenses.length - 1 ? '.' : ',')
                 text += '\n'
             })
         }
         text += '\n'
     }
-    if (step_2.a_9) text += 'Ponoszę' + (houseExpenses.length ? ' również' : '')  + ' koszty wyżywienia w wysokości około ' + step_2.a_9_0 + ' zł miesięcznie. '
-    if (step_2.a_11) text += 'Na odzież i obuwie wydaję ok. ' + (isNaN(Number(step_2.a_11_0)) ? '' : step_2.a_11_0 * 12) + ' zł rocznie. '
-    if (step_2.a_10) text += 'Na środki czystości wydaję ok. ' + step_2.a_10_0 + ' zł miesięcznie. '
-    if (step_2.a_12) text += 'Na kosmetyki i inne środki higieny wydaję ok. ' + step_2.a_12_0 + ' zł miesięcznie. '
-    if (step_2.a_9 || step_2.a_10 || step_2.a_11 || step_2.a_12) text += '\n\n'
-    const furtherExpenses = []
-    if (step_2.a_17) furtherExpenses.push('koszty utrzymania samochodu, w tym obowiązkowe przeglądy, ubezpieczenie OC i AC – ' + step_2.a_17_0)
-    if (step_2.a_14) furtherExpenses.push('koszty paliwa – ok. ' + step_2.a_14_0 + ' zł miesięcznie')
-    if (step_2.a_13) furtherExpenses.push('koszt biletu miesięcznego – ' + step_2.a_13_0 + ' zł miesięcznie')
-    if (step_2.a_18) furtherExpenses.push('koszty związane z opieką dentystyczną – ' + step_2.a_18_0)
-    if (step_2.a_19) furtherExpenses.push('koszty wizyt lekarskich – ' + step_2.a_19_0)
-    if (step_2.a_20) furtherExpenses.push('koszty przyjmowanych na stałe lekarstw – ' + step_2.a_20_0)
-    if (step_2.a_16 && Array.isArray(step_2.a_16_0)) {
-        step_2.a_16_0.forEach(([amount = '', forWhat = ''] = []) => {
-            furtherExpenses.push('kwotę ' + amount + ' zł miesięcznie na ' + forWhat)
+    const yearlyExpenses = []
+    if (a.is_car_maintenance_cost) yearlyExpenses.push('koszty utrzymania samochodu, w tym obowiązkowe przeglądy, ubezpieczenie OC i AC – ' + a.car_maintenance_cost + ' zł rocznie')
+    if (a.is_dental_care_cost) yearlyExpenses.push('koszty związane z opieką dentystyczną – ' + a.dental_care_cost + ' zł rocznie')
+    if (a.is_doctor_cost) yearlyExpenses.push('koszty wizyt lekarskich – ' + a.doctor_cost + ' zł rocznie')
+    if (a.is_drugs_cost) yearlyExpenses.push('koszty przyjmowanych na stałe lekarstw – ' + a.drugs_cost + 'zł rocznie')
+    if (a.is_different_yearly_cost && Array.isArray(a.yearly_cost)) {
+        a.yearly_cost.forEach(({ yearly_cost_amount, yearly_cost_type } = {}) => {
+            yearlyExpenses.push(normalize(yearly_cost_amount) + ' zł rocznie na ' + normalize(yearly_cost_type))
         })
     }
-    if (step_2.a_21 && Array.isArray(step_2.a_21_0)) {
-        step_2.a_21_0.forEach(([what, amount] = []) => {
-            furtherExpenses.push(normalize(what) + ' – ' + normalize(amount))
-        })
-    }
-    if (furtherExpenses.length) {
+    if (yearlyExpenses.length) {
         text += 'Do stałych zobowiązań należy doliczyć również'
-        if (furtherExpenses.length === 1) {
+        if (yearlyExpenses.length === 1) {
             text += ' '
-            text += furtherExpenses[0]
+            text += yearlyExpenses[0]
             text += '\n'
         } else {
             text += ':\n'
-            furtherExpenses.forEach((item, i) => {
+            yearlyExpenses.forEach((item, i) => {
                 text += ' – '
                 text += item
-                text += (i === furtherExpenses.length - 1 ? '.' : ',')
+                text += (i === yearlyExpenses.length - 1 ? '.' : ',')
                 text += '\n'
             })
         }
         text += '\n'
     }
-    if (step_2.a_15) text += ('Opiekuję się zwierzęciem, na którego utrzymanie wydaję ok. ' + step_2.a_15_0 + ' zł miesięcznie.\n\n')
-    if (step_2.a_22) text += normalize(step_2.a_22_0)
+    if (a.has_peer_expenses) text += normalize(a.peer_expenses)
     if (text) {
         const lines = doc.splitTextToSize(text, 168)
         if (lines.length > 13) {
@@ -418,7 +424,6 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
         } else {
             doc.text(21, 193, lines)
         }
-        // TODO continue on extra page if text too long
     }
 
     doc.addPage()
@@ -437,8 +442,8 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
     doc.text(22, 133, '10. Podpis wnioskodawcy')
     doc.setFont('TeXGyreTermes', 'normal', 'normal')
     doc.setFontSize(10)
-    if (step_2.a_23) {
-        const lines = doc.splitTextToSize(normalize(step_2.a_23_0), 168)
+    if (a.has_expenses_extra_info) {
+        const lines = doc.splitTextToSize(normalize(a.expenses_extra_info), 168)
         if (lines.length > 13) {
             doc.setFontSize(lines.length > 16 ? 8 : 9)
             doc.text(21, 37, normalize(step_2.a_23_0), {
@@ -450,7 +455,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6]) => {
         }
         // TODO continue on extra page if text too long
     }
-    const city = normalize(step_4.a_1).split('\n').at(-1).split(' ').slice(1).join(' ') || '......................'
+    const city = normalize(a.city) || '......................'
     doc.text(21, 124, city + ', ' + (new Date).toLocaleDateString('pl-PL', { dateStyle: 'long' }) + 'r.')
 
     return (filename) => {

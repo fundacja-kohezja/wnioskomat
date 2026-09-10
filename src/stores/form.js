@@ -7,18 +7,19 @@ import validators from '../helpers/validation'
 
 const initAnswers = () => steps.map(() => ({}))
 
-const validateAnswer = (q, i, id, answers) => {
-    const subanswers = q.subquestions ? q.subquestions.flatMap((q, j) => validateAnswer(q, i, id+'_'+j, answers)) : []
+const validateAnswer = (q, i, answers, parent) => {
+    const parentForSubanswers = q.name
+    const subanswers = q.subquestions ? q.subquestions.flatMap(q => validateAnswer(q, i, answers, parentForSubanswers)) : []
 
-    if (q.showIf && !isShown(q.showIf, answers, i, id)) {
+    if (q.showIf && !isShown(q.showIf, answers, i, parent)) {
         return subanswers
     }
-    const answer = answers[i][id]
+    const answer = answers[i][q.name]
     if (!q.filledIfAny && q.type === 'checkbox' && answer === undefined) {
         return subanswers
     }
     const isFilled = q.filledIfAny
-        ? (_, answers) => q.filledIfAny.some(answerNb => answers[i][answerNb])
+        ? (_, answers) => q.filledIfAny.some(answerName => answers[i][answerName])
         : (q.type === 'checkbox' ? () => true : q.type === 'month' ? (([month, year] = []) => month && year) : a => a)
     if (!isFilled(answer, answers)) {
         return ['unfilled', ...subanswers]
@@ -30,7 +31,6 @@ const validateAnswer = (q, i, id, answers) => {
 }
 
 export default defineStore('form', () => {
-    // TODO versioning & migrations
 
     const answers = ref(initAnswers())
 
@@ -40,7 +40,7 @@ export default defineStore('form', () => {
 
     const answerStatuses = computed(() => steps.map(
         ({ questions }, i) => questions.flatMap(
-            (q, j) => validateAnswer(q, i, 'a_'+j, answers.value)
+            q => validateAnswer(q, i, answers.value)
         )
     ))
 

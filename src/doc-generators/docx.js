@@ -78,6 +78,22 @@ export function initDocx() {
                     bold,
                     italics,
                 })
+            ) : boldSep && italicSep ? text.split(italicSep).flatMap(
+                (text, i) => footnotes ? text.split(boldSep).flatMap(
+                    (text, j) => text.split(/[{}]/).map(
+                        (text, k) => k % 2 === 1 ? new FootnoteReferenceRun(text) : new TextRun({
+                            text,
+                            italics: i % 2 === 1,
+                            bold: j % 2 === 1,
+                        })
+                    )
+                ) : text.split(boldSep).map(
+                    (text, j) => new TextRun({
+                        text,
+                        italics: i % 2 === 1,
+                        bold: j % 2 === 1,
+                    })
+                )
             ) : italicSep ? text.split(italicSep).flatMap(
                 (text, i) => footnotes ? text.split(/[{}]/).map(
                     (text, j) => j % 2 === 1 ? new FootnoteReferenceRun(text) : new TextRun({
@@ -111,7 +127,7 @@ export function initDocx() {
         if (footnotes) {
             for (const footnote in footnotes) {
                 const format = footnotesFormat[footnote]
-                docFootnotes[footnote[1]] = { children: [
+                docFootnotes[footnote.slice(1, -1)] = { children: [
                     new Paragraph({
                         spacing: { line: 1 * 240 },
                         alignment: AlignmentType.LEFT,
