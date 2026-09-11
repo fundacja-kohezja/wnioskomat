@@ -5,8 +5,23 @@ import './fonts/TeXGyreTermes/TeXGyreTermes-bold'
 import './fonts/TeXGyreTermes/TeXGyreTermes-italic'
 // import './fonts/TeXGyreTermes/TeXGyreTermes-bolditalic' // Unnecessary for now
 
-export function initPdf() {
+// TODO load DejaVuSans only if necessary, as it is used only in one type of document
+import './fonts/DejaVuSans/DejaVuSans-normal'
+import './fonts/DejaVuSans/DejaVuSans-bold'
+
+export function initPdf({ margin = 25, defaultAlign = 'justify' } = {}) {
     const doc = new jsPDF
+
+    const fonts = {
+        serif: 'TeXGyreTermes',
+        sansSerif: 'DejaVuSans',
+    }
+
+    let fontFamily = fonts.serif
+    const setFontFamily = (family) => {
+        fontFamily = family
+        setFont()
+    }
 
     let fontSize
     const setFontSize = (size) => {
@@ -15,52 +30,61 @@ export function initPdf() {
     }
     setFontSize(11)
 
+    let lineHeight
     let lineHeightFactor
     const setLineHeight = (lh) => {
-        doc.setLineHeightFactor(lh)
-        lineHeightFactor = lh
+        doc.setLineHeightFactor(lh * 1.2)
+        lineHeight = lh
+        lineHeightFactor = lh * 1.2
     }
     setLineHeight(1.15)
 
     let fontStyle
     const setFontStyle = style => {
         fontStyle = style
-        switch(style) {
+        setFont()
+    }
+
+    const setFont = () => {
+        switch(fontStyle) {
             case 'bold-italic':
-                doc.setFont('TeXGyreTermes', 'italic', 'bold')
+                doc.setFont(fontFamily, 'italic', 'bold')
                 break
             case 'bold':
-                doc.setFont('TeXGyreTermes', 'normal', 'bold')
+                doc.setFont(fontFamily, 'normal', 'bold')
                 break
             case 'italic':
-                doc.setFont('TeXGyreTermes', 'italic', 'normal')
+                doc.setFont(fontFamily, 'italic', 'normal')
                 break
             default:
-                doc.setFont('TeXGyreTermes', 'normal', 'normal')
+                doc.setFont(fontFamily, 'normal', 'normal')
         }
     }
+
     setFontStyle('normal')
 
-    const font = ({ size, lh, style }, content) => {
+    const font = ({ size, lh, style, family }, content) => {
         const currentSize = fontSize
-        const currentLineHeight = lineHeightFactor
+        const currentLineHeight = lineHeight
         const currentFontStyle = fontStyle
+        const currentFamily = fontFamily
         if (size) setFontSize(size)
         if (lh) setLineHeight(lh)
         if (style) setFontStyle(style)
+        if (family) setFontFamily(fonts[family])
         content()
         setFontSize(currentSize)
         setLineHeight(currentLineHeight)
         setFontStyle(currentFontStyle)
+        setFontFamily(currentFamily)
     }
 
-    const margin = 25
     const w = 210
     const maxWidth = w - margin*2
 
     let h = 297 // available height may shrink if footnotes appear
 
-    const unitFactor = fontSize / (72/25.4)
+    const unitFactor = () => fontSize / (72/25.4)
 
     let y = margin
     let pageFootnotes = []
@@ -69,6 +93,7 @@ export function initPdf() {
 
     const numbering = {
         'basic-numbering': [1, 'a'],
+        'alt-numbering': [1],
         'section-marker': ['a'],
     }
     const resetNumbering = (r, l = 0) => {
@@ -83,6 +108,7 @@ export function initPdf() {
     }
     const numberingSuffixes = {
         'basic-numbering': '.',
+        'alt-numbering': ')',
         'section-marker': ')',
     }
     const increment = (r, l) => {
@@ -188,14 +214,14 @@ export function initPdf() {
                             part = part.replace(footnote, 'a'.repeat(footnote.length - 2)) // 'a' glyph has roughly the same width as smaller number
                         })
                     }
-                    wordWidth += doc.getStringUnitWidth(part) * unitFactor
+                    wordWidth += doc.getStringUnitWidth(part) * unitFactor()
                 })
             })
             if (x + wordWidth > w) {
                 startNewLine()
             }
             x += wordWidth
-            x += doc.getStringUnitWidth(' ') * unitFactor
+            x += doc.getStringUnitWidth(' ') * unitFactor()
 
             lines[line].words.push({ text: word, width: wordWidth })
         })
@@ -208,7 +234,7 @@ export function initPdf() {
 
         const renderLine = ({ textWidth, words }) => {
             if (dryRun) {
-                y += lineHeightFactor * unitFactor
+                y += lineHeightFactor * unitFactor()
                 return
             }
 
@@ -249,13 +275,13 @@ export function initPdf() {
                                 const [before = '', rest = ''] = text.split(footnote[0])
                                 const [inside = '', after = ''] = rest.split(footnote.at(-1))
                                 doc.text(before, x + x2, y)
-                                x2 += doc.getStringUnitWidth(before) * unitFactor
+                                x2 += doc.getStringUnitWidth(before) * unitFactor()
                                 font({ size: 8 }, () => {
                                     doc.text(inside, x + x2, y - 1.5)
                                 })
-                                x2 += doc.getStringUnitWidth('a'.repeat(inside.length)) * unitFactor
+                                x2 += doc.getStringUnitWidth('a'.repeat(inside.length)) * unitFactor()
                                 doc.text(after, x + x2, y)
-                                x2 += doc.getStringUnitWidth(after) * unitFactor
+                                x2 += doc.getStringUnitWidth(after) * unitFactor()
                             })
                             if (!isFootnote) {
                                 doc.text(text, x, y)
@@ -279,7 +305,7 @@ export function initPdf() {
                                 setFontStyle(isItalic && isBold ? 'bold-italic' : isItalic ? 'italic' : isBold ? 'bold' : 'normal')
                             }
                             renderWord(part, x + x2)
-                            x2 += doc.getStringUnitWidth(part) * unitFactor
+                            x2 += doc.getStringUnitWidth(part) * unitFactor()
                         })
                     })
                 } else {
@@ -287,15 +313,15 @@ export function initPdf() {
                 }
 
                 x += word.width
-                x += doc.getStringUnitWidth(' ') * unitFactor
+                x += doc.getStringUnitWidth(' ') * unitFactor()
                 x += extraSpace
             })
-            y += lineHeightFactor * unitFactor
+            y += lineHeightFactor * unitFactor()
         }
 
         lines.forEach((line, i) => {
             const linesLeft = lines.length - i
-            const linesLeftOnPage = Math.round((h - y - margin)/(lineHeightFactor * unitFactor))
+            const linesLeftOnPage = Math.round((h - y - margin)/(lineHeightFactor * unitFactor()))
 
             if (
                 linesLeftOnPage < 1 ||
@@ -312,16 +338,18 @@ export function initPdf() {
         })
     }
 
-    const p = (text, { shift = 0, spaceAfter = 3, spaceBefore = 0, align = 'justify', italicSep, boldSep, footnotes, footnotesFormat, ...options  } = {}, doExtra) => {
+    let defaultShift = 0
+    let defaultMaxWidth
+    const p = (text, { shift = defaultShift, spaceAfter = 3, spaceBefore = 0, align = defaultAlign, italicSep, boldSep, footnotes, footnotesFormat, ...options  } = {}, doExtra) => {
         space(spaceBefore)
-        const width = options.maxWidth || maxWidth - shift
+        const width = options.maxWidth || defaultMaxWidth || maxWidth - shift
         if (align === 'center' || align === 'right') {
             // TODO we should check if there is enough space and possibly move to another page
             const lines = doc.splitTextToSize(text, width)
             if (!dryRun) {
-                doc.text(lines, align === 'center' ? w/2 : w - margin - shift, y, { align })
+                doc.text(lines, align === 'center' ? width/2 + margin + shift : w - margin - shift, y, { align })
             }
-            y += lines.length * fontSize * lineHeightFactor / unitFactor
+            y += lines.length * fontSize * lineHeightFactor / unitFactor()
         } else {
             const lines = textToLines(text, italicSep, boldSep, width, footnotes && Object.keys(footnotes))
             renderLines(lines, {
@@ -350,6 +378,35 @@ export function initPdf() {
         })
     }
 
+    const table = (content) => {
+        content()
+    }
+
+    let rowHeight = 0
+    let cellShift = 0
+    const row = (content, height) => {
+        cellShift = 0
+        rowHeight = height
+        content()
+        y += height
+    }
+
+    const cell = (content, { width = maxWidth, pt = 0, px = 2, factor, isFilled } = {}) => {
+        if (factor) width *= factor
+        doc.setFillColor('0.85')
+        doc.rect(margin + cellShift, y, width, rowHeight, isFilled ? 'DF' : 'S')
+        const startY = y
+        y += fontSize * lineHeightFactor / (72/25.4)
+        y += pt
+        defaultShift = cellShift + px
+        defaultMaxWidth = width - px - px
+        content()
+        defaultShift = 0
+        defaultMaxWidth = undefined
+        y = startY
+        cellShift += width
+    }
+
     const save = (filename) => {
         doc.save(filename+'.pdf')
     }
@@ -358,5 +415,5 @@ export function initPdf() {
         attachFootnotes()
     }
 
-    return { p, li, font, setLineHeight, resetNumbering, noPageBreak, complete, save }
+    return { p, li, table, row, cell, font, setLineHeight, resetNumbering, newPage, noPageBreak, complete, save }
 }

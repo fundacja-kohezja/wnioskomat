@@ -20,7 +20,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         })
     })
 
-    setLineHeight(1.5)
+    setLineHeight(1.15)
 
     let text = 'Udzielam pełnomocnictwa osobie o danych '
     text += (normalize(a.proxy_name) || '......................')

@@ -144,7 +144,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         }
     })
 
-    setLineHeight(1.5)
+    setLineHeight(1.15)
 
     p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego, działając jako przedstawiciele ustawowi małoletniej osoby o danych '+([a.birth_name, a.birth_surname].map(normalize).join(' ') || '......................')+' (dalej jako '+({K: 'Wnioskodawczyni', M: 'Wnioskodawca'}[a.new_mark] || '......................')+') wnosimy o:', {
         spaceBefore: 12,

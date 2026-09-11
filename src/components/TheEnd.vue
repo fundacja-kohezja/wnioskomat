@@ -46,7 +46,8 @@ if (answers.value[4].has_proxy) {
 if (answers.value[0].is_exemption) {
     documents.push({
         label: 'statement_of_means',
-        pdf: generateStatement(answers.value),
+        pdf: generateStatement(answers.value, initPdf),
+        docx: generateStatement(answers.value, initDocx),
     })
 }
 

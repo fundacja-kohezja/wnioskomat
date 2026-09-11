@@ -96,7 +96,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         }
     })
 
-    setLineHeight(1.5)
+    setLineHeight(1.15)
 
     p('Na podstawie art. 36 ustawy Prawo o aktach stanu cywilnego wnoszę o:', {
         spaceBefore: 12,
