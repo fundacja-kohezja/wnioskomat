@@ -157,7 +157,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         font({ size: 10 }, () => {
             for (let i = 0; i < 5; i++) {
                 row(() => {
-                    if (a.peers[i]) {
+                    if (a.peers && a.peers[i]) {
                         const { peer_name, peer_birth, peer_relation } = a.peers[i]
                         cell(() => {
                             p(normalize(peer_name))

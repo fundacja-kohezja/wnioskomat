@@ -536,7 +536,7 @@
                     name: proxy_city
                     showIf: { answer: has_proxy }
       - heading: 'Wybór sądu'
-        subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla Twojego miejsca zamieszkania, czyli adresu, który wpisał_ś powyżej (jeśli masz pełnomocnika do doręczeń, wybierz sąd właściwy dla adresu pełnomocnika). Możesz się upewnić, który sąd jest właściwy, dzwoniąc do Biura Obsługi Interesantów w najbliższym sądzie rejonowym.'
+        subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla Twojego miejsca zamieszkania, czyli adresu, który wpisał_ś powyżej. Możesz się upewnić, który sąd jest właściwy, dzwoniąc do Biura Obsługi Interesantów w najbliższym sądzie rejonowym.'
         label: 'Znajdź wpisując miejscowość/dzielnicę'
         name: chosen_court
         datalist: courts
