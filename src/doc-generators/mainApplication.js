@@ -3,13 +3,13 @@ import { courts } from '../helpers/datasets'
 
 const normalize = text => (text || '').trim()
 
-export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], documentCreatorInitializer) => {
+export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitializer) => {
 
     const a = {
         ...step_0,
-        ...step_3,
+        ...step_1,
+        ...step_2,
         ...step_4,
-        ...step_6,
     }
 
     const { p, li, font, setLineHeight, resetNumbering, noPageBreak, complete, save } = documentCreatorInitializer()

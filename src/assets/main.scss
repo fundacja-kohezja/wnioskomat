@@ -13,6 +13,16 @@ $gray-800: #262626;
 $gray-900: #171717;
 $gray-950: #111;
 
+$green-100: #dcfce7;
+$green-200: #bbf7d0;
+$green-300: #86efac;
+$green-400: #4ade80;
+$green-500: #22c55e;
+$green-600: #16a34a;
+$green-700: #15803d;
+$green-800: #166534;
+$green-900: #14532d;
+
 $teal-100: #ccfbf1;
 $teal-200: #99f6e4;
 $teal-300: #5eead4;
@@ -531,7 +541,6 @@ hr {
 }
 
 .nav-link {
-    font-size: 0.9em;
     cursor: pointer;
     text-align: left;
 }
@@ -661,14 +670,91 @@ a {
 }
 
 .side-nav {
-    width: 16em;
+    width: 18em;
     flex-shrink: 0;
     border-right: 1px solid light-dark($gray-300, $gray-800);
     align-self: start;
     position: sticky;
     top: 2em;
+    padding-right: 0.75em;
+    box-sizing: border-box;
+
+    h2, h4 {
+        font-size: 1.1em;
+        margin-left: 1.5rem;
+        line-height: 1.1;
+        font-weight: 500;
+    }
+
+    h3 {
+        font-size: 0.8rem;
+        margin-top: 2.25em;
+        font-weight: bold;
+        color: light-dark($gray-600, $gray-400);
+    }
+
+    h4 {
+        font-size: 0.9em;
+    }
+
+    details {
+
+        summary {
+            display: flex;
+
+            &::before {
+                flex-shrink: 0;
+                margin-top: 0.3em;
+            }
+
+            h2, h3, h4 {
+                margin-left: 0;
+            }
+        }
+
+        &[open] h2 {
+            margin-bottom: 0.25em;
+        }
+
+        details {
+            margin-top: 1.25em;
+
+            &[open] {
+                margin-bottom: 2em;
+
+                summary {
+                    margin-bottom: 1.25em;
+                }
+            }
+
+            summary::before {
+                width: 0.4em;
+                height: 0.4em;
+                margin-right: 0.9em;
+                border-top-width: 2px;
+                border-right-width: 2px;
+            }
+        }
+
+        ol {
+            margin-block: 1em;
+        }
+
+        > .nav-link {
+            margin-left: 3.5rem;
+        }
+
+        > .step.final:not(:last-child) {
+            margin-bottom: 1.125em;
+        }
+    }
+
+    > details:not(:first-child) {
+        margin-top: 2em;
+    }
 
     .nav-link {
+        font-size: 0.9em;
         text-decoration-thickness: 1.5px;
         text-decoration-color: light-dark($gray-300, $gray-750);
         color: inherit;
@@ -705,11 +791,12 @@ a {
     }
 
     > .nav-link {
-        margin-left: 4rem;
+        display: block;
+        margin-top: 2em;
     }
 
     ol {
-        padding-left: 2em;
+        padding-left: 1.5em;
 
         > li + li {
             margin-top: 1em;
@@ -725,7 +812,7 @@ a {
             flex-shrink: 0;
 
             &.completed {
-                color: light-dark($gray-600, $gray-400);
+                color: light-dark($green-700, $green-400);
             }
 
             .dash {
@@ -736,13 +823,22 @@ a {
                 stroke: light-dark($amber-700, $amber-400);
             }
         }
+
+        &.final {
+            margin-left: 1.5rem;
+
+            svg {
+                margin-inline: 0.125em;
+
+                &:not(.current) {
+                    color: light-dark($gray-400, $gray-600);
+                }
+            }
+        }
     }
 
     .current .step svg.completed {
-
-        &.completed {
-            color: light-dark($gray-950, $gray-100);
-        }
+        color: light-dark($green-900, $green-200);
     }
 }
 
@@ -1196,8 +1292,16 @@ a {
     color: light-dark(#c2410c, #fb923c);
 }
 
-.confirm-modal {
+.confirm-message {
     line-height: 1.4;
+    background-color: light-dark($white, $gray-900);
+    padding: 1em;
+    border-radius: 6px;
+    max-width: 40em;
+
+    .btn {
+        padding: 0.5em 1em;
+    }
 
     .message {
         font-weight: 600;
@@ -1205,6 +1309,7 @@ a {
         display: flex;
         gap: 0.5em;
         align-items: center;
+        margin-bottom: 0.75em;
 
         svg {
             color: light-dark($gray-600, $gray-400);
@@ -1273,6 +1378,10 @@ a {
             span {
                 font-weight: normal;
             }
+
+            b {
+                font-weight: bold;
+            }
         }
     }
 }
@@ -1282,17 +1391,82 @@ a {
     font-size: 14px;
     gap: 0.5em;
     margin-top: 1.25em;
+    margin-left: 0;
+    padding-left: 2em;
+    padding-top: 0.75em;
+    max-width: 42em;
 
     svg {
         flex-shrink: 0;
-        color: light-dark($gray-400, $gray-500);
+        top: 0.7em;
+    }
+}
+
+.downloads-info {
+    margin-block: 1em;
+    font-weight: 600;
+
+    + ul {
+        padding-left: 1.5em;
+
+         li {
+             margin-bottom: 0.5em;
+         }
+    }
+}
+
+.generated-docs {
+    display: inline-flex;
+    gap: 1em;
+    flex-direction: column;
+}
+
+.docs-instruction {
+    margin-top: 2em;
+    margin-bottom: 2.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    max-width: 42em;
+    font-weight: 600;
+
+    details :not(summary) {
+        font-weight: 400;
+    }
+
+    details b {
+        font-weight: bold;
+    }
+
+    li {
+        margin-top: 0.5em;
+    }
+
+    details small {
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    span {
+        display: inline-block;
+        white-space: pre-wrap;
+        margin-top: 0.25em;
+        font-weight: 400;
+    }
+
+    .address {
+        font-size: 14px;
+        display: inline-block;
+        vertical-align: top;
+        margin-block: 0.5em;
+        margin-right: 2em;
+        font-weight: 600;
     }
 }
 
 .generated-doc {
     background-color: light-dark($white, $gray-900);
     padding: 1em;
-    margin-top: 1.25em;
     border-radius: 6px;
 
     .buttons {
@@ -1354,6 +1528,7 @@ details[open] > summary::before {
     gap: 1.5em;
     padding-left: 1.5em;
     font-weight: 600;
+    max-width: 42em;
 
     li * {
         font-size: 14px;
@@ -1368,14 +1543,6 @@ details[open] > summary::before {
         }
     }
 
-    ol, ul {
-        padding-left: 1.5em;
-    }
-
-    ul {
-        list-style-type: disc;
-    }
-
     h4 {
         font-size: inherit;
         font-weight: inherit;
@@ -1383,6 +1550,18 @@ details[open] > summary::before {
 
     p, details {
         margin-top: 1em;
+    }
+}
+
+.docs-instruction,
+.further-steps {
+
+    ol, ul {
+        padding-left: 1.5em;
+    }
+
+    ul {
+        list-style-type: disc;
     }
 
     details p {

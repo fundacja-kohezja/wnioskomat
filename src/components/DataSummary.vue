@@ -4,12 +4,12 @@ import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 
 import SummaryField from './SummaryField.vue'
-import useFormStore from '../stores/form'
+import { useMainApplicationFormStore } from '../stores/subforms'
 import generateSummary from '../helpers/generateSummary'
 
 const { t } = useI18n()
 
-const { answers } = storeToRefs(useFormStore())
+const { answers } = storeToRefs(useMainApplicationFormStore())
 
 const summary = computed(() => generateSummary(answers.value, t))
 

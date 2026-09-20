@@ -3,8 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 
-import useFormStore from '../stores/form'
-import { isShown } from '../helpers/misc'
+import { isShown } from '../helpers/answers'
 import validators from '../helpers/validation'
 import datasets from '../helpers/datasets'
 import MonthPicker from './MonthPicker.vue'
@@ -23,12 +22,16 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    formStore: {
+        type: Object,
+        required: true,
+    },
     parent: String,
 })
 
 const value = defineModel()
 
-const { answers } = storeToRefs(useFormStore())
+const { answers } = storeToRefs(props.formStore)
 const { t } = useI18n()
 
 const validationError = computed(() => {
@@ -68,6 +71,7 @@ const shown = computed(() => !props.question.showIf || isShown(
             :question="question"
             :step="step"
             :answer-number="answerNumber"
+            :form-store="formStore"
             v-model="value"
         />
         <label
@@ -162,6 +166,7 @@ const shown = computed(() => !props.question.showIf || isShown(
                 :question="subquestion"
                 :step="step"
                 :answer-number="answerNumber+'_'+i"
+                :form-store="formStore"
                 :parent="question.name"
                 v-model="answers[step][subquestion.name]"
             />

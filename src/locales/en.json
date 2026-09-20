@@ -70,8 +70,6 @@
     "step_invalid": "Contains errors",
     "documents_ready": "Your application is ready!",
     "further_steps": "Further steps",
-    "back_to_edit": "Go back to edit",
-    "back_to_form": "Return to form",
     "generate_anyway": "Generate anyway",
     "warning": "Warning",
     "some_invalid": "Some fields are filled out incorrectly.",

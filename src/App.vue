@@ -10,8 +10,7 @@ import TheLangSwitch from './components/TheLangSwitch.vue'
 import TheThemeSwitch from './components/TheThemeSwitch.vue'
 import TheLocaleError from './components/TheLocaleError.vue'
 import TheStartScreen from './components/TheStartScreen.vue'
-import TheForm from './components/TheForm.vue'
-import TheEnd from './components/TheEnd.vue'
+import TheFormScreen from './components/TheFormScreen.vue'
 import HelpModal from './components/modals/HelpModal.vue'
 import ExportModal from './components/modals/ExportModal.vue'
 import ExitModal from './components/modals/ExitModal.vue'
@@ -22,7 +21,7 @@ const { anyAnswers } = storeToRefs(useFormStore())
 
 const { t } = useI18n()
 
-/** @type import('vue').Ref< 'start' | 'form' | 'end' > */
+/** @type import('vue').Ref< 'start' | 'form' > */
 const currentScreen = ref('start')
 
 const navigate = function (screen) {
@@ -63,6 +62,11 @@ const { open: openExit, close: closeExit } = useModal({
     <div v-if="isInitialLocaleLoading" class="loading"></div>
     <template v-else>
         <div class="padding-x top-bar">
+            <button class="nav-link" v-if="currentScreen !== 'start'" @click="navigate('start')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+                    <path d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>{{ t('start') }}
+            </button>
             <TheLangSwitch />
             <TheThemeSwitch />
             <div class="secondary-section">
@@ -105,8 +109,7 @@ const { open: openExit, close: closeExit } = useModal({
         <main class="padding-x main-content" :class="{ loading: isCurrentLocaleLoading }">
             <TheLocaleError />
 
-            <TheForm v-if="currentScreen === 'form'" @go-to-start="navigate('start')" @go-to-end="navigate('end')" />
-            <TheEnd v-else-if="currentScreen === 'end'" @go-to-form="navigate('form')" />
+            <TheFormScreen v-if="currentScreen === 'form'" @go-to-start="navigate('start')" />
             <TheStartScreen v-else @go-to-form="navigate('form')" />
         </main>
         <ModalsContainer />

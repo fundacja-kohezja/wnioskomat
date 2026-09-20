@@ -4,12 +4,11 @@ import { estimateLines } from '@/helpers/misc'
 
 const normalize = text => (text || '').trim()
 
-export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], documentCreatorInitializer) => {
+export default ([step_0, step_1], documentCreatorInitializer) => {
 
     const a = {
+        ...step_0,
         ...step_1,
-        ...step_2,
-        ...step_4,
     }
 
     const { p, li, table, row, cell, font, setLineHeight, resetNumbering, newPage, complete, save } = documentCreatorInitializer({
@@ -22,12 +21,12 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
     const nb = 'alt-numbering'
 
     // TODO continue on extra page if text too long
-    const fitText = (text, maxLines, cellProps = {}) => {
+    const fitText = (text, maxLines, cellProps = {}, replaceNewlineWithComma = true) => {
         const lines = estimateLines(text, 100)
         if (lines > maxLines) {
             cell(() => {
                 font({ size: 8, lh: 0.85 }, () => {
-                    p(text.replace('\n', ', '), { mayBreak: true })
+                    p(replaceNewlineWithComma ? text.replaceAll('\n', ', ') : text, { mayBreak: true })
                 })
             }, { pt: -2, ...cellProps })
         } else {
@@ -400,7 +399,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         }, 16)
 
         let text = ''
-        if (a.has_expenses_intro) text += (normalize(a.expenses_intro) + '\n\n')
+        if (a.has_expenses_intro) text += (normalize(a.expenses_intro) + '\n')
         const monthlyExpenses = []
         if (a.is_rent_cost) monthlyExpenses.push('czysz najmu w wysokości ' + a.rent_cost + ' zł')
         if (a.is_media_cost) monthlyExpenses.push(a.media_cost + ' zł opłat eksploatacyjnych')
@@ -439,7 +438,6 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
                     text += '\n'
                 })
             }
-            text += '\n'
         }
         const yearlyExpenses = []
         if (a.is_car_maintenance_cost) yearlyExpenses.push('koszty utrzymania samochodu, w tym obowiązkowe przeglądy, ubezpieczenie OC i AC – ' + a.car_maintenance_cost + ' zł rocznie')
@@ -471,7 +469,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], docume
         if (a.has_peer_expenses) text += normalize(a.peer_expenses)
 
         row(() => {
-            fitText(text, 12, { columnSpan: 3 })
+            fitText(text, 12, { columnSpan: 3 }, false)
         }, 60)
     })
 

@@ -1,20 +1,23 @@
 <script setup>
 import { onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { storeToRefs } from 'pinia'
 
 import BaseModal from './BaseModal.vue'
-import useFormStore from '@/stores/form'
+import { useExemptionFormStore, useMainApplicationFormStore, useServiceProxyFormStore } from '@/stores/subforms'
 
 const emit = defineEmits(['confirm'])
 
 const { t } = useI18n()
 
-const { answers } = storeToRefs(useFormStore())
-
 const loading = ref(false)
 const ready = ref(false)
 const fileInput = ref()
+
+const stores = {
+    mainApplicationForm: useMainApplicationFormStore(),
+    exemptionForm: useExemptionFormStore(),
+    serviceProxyForm: useServiceProxyFormStore(),
+}
 
 const report = (msg) => {
     fileInput.value.setCustomValidity(msg)
@@ -39,15 +42,15 @@ reader.onload = () => {
     }
 
     // TODO expand validation
-    if (!Array.isArray(parsedResult)) {
+    if (!parsedResult || typeof parsedResult !== 'object') {
         report(t('malformed'))
         return
     }
-    if (!parsedResult.every(el => el instanceof Object && !Array.isArray(el))) {
-        report(t('malformed'))
-        return
+
+    for(const store in parsedResult) {
+        if(!stores[store]) continue
+        stores[store].answers = parsedResult[store]
     }
-    answers.value = parsedResult
     ready.value = true
 }
 

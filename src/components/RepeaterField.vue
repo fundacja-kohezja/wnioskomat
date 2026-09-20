@@ -17,6 +17,10 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    formStore: {
+        type: Object,
+        required: true,
+    },
 })
 
 const value = defineModel()
@@ -61,6 +65,7 @@ onMounted(() => {
                 :question="field"
                 :step="step"
                 :answer-number="answerNumber+'_'+j"
+                :form-store="formStore"
                 v-model="items[field.name]"
             />
             <div class="buttons-group">

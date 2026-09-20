@@ -1,24 +1,5 @@
 <template>
     <ol class="further-steps">
-        <li>Wydrukuj dokumenty i podpisz je – własnoręcznie i czytelnie</li>
-        <li>
-            <h4>Dostarcz wniosek do sądu</h4>
-            <details>
-                <summary>Chcę go wysłać pocztą</summary>
-                <ol>
-                    <li>Zaadresuj kopertę tymi samymi danymi, które są we wniosku</li>
-                    <li>Włóż do koperty wniosek oraz załączniki (rozmiar koperty nie ma znaczenia)</li>
-                    <li>Wyślij ją w dowolnym oddziale Poczty Polskiej jako list polecony</li>
-                    <li>Zachowaj podbite potwierdzenie nadania</li>
-                </ol>
-            </details>
-            <details>
-                <summary>Chcę zanieść go do sądu osobiście</summary>
-                <p>
-                    Wniosek możesz zanieść bezpośrednio do sądu i złożyć na biurze podawczym – miej wtedy ze sobą dodatkową kserokopię wniosku, na którym w sądzie przybita zostanie pieczątka potwierdzająca jego złożenie.
-                </p>
-            </details>
-        </li>
         <li>
             <h4>Przejdź przez postępowanie sądowe</h4>
             <p>Tu wiele zależy od sędziego, na jakiego trafisz. W idealnym wariancie sąd wyda od razu postanowienie, bez wzywania cię na rozprawę – w takim wypadku nie musisz nic więcej robić. Może się jednak zdarzyć, że napotkasz trudności.</p>
@@ -84,12 +65,6 @@
                     </p>
                 </details>
                 <details>
-                    <summary>Sąd pozytywnie rozpatrzył wniosek, ale nie przychylił się do zmiany imienia</summary>
-                    <p>
-                        Jeśli sąd nie rozpatrzył pozytywnie wniosku o zmianę imienia, to imię musisz zmienić samodzielnie. Zrobisz to, wysyłając do urzędu stanu cywilnego wniosek (dostępny na stronie docelowego urzędu). Tego typu pismo nie musi zawierać tak szczegółowego uzasadnienia, jak wnioski o zmianie imienia bez sądowego uzgodnienia płci – w tym przypadku wystarczy powołać się na wyrok sądu. Po otrzymaniu informacji o zmianie numeru PESEL i imienia możesz udać się do dowolnego urzędu gminy, by złożyć wniosek o nowy dowód osobisty.
-                    </p>
-                </details>
-                <details>
                     <summary>Mój wniosek o sprostowanie aktu urodzenia został oddalony</summary>
                     <p>
                         Taka sytuacja jest mało prawdopodobna, ale jeśli nastąpiła, <strong>natychmiast skontaktuj się z prawnikiem</strong>, ponieważ jeśli nie podejmiesz działań w ciągu 7 dni, postanowienie sądu staje się prawomocne.
@@ -147,6 +122,12 @@
             <h4>Otrzymaj pozytywne rozpatrzenie</h4>
             <p>Niezależnie od tego, jak toczyło się postępowanie, wszystkie znane nam sprawy ostatecznie zawsze kończyły się pozytywnym rozpatrzeniem. Informacja przyjdzie do Ciebie pocztą.</p>
             <p>Po uprawomocnieniu warto złożyć wniosek o wydanie odpisu postanowienia – przyda ci się przy wyrabianiu nowych dokumentów.</p>
+            <details>
+                <summary>Co jeśli sąd nie przychylił się do zmiany imienia?</summary>
+                <p>
+                    Może zdarzyć się, że sąd poztywnie rozpatrzy wniosek o sprostowanie aktu urodzenia, ale nie przychyli się do zmiany imienia. W takim wypadku imię musisz zmienić samodzielnie. Zrobisz to, wysyłając do urzędu stanu cywilnego wniosek (dostępny na stronie docelowego urzędu). Tego typu pismo nie musi zawierać tak szczegółowego uzasadnienia, jak wnioski o zmianie imienia bez sądowego uzgodnienia płci – w tym przypadku wystarczy powołać się na wyrok sądu. Po otrzymaniu informacji o zmianie numeru PESEL i imienia możesz udać się do dowolnego urzędu gminy, by złożyć wniosek o nowy dowód osobisty.
+                </p>
+            </details>
         </li>
         <li>
             <h4>Upewnij się, że sąd przekazał postanowienie do Urzędu Stanu Cywilnego</h4>

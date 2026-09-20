@@ -1,12 +1,13 @@
-import steps from '../steps.yaml'
+import steps from '../forms/glownyWniosek.yml'
 
-export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => {
+export default ([step_0, step_1, step_2, step_3, step_4], t) => {
 
     const a = {
         ...step_0,
+        ...step_1,
+        ...step_2,
         ...step_3,
         ...step_4,
-        ...step_6,
     }
 
     const summary = []
@@ -18,7 +19,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => 
     summary.push({
         type: 'list',
         items: [
-            [t('s_1'), a.new_mark ? steps[0].questions[0].options[a.new_mark] : '…'],
+            [t('s_1'), a.new_mark || '…'],
             ...(a.is_new_firstname ? [
                 [t('s_2'), a.new_firstname || '…'],
             ] : []),
@@ -34,6 +35,15 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => 
         ],
         crossedItemsLabel: t('s_7'),
     })
+    if (a.is_underage) {
+        summary.push({
+            type: 'paragraphs',
+            items: [
+                ['Składasz wniosek jako osoba niepełnoletnia, za pośrednictwem rodziców.'],
+            ],
+        })
+    }
+
     summary.push({
         type: 'h',
         content: t('s_8'),
@@ -96,7 +106,7 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => 
         (a.name_change_confirmation ? attached : unattached).push(t('s_23'))
     }
     if (a.proving_documents) {
-        attached.push(a.proving_documents_type ? steps[3].questions[8].subquestions[0].options[a.proving_documents_type] : t('s_24'))
+        attached.push(a.proving_documents_type ? { A: 'Wydruk z portali społecznościowych', B: 'Identyfikator z miejsca pracy', C: 'Wydruk z portalu USOS' }[a.proving_documents_type] : t('s_24'))
     } else {
         unattached.push(t('s_25'))
     }
@@ -124,22 +134,65 @@ export default ([step_0, step_1, step_2, step_3, step_4, step_5, step_6], t) => 
                 [t('s_30')]: ['', a.email + '\n', t('s_31'), a.phone]
             } : {}),
             ...(a.has_proxy ? {
-                [t('s_32')]: [(a.proxy_name || '…'), 'PESEL: ' + (a.proxy_pesel || '…'), (a.proxy_address_1 || '…'), a.proxy_address_2, (a.proxy_zip_code || '…') + ' ' + (a.proxy_city || '…')]
-                    .filter(x => x)
-                    .join('\n')
+                [t('s_32')]: ['', (a.proxy_name || '…'), '\nPESEL ', (a.proxy_pesel || '…') + '\n' + (a.proxy_address_1 || '…') + (a.proxy_address_2 ? ('\n' + a.proxy_address_2) : '') + '\n' + (a.proxy_zip_code || '…') + ' ' + (a.proxy_city || '…')]
             } : {}),
             [t('s_33')]: a.chosen_court || '…',
             [t('s_34')]: ['', (a.birth_name || '…') + ' ' + (a.birth_surname || '…'), '\n'+t('s_35'), a.birth_date || '…', '\n'+t('s_36'), a.birth_certificate_id || '…', '\n'+t('s_37')+' Urząd Stanu Cywilnego w ', a.birth_certificate_issuer || '…'],
-            [t('s_38')]: a.experience || '…',
         }
+    })
+
+    if (a.is_underage) {
+        summary.push({
+            type: 'h',
+            content: 'Dane pierwszego rodzica:',
+        })
+
+        summary.push({
+            type: 'table',
+            rows: {
+                'Imię i nazwisko': ['', a.parent_1_name || '…'],
+                'PESEL': a.parent_1_pesel || '…',
+                [t('s_29')]: [(a.parent_1_address_1 || '…'), a.parent_1_address_2, (a.parent_1_zip_code || '…') + ' ' + (a.parent_1_city || '…')]
+                    .filter(x => x)
+                    .join('\n'),
+                ...(a.parent_1_has_contact_info ? {
+                    [t('s_30')]: ['', a.parent_1_email + '\n', t('s_31'), a.parent_1_phone]
+                } : {}),
+            }
+        })
+
+        summary.push({
+            type: 'h',
+            content: 'Dane drugiego rodzica:',
+        })
+
+        summary.push({
+            type: 'table',
+            rows: {
+                'Imię i nazwisko': ['', a.parent_2_name || '…'],
+                'PESEL': a.parent_2_pesel || '…',
+                [t('s_29')]: [(a.parent_2_address_1 || '…'), a.parent_2_address_2, (a.parent_2_zip_code || '…') + ' ' + (a.parent_2_city || '…')]
+                    .filter(x => x)
+                    .join('\n'),
+                ...(a.parent_2_has_contact_info ? {
+                    [t('s_30')]: ['', a.parent_2_email + '\n', t('s_31'), a.parent_2_phone]
+                } : {}),
+            }
+        })
+    }
+
+    summary.push({
+        type: 'h',
+        content: t('s_38'),
     })
 
     summary.push({
         type: 'paragraphs',
         items: [
+            ['', a.experience || '…'],
             [t('s_39'), a.hrt_since ? (a.hrt_since[0] ? t(['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][a.hrt_since[0]-1]) : '') + ' ' + (a.hrt_since[1] || '…') : '…'],
             ...(a.has_assessment ? [[t('s_40')]] : []),
-            [t('s_41'), a.areas ? steps[6].questions[4].options[a.areas] : '…'],
+            [t('s_41'), a.areas ? { some: 'w niektórych obszarach', all: 'w większości obszarów' }[a.areas] : '…'],
             ...(a.has_common_name ? [
                 [t('s_42'), a.common_name || '…']
             ] : []),
