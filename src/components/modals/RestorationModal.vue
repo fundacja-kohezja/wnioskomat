@@ -3,6 +3,7 @@ import { onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import BaseModal from './BaseModal.vue'
+import useFormStore from '@/stores/form'
 import { useExemptionFormStore, useMainApplicationFormStore, useServiceProxyFormStore } from '@/stores/subforms'
 
 const emit = defineEmits(['confirm'])
@@ -13,6 +14,7 @@ const loading = ref(false)
 const ready = ref(false)
 const fileInput = ref()
 
+const formStore = useFormStore()
 const stores = {
     mainApplicationForm: useMainApplicationFormStore(),
     exemptionForm: useExemptionFormStore(),
@@ -28,7 +30,9 @@ const reader = new FileReader
 
 reader.onloadend = () => {
     loading.value = false
-    fileInput.value.value = ''
+    if (fileInput.value) {
+        fileInput.value.value = ''
+    }
 }
 
 reader.onload = () => {
@@ -47,10 +51,14 @@ reader.onload = () => {
         return
     }
 
-    for(const store in parsedResult) {
+    for (const store in parsedResult) {
         if(!stores[store]) continue
         stores[store].answers = parsedResult[store]
+        stores[store].validate()
     }
+    formStore.currentForm = parsedResult.currentForm || 'mainApplication'
+    formStore.currentStep = parsedResult.currentStep || 0
+
     ready.value = true
 }
 

@@ -1,3 +1,25 @@
+- title: 'Informacje o sprawie'
+  description: 'Ten wniosek składa się już po wysłaniu właściwego wniosku i rozpoczęciu postępowania, dlatego trzeba podać jego dane, by sąd wiedział której sprawy tyczy się dokument. Znajdziesz je na korespondencji z sądu albo ustalisz dzwoniąc do sądu na Biuro Obsługi Interesanta.'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'
+      - label: 'Powód wnioskowania o zwolnienie z kosztów'
+        name: exemption_reason
+        type: radio_vertical
+        options:
+            A: 'zaliczka na poczet opinii biegłych'
+            B: 'przyznanie biegłym wynagrodzenia'
+            C: 'inna sytuacja'
+        subquestions:
+            - prefix: 'W związku z'
+              name: exemption_other_reason
+              showIf: { value: C }
+
+
 - title: 'Majątek i dochody'
   description: 'Tu wprowadzisz dane o swoim majątku i źródłach dochodu, które posłużą do wygenerowania oświadczenia o stanie majątkowym.'
   questions:

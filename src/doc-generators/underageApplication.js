@@ -136,12 +136,6 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
             align: 'center',
             spaceBefore: 16,
         })
-        if (a.is_exemption) {
-            p('wraz z wnioskiem o zwolnienie od obowiązku ponoszenia kosztów sądowych', {
-                align: 'center',
-                spaceAfter: 0,
-            })
-        }
     })
 
     setLineHeight(1.15)
@@ -239,12 +233,6 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
     if (a.proving_documents) {
         li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS' }[a.proving_documents_type] || '......................')+' – na fakt występowania u '+part0+' trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[a.new_mark] || '.......')+' w otoczeniu;', {
             level: 2,
-        })
-    }
-
-    if (a.is_exemption) {
-        li(nb, 'wnosimy o zwolnienie nas od obowiązku ponoszenia kosztów procesu w całości, ponieważ nie jesteśmy w stanie ich ponieść bez uszczerbku utrzymania koniecznego dla siebie i rodziny.', {
-            spaceBefore: 3,
         })
     }
 
@@ -495,14 +483,6 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
             '{12}': 'https://pubmed.ncbi.nlm.nih.gov/27707515/',
         }
     })
-    if (a.is_exemption) {
-        font({ style: 'bold' }, () => {
-            li(letter, 'Wniosek o zwolnienie od kosztów.', {
-                spaceAfter: 3,
-            })
-        })
-        p('Nasza sytuacja materialna uniemożliwia nam poniesienie kosztów sądowych bez uszczerbku dla utrzymania koniecznego siebie i rodziny. Szczegółowe informacje dotyczące naszej sytuacji znajdują się w załączonym oświadczeniu o stanie rodzinnym, majątku, dochodach i źródłach utrzymania.')
-    }
 
     noPageBreak(() => {
         p('Z tych względów wnoszę jak na wstępie.', {
@@ -521,7 +501,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
     p('Załączniki:')
     resetNumbering(nb)
     const attachments = [
-        a.is_exemption ? 'oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania' : 'dowód uiszczenia opłaty sądowej od wniosku',
+        'dowód uiszczenia opłaty sądowej od wniosku',
         'odpis aktu urodzenia',
     ]
     if (a.psychologist) attachments.push('opinia psychologiczna')

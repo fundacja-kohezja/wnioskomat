@@ -4,14 +4,16 @@ import { estimateLines } from '@/helpers/misc'
 
 const normalize = text => (text || '').trim()
 
-export default ([step_0, step_1], documentCreatorInitializer) => {
+export default (mainFormAnswers, exemptionFormAnswers, documentCreatorInitializer) => {
 
     const a = {
-        ...step_0,
-        ...step_1,
+        ...mainFormAnswers[2],
+        ...exemptionFormAnswers[0],
+        ...exemptionFormAnswers[1],
+        ...exemptionFormAnswers[2],
     }
 
-    const { p, li, table, row, cell, font, setLineHeight, resetNumbering, newPage, complete, save } = documentCreatorInitializer({
+    const { p, li, table, row, cell, font, setLineHeight, newPage, complete, save } = documentCreatorInitializer({
         margin: 20,
         defaultAlign: 'left'
     })
@@ -78,7 +80,7 @@ export default ([step_0, step_1], documentCreatorInitializer) => {
         row(() => {
             cell(() => {
                 font({ size: 10 }, () => {
-                    p(normalize(a.chosen_court) + ', Wydział Cywilny, ' + normalize(courts[a.chosen_court]?.address || '').replace('\n', ', '))
+                    p((normalize(a.chosen_court) || 'Sąd Rejonowy w ......................') + ', ' + (normalize(a.court_department) || 'Wydział Cywilny') + ', ' + normalize(courts[a.chosen_court]?.address || '......................').replace('\n', ', '))
                 })
             }, { pt: -1 })
         }, 9)
@@ -94,7 +96,7 @@ export default ([step_0, step_1], documentCreatorInitializer) => {
         }, 15)
         row(() => {
             cell(() => {
-                // blank
+                p(normalize(a.case_id) || '......................')
             })
         }, 9)
         row(() => {

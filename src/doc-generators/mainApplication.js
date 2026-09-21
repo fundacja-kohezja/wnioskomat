@@ -88,12 +88,12 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
             align: 'center',
             spaceBefore: 16,
         })
-        if (a.is_exemption) {
-            p('wraz z wnioskiem o zwolnienie od obowiązku ponoszenia kosztów sądowych', {
-                align: 'center',
-                spaceAfter: 0,
-            })
-        }
+        // if (a.is_exemption) {
+        //     p('wraz z wnioskiem o zwolnienie od obowiązku ponoszenia kosztów sądowych', {
+        //         align: 'center',
+        //         spaceAfter: 0,
+        //     })
+        // }
     })
 
     setLineHeight(1.15)
@@ -192,11 +192,11 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
         })
     }
 
-    if (a.is_exemption) {
-        li(nb, 'wnoszę o zwolnienie mnie od obowiązku ponoszenia kosztów procesu w całości, ponieważ nie jestem w stanie ich ponieść bez uszczerbku utrzymania koniecznego dla siebie i rodziny.', {
-            spaceBefore: 3,
-        })
-    }
+    // if (a.is_exemption) {
+    //     li(nb, 'wnoszę o zwolnienie mnie od obowiązku ponoszenia kosztów procesu w całości, ponieważ nie jestem w stanie ich ponieść bez uszczerbku utrzymania koniecznego dla siebie i rodziny.', {
+    //         spaceBefore: 3,
+    //     })
+    // }
 
     if (a.long_guidelines) {
         p('Jednocześnie przedkładam jako załącznik wydaną przez Rzecznika Praw Obywatelskich publikację |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, zawierającą szereg specjalistycznych informacji dotyczących praw osób transpłciowych oraz aktualnych standardów orzeczniczych w sprawach o ustalenie płci.', {
@@ -402,14 +402,14 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
         p('Nie jest argumentem przemawiającym za niedopuszczalnością drogi sądowej w tym zakresie okoliczność, że istnieje uregulowana procedura administracyjna dotycząca zmiany imion i nazwisk, przewidziana w ustawie o zmianie imienia i nazwiska. Orzekający w tych sprawach organ administracji w osobie kierownika urzędu stanu cywilnego należy uznać za właściwy do korygowania danych osób transpłciowych wyłącznie wówczas, gdy wniosek kieruje się w trybie administracyjnym i w oparciu o owe „ważne powody”, wymienione w art. 4 odnośnej ustawy – niezwiązane ze zmianą oznaczenia płci. Nieenumeratywny katalog owych powodów odwołuje się jednak do sytuacji odmiennych rodzajowo, niż transpłciowość i zapadnięcie orzeczenia sądowego stwierdzającego, że wnioskodawca jest kobietą/mężczyzną zamiast płci przypisanej przy urodzeniu.')
         p('Brak zatem podstawy do uznania, że w zakresie żądania zmiany imienia wniosek podlega odrzuceniu na zasadzie art. 199 § 1 pkt 1 k.p.c. w zw. z art. 13 § 2 k.p.c., a wobec obrania przeze mnie konkretnego imienia '+({ K: 'żeńskiego', M: 'męskiego' }[a.new_mark] || '.......')+' –  jakie chcę nosić po sprostowaniu aktu urodzenia poprzez ujawnienie tam płci '+({ K: 'żeńskiej', M: 'męskiej' }[a.new_mark] || '.......')+' – i jakich w praktyce używam, istnieje możliwość orzeczenia także i w tym przedmiocie.')
     }
-    if (a.is_exemption) {
-        font({ style: 'bold' }, () => {
-            li(letter, 'Wniosek o zwolnienie od kosztów.', {
-                spaceAfter: 3,
-            })
-        })
-        p('Moja sytuacja materialna uniemożliwia mi poniesienie kosztów sądowych bez uszczerbku dla utrzymania koniecznego siebie i rodziny. Szczegółowe informacje dotyczące mojej sytuacji znajdują się w załączonym oświadczeniu o stanie rodzinnym, majątku, dochodach i źródłach utrzymania.')
-    }
+    // if (a.is_exemption) {
+    //     font({ style: 'bold' }, () => {
+    //         li(letter, 'Wniosek o zwolnienie od kosztów.', {
+    //             spaceAfter: 3,
+    //         })
+    //     })
+    //     p('Moja sytuacja materialna uniemożliwia mi poniesienie kosztów sądowych bez uszczerbku dla utrzymania koniecznego siebie i rodziny. Szczegółowe informacje dotyczące mojej sytuacji znajdują się w załączonym oświadczeniu o stanie rodzinnym, majątku, dochodach i źródłach utrzymania.')
+    // }
 
     noPageBreak(() => {
         p('Z tych względów wnoszę jak na wstępie.', {
@@ -428,7 +428,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
     p('Załączniki:')
     resetNumbering(nb)
     const attachments = [
-        a.is_exemption ? 'oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania' : 'dowód uiszczenia opłaty sądowej od wniosku',
+        'dowód uiszczenia opłaty sądowej od wniosku',
         'odpis aktu urodzenia',
     ]
     if (a.psychologist) attachments.push('opinia psychologiczna')

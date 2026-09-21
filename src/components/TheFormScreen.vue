@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
 
 import { useExemptionFormStore, useMainApplicationFormStore, useServiceProxyFormStore, useWniosekOWydaniePismaFormStore } from '../stores/subforms'
+import useFormStore from '../stores/form'
 import mainApplicationsFormData from '../forms/glownyWniosek.yml'
 import exemptionFormData from '../forms/kosztyZwolnienie.yml'
 import serviceProxyFormData from '../forms/posrednikDoreczen.yml'
@@ -53,27 +55,41 @@ const groups = {
     ],
 }
 
-/** @type import('vue').Ref< 'mainApplication' | 'exemption' | 'serviceProxy' | 'furtherSteps' > */
-const currentForm = ref('mainApplication')
+const mainApplicationNavContainer = ref()
+const extraDocsNavContainer = ref()
+const docNavContainers = ref({})
 
-const currentIndex = ref(0)
+const { currentForm, currentStep } = storeToRefs(useFormStore())
 
 const changeStep = (form, step) => {
     currentForm.value = form
-    currentIndex.value = step
+    currentStep.value = step
 }
+
+watchEffect(() => {
+    if (!forms[currentForm.value] && currentForm.value !== 'furtherSteps') currentForm.value = 'mainApplication'
+    if (!(currentStep.value >= 0) || !Number.isInteger(+currentStep.value)) currentStep.value = 0
+})
+
+onMounted(() => {
+    if (currentForm.value !== 'mainApplication' && currentForm.value !== 'furtherSteps') {
+        mainApplicationNavContainer.value.open = false
+        extraDocsNavContainer.value.open = true
+        docNavContainers.value[currentForm.value].open = true
+    }
+})
 
 </script>
 
 <template>
     <div class="cols-layout">
         <nav class="side-nav">
-            <details open>
+            <details open ref="mainApplicationNavContainer">
                 <summary><h2>{{ t('mainApplication') }}</h2></summary>
                 <StepStatuses
                     :steps="forms.mainApplication.data"
                     :formStore="forms.mainApplication.store"
-                    :currentIndex="'mainApplication' === currentForm ? currentIndex : undefined"
+                    :currentIndex="'mainApplication' === currentForm ? currentStep : undefined"
                     hasSummary
                     @changeCurrentIndex="changeStep('mainApplication', $event)"
                 />
@@ -81,16 +97,16 @@ const changeStep = (form, step) => {
             <button class="nav-link" @click="changeStep('furtherSteps', 0)" :aria-current="currentForm === 'furtherSteps' ? true : undefined" :class="{ current: currentForm === 'furtherSteps' }">
                 {{ t('further_steps') }}
             </button>
-            <details>
+            <details ref="extraDocsNavContainer">
                 <summary><h2>{{ t('extra_documents') }}</h2></summary>
                 <template v-for="(group, title) in groups">
                     <h3>{{ t(title) }}</h3>
-                    <details v-for="form of group">
+                    <details v-for="form of group" :ref="el => docNavContainers[form] = el">
                         <summary><h4>{{ t(form) }}</h4></summary>
                         <StepStatuses
                             :steps="forms[form].data"
                             :formStore="forms[form].store"
-                            :currentIndex="form === currentForm ? currentIndex : undefined"
+                            :currentIndex="form === currentForm ? currentStep : undefined"
                             @changeCurrentIndex="changeStep(form, $event)"
                         />
                     </details>
@@ -105,10 +121,10 @@ const changeStep = (form, step) => {
             :steps="forms[currentForm].data"
             :formStore="forms[currentForm].store"
             :hasSummary="forms[currentForm].hasSummary"
-            :currentIndex="currentIndex"
-            @changeCurrentIndex="currentIndex = $event"
-            @decrementIndex="currentIndex--"
-            @incrementIndex="currentIndex++"
+            :currentIndex="currentStep"
+            @changeCurrentIndex="currentStep = $event"
+            @decrementIndex="currentStep--"
+            @incrementIndex="currentStep++"
         />
     </div>
 </template>

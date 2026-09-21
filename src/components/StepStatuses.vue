@@ -25,17 +25,27 @@ const { t } = useI18n()
 
 const { answers, answerStatuses } = storeToRefs(props.formStore)
 
+const allSteps = computed(() => props.hasSummary ? [
+    ...props.steps,
+     {
+         title: t('summary'),
+     },
+] : props.steps)
+
 const currentStep = computed(() => props.steps[props.currentIndex])
 const downloadsIndex = computed(() => props.hasSummary ? props.steps.length + 1 : props.steps.length)
-const statuses = computedWithControl(
-    currentStep,
-    () => answerStatuses.value.map(statuses => {
+const statuses = computedWithControl(currentStep, () => {
+    const statuses = answerStatuses.value.map(statuses => {
         if (statuses.includes('invalid')) return 'invalid'
         if (statuses.every(status => status === 'valid')) return 'completed'
         if (statuses.every(status => status === 'unfilled')) return 'empty'
         return 'partial'
-    }),
-)
+    })
+    if (props.hasSummary) {
+        statuses.push(statuses.every((s, i) => (props.steps[i].showIf && !isShown(props.steps[i].showIf, answers.value)) || s === 'completed') ? 'completed' : 'empty')
+    }
+    return statuses
+})
 watch(() => answerStatuses.value[props.currentIndex], () => {
     if (statuses.value[props.currentIndex] === 'empty') return
     statuses.trigger() // TODO this makes them not update when modal clears answer data
@@ -45,7 +55,7 @@ watch(() => answerStatuses.value[props.currentIndex], () => {
 
 <template>
     <ol>
-        <template v-for="(step, index) of steps">
+        <template v-for="(step, index) of allSteps">
             <li v-if="!step.showIf || isShown(step.showIf, answers)" :class="{ current: currentIndex === index }" :aria-current="currentIndex === index ? true : undefined">
                 <span class="step">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" :class="statuses[index]">
@@ -60,14 +70,6 @@ watch(() => answerStatuses.value[props.currentIndex], () => {
             </li>
         </template>
     </ol>
-    <span v-if="hasSummary" class="step final">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" :class="{ current: currentIndex === steps.length }">
-          <path fill-rule="evenodd" d="M2 4.75A.75.75 0 0 1 2.75 4h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75Zm0 10.5a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1-.75-.75ZM2 10a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 10Z" clip-rule="evenodd" />
-        </svg>
-        <button @click="emit('changeCurrentIndex', steps.length)" :aria-current="currentIndex === steps.length ? true : undefined" :class="{ current: currentIndex === steps.length }" class="nav-link">
-            {{ t('summary') }}
-        </button>
-    </span>
     <span class="step final">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" :class="{ current: currentIndex === downloadsIndex }">
             <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />

@@ -1,5 +1,3 @@
-import steps from '../forms/glownyWniosek.yml'
-
 export default ([step_0, step_1, step_2, step_3, step_4], t) => {
 
     const a = {
@@ -26,12 +24,12 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
             ...(a.is_new_surname ? [
                 [t('s_3'), a.new_surname || '…'],
             ] : []),
-            ...(a.is_exemption ? [t('s_4')] : []),
+            // ...(a.is_exemption ? [t('s_4')] : []),
         ],
         crossedItems: [
             ...(a.is_new_firstname ? [] : [t('s_5')]),
             ...(a.is_new_surname   ? [] : [t('s_6')]),
-            ...(a.is_exemption     ? [] : [t('s_4')]),
+            // ...(a.is_exemption     ? [] : [t('s_4')]),
         ],
         crossedItemsLabel: t('s_7'),
     })
@@ -49,11 +47,8 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
         content: t('s_8'),
     })
 
-    const attached = []
+    const attached = [t('s_9'), t('s_10')]
     const unattached = []
-
-    attached.push(t('s_9'))
-    if (!a.is_exemption) attached.push(t('s_10'))
 
     if (a.psychologist) {
         attached.push([

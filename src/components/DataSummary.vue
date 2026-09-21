@@ -13,6 +13,8 @@ const { answers } = storeToRefs(useMainApplicationFormStore())
 
 const summary = computed(() => generateSummary(answers.value, t))
 
+// TODO incomplete and invalid answers should be marked as such and all answers should lead to form field upon clicking
+
 </script>
 
 <template>

@@ -136,9 +136,9 @@ const shown = computed(() => !props.question.showIf || isShown(
             <legend v-if="question.label">{{ question.label }}</legend>
             <MonthPicker v-model="value" />
         </fieldset>
-        <fieldset v-else-if="question.type === 'radio' || question.type === 'radio_featured'">
+        <fieldset v-else-if="question.type === 'radio' || question.type === 'radio_featured' || question.type === 'radio_vertical'">
             <legend v-if="question.label">{{ question.label }}</legend>
-            <div class="radio-buttons" :class="{ featured: question.type === 'radio_featured' }">
+            <div class="radio-buttons" :class="{ featured: question.type === 'radio_featured', vertical: question.type === 'radio_vertical' }">
                 <label class="radio-button" v-for="(optionLabel, option) in question.options">
                     <input type="radio" v-model="value" :value="option" />
                     <span>{{ optionLabel }}</span>

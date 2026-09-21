@@ -10,6 +10,14 @@ export default (steps) => {
         answers.value = initAnswers()
     }
 
+    // TODO data needs to be validated upon hydration as user can put anything in localStorage
+    // this is the stub of the validation, but it certainly will need to be expanded
+    const validate = () => {
+        steps.forEach((_, i) => {
+            if (!answers.value[i]) answers.value[i] = {}
+        })
+    }
+
     const answerStatuses = computed(() => getAnswerStatuses(steps, answers.value))
 
     const anyAnswers = computed(() => checkForAnyFilled(answerStatuses.value))
@@ -24,6 +32,6 @@ export default (steps) => {
     return {
         answers, ignoreWarning,
         answerStatuses, anyAnswers, anyInvalid, anyIncomplete,
-        clearAnswers,
+        clearAnswers, validate,
     }
 }
