@@ -1,8 +1,8 @@
 const normalize = text => (text || '').trim()
 
-export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitializer) => {
+export default (mainFormAnswers, documentCreatorInitializer, proxyFormAnswers) => {
 
-    const a = { ...step_2 }
+    const a = proxyFormAnswers ? { ...mainFormAnswers[2], ...proxyFormAnswers[0] } : { ...mainFormAnswers[2] }
 
     const { p, font, setLineHeight, complete, save } = documentCreatorInitializer()
 
@@ -26,7 +26,13 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
     text += (normalize(a.proxy_name) || '......................')
     text += ', PESEL '
     text += (a.proxy_pesel || '......................')
-    text += ' do dokonywania w moim imieniu niektórych czynności procesowych w postaci odbioru kierowanych do mnie pism sądowych w postępowaniu z mojego wniosku u sprostowanie aktu urodzenia – w toku całego postępowania, do uprawomocnienia się orzeczenia.'
+    text += ' do dokonywania w moim imieniu niektórych czynności procesowych w postaci odbioru kierowanych do mnie pism sądowych '
+    if (proxyFormAnswers) {
+        text += 'w postępowaniu zawisłym przed ' + (normalize(a.chosen_court).replace('Sąd Rejonowy', 'Sądem Rejonowym') || 'Sądem Rejonowym w ...................') + ' pod sygnaturą akt ' + (normalize(a.case_id) || '......................')
+    } else {
+        text += 'w postępowaniu z mojego wniosku u sprostowanie aktu urodzenia'
+    }
+    text += ' – w toku całego postępowania, do uprawomocnienia się orzeczenia.'
     p(text)
 
     p('Adres pełnomocnika to:\n' + (

@@ -1,0 +1,17 @@
+- title: 'Dane do wniosku'
+  description: 'Jeśli sąd wezwał Cię na rozprawę i będzie Ci trudno stawić się osobiście w wyznaczonym terminie, możesz zawnioskować o przeprowadzenie jej zdalnie.'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'
+      - label: 'Wyznaczony termin rozprawy'
+        name: trial_date
+        type: date
+        description: 'Podaj termin, w jakim sąd wyznaczył rozprawę'
+      - label: 'Twój adres e-mail'
+        name: email_for_remote_trial_link
+        validation: email
+        description: 'Adres e-mail, pod którym chcesz odebrać link do wzięcia udziału w zdalnej rozprawie'

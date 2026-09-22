@@ -3,11 +3,20 @@ import { onMounted, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 
-import { useExemptionFormStore, useMainApplicationFormStore, useServiceProxyFormStore, useWniosekOWydaniePismaFormStore } from '../stores/subforms'
+import {
+    useExemptionFormStore,
+    useMainApplicationFormStore,
+    useRemoteTrialFormStore,
+    useServiceProxyFormStore,
+    useRescheduleTrialFormStore,
+    useWniosekOWydaniePismaFormStore,
+} from '../stores/subforms'
 import useFormStore from '../stores/form'
 import mainApplicationsFormData from '../forms/glownyWniosek.yml'
 import exemptionFormData from '../forms/kosztyZwolnienie.yml'
 import serviceProxyFormData from '../forms/posrednikDoreczen.yml'
+import remoteTrialFormData from '../forms/rozprawaZdalna.yml'
+import rescheduleTrialFormData from '../forms/zmianaTerminuRozprawy.yml'
 import wniosekOWydaniePismaFormData from '../forms/wniosekOWydaniePisma.yml'
 import StepStatuses from './StepStatuses.vue'
 import FormFields from './FormFields.vue'
@@ -20,6 +29,8 @@ const { t } = useI18n()
 const mainApplicationFormStore = useMainApplicationFormStore()
 const exemptionFormStore = useExemptionFormStore()
 const serviceProxyFormStore = useServiceProxyFormStore()
+const remoteTrialFormStore = useRemoteTrialFormStore()
+const rescheduleTrialFormStore = useRescheduleTrialFormStore()
 const wniosekOWydaniePismaFormStore = useWniosekOWydaniePismaFormStore()
 
 const forms = {
@@ -38,6 +49,16 @@ const forms = {
         store: serviceProxyFormStore,
         hasSummary: false,
     },
+    remoteTrial: {
+        data: remoteTrialFormData,
+        store: remoteTrialFormStore,
+        hasSummary: false,
+    },
+    rescheduleTrial: {
+        data: rescheduleTrialFormData,
+        store: rescheduleTrialFormStore,
+        hasSummary: false,
+    },
     wniosekOWydaniePisma: {
         data: wniosekOWydaniePismaFormData,
         store: wniosekOWydaniePismaFormStore,
@@ -49,6 +70,8 @@ const groups = {
     ongoing: [
         'exemption',
         'serviceProxy',
+        'remoteTrial',
+        'rescheduleTrial',
     ],
     finishing: [
         'wniosekOWydaniePisma'

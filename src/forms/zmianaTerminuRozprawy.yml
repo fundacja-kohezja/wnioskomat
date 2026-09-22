@@ -1,0 +1,56 @@
+- title: 'Dane do wniosku'
+  description: 'Jeśli sąd wezwał Cię na rozprawę i nie jesteś w stanie stawić się w wyznaczonym terminie, możesz zawnioskować o zmianę tego terminu.'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'
+      - label: 'Wyznaczony termin rozprawy'
+        name: trial_date
+        type: date
+        description: 'Podaj termin, w jakim sąd wyznaczył rozprawę'
+
+- title: 'Powód wnioskowania'
+  description: 'Przyczyna dla której nie możesz się stawić w sądzie musi być obiektywna i niezawiniona przed Ciebie. Jeśli masz wtedy pracę, uczelnię czy szkołę, nie jest to wystarczający powód – rozprawa w sądzie usprawiedliwia nieobecność.'
+  questions:
+      - label: 'Wybierz powód wnioskowania o zmianę terminu rozprawy:'
+        name: absence_reason
+        type: radio_vertical
+        options:
+            A: 'choroba'
+            B: 'wcześniej zaplanowany urlop'
+            C: 'inny powód'
+        subquestions:
+            - name: absence_other_reason
+              prefix: 'z powodu'
+              showIf: { value: C }
+      - label: 'Chcę przedłożyć dowody'
+        name: has_proof
+        type: checkbox
+        description: 'Warto przedłożyć dowody zadeklarowanej przyczyny, np. w przypadku wcześniej zaplanowanego urlopu mogą to być bilety lotnicze/kolejowe, potwierdzenia rezerwacji noclegu itp.'
+        showIf: { answer: absence_reason, value: [B, C] }
+        subquestions:
+            - label: 'Wymień dowody'
+              name: proof
+              type: textarea
+              showIf: {}
+      - label: 'Dowód choroby:'
+        name: 'illness_proof'
+        type: radio_vertical
+        description: 'Warto od razu dołączyć zaświadczenie od lekarza sądowego, jeśli masz taką możliwość. W ostateczności możesz załączyć zwykłe zwolenienie lekarskie, jednak i tak trzeba będzie później dostarczyć takie od lekarza sądowego.'
+        showIf: { answer: absence_reason, value: A }
+        options:
+            A: 'zaświadczenie od lekarza sądowego'
+            B: 'zwolenienie lekarskie'
+        extraInfo:
+            title: 'Jak uzyskać zaświadczenie od lekarza sądowego'
+            content:
+                - 'Spis lekarzy sądowych znajdziesz na stronie sądu okręgowego, pod który podlega sąd rejonowy, który prowadzi Twoją sprawę.'
+                - 'Musisz zadzwonić i umówić się na wizytę – jest to bezpłatne.'
+      - label: 'Z czego wynika, że nie możesz stawić się w sądzie?'
+        name: 'absence_explanation'
+        type: textarea
+        description: 'To miejsce na dokładniejszy opis sytuacji w dwóch, trzech zdaniach. Ważne, żeby odwołać się do faktów. Możesz zacząć od słów „Wynika to z…”'
+        showIf: { answer: absence_reason, value: [A, B, C] }

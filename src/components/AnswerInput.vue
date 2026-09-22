@@ -172,7 +172,7 @@ const shown = computed(() => !props.question.showIf || isShown(
             />
         </template>
     </div>
-    <details v-if="question.extraInfo">
+    <details v-if="question.extraInfo" v-show="shown">
         <summary>{{ question.extraInfo.title }}</summary>
         <p v-for="paragraph of question.extraInfo.content">
             {{ paragraph }}

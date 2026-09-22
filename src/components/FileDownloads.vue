@@ -4,6 +4,9 @@ import { storeToRefs } from 'pinia'
 
 import MainDownloads from './MainDownloads.vue'
 import ExemptionDownloads from './ExemptionDownloads.vue'
+import ProxyDownloads from './ProxyDownloads.vue'
+import RemoteDownloads from './RemoteDownloads.vue'
+import RescheduleDownloads from './RescheduleDownloads.vue'
 
 const props = defineProps({
     name: {
@@ -23,6 +26,9 @@ const { ignoreWarning, anyInvalid, anyIncomplete } = storeToRefs(props.store)
 const components = {
     mainApplication: MainDownloads,
     exemption: ExemptionDownloads,
+    serviceProxy: ProxyDownloads,
+    remoteTrial: RemoteDownloads,
+    rescheduleTrial: RescheduleDownloads,
 }
 
 </script>

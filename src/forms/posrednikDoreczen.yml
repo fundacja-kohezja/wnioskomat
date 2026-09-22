@@ -2,31 +2,26 @@
   description: 'Jeśli chcesz w trakcie postępowania (czyli już po złożeniu właściwego wniosku) wyznaczyć osobę, która będzie w Twoim imieniu odbierać korespondecję z sądu (pod swoim adresem), wypełnij poniższe pola.'
   questions:
       - label: 'Sygnatura sprawy'
-        name: case_id_for_new_proxy
-        placeholder: 'np. I Ns 100/25'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
       - heading: 'Dane pełnomocnika'
         label: 'Imię i nazwisko'
-        name: new_proxy_name
-        showIf: {}
+        name: proxy_name
       - label: 'PESEL'
-        name: new_proxy_pesel
+        name: proxy_pesel
         validation: pesel
-        showIf: {}
       - label: 'Pierwsza linia adresu'
-        name: new_proxy_address_1
+        name: proxy_address_1
         description: 'Ulica, numer domu, mieszkania'
         placeholder: 'Przykładowa 34B/12'
-        showIf: {}
       - label: 'Druga linia adresu'
-        name: new_proxy_address_2
+        name: proxy_address_2
         description: 'Opcjonalnie, w przypadku większości adresów nie jest potrzebna'
-        filledIfAny: [new_proxy_address_1]
-        showIf: {}
+        filledIfAny: [proxy_address_1]
       - label: 'Kod pocztowy'
-        name: new_proxy_zip_code
+        name: proxy_zip_code
         isRow: true
         placeholder: '00-000'
-        showIf: {}
         subquestions:
             - label: 'Miejscowość'
-              name: new_proxy_city
+              name: proxy_city
