@@ -1,0 +1,33 @@
+- title: 'Dane do wniosku'
+  description: 'Jeśli Twoja sprawa nie rusza się przez kilka miesięcy i telefon do Biura Obsługi Interesantów potwierdził, że nie ma postępów, możesz sprobówać ponaglić sąd odpowiednim wnioskiem.'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'
+      - label: 'Jak złożył_ś główny wniosek?'
+        name: delivery_method
+        type: radio
+        options:
+            mail: 'pocztą'
+            personally: 'osobiście'
+      - label: 'Data wysłania/złożenia wniosku'
+        name: application_date
+        type: date
+        description: 'W przypadku wysyłki chodzi o datę nadania listu na poczcie (znajdziesz ją na potwierdzeniu nadania). Jeśli wniosek był składany na biurze podawczym, data widnieje na odpisie, na pieczątce z sądu.'
+      - label: 'Okoliczności'
+        name: circumstances
+        type: radio_vertical
+        options:
+            A: 'nic się nie wydarzyło od momentu złożenia wniosku'
+            B: 'biegli spóźniają się z wydaniem opinii'
+            C: 'sąd nie podejmuje żadnych działań mimo otrzymania opinii biegłych'
+            D: 'inne'
+        subquestions:
+            - label: 'Opisz sytuację'
+              name: other_circumstances
+              type: textarea
+              description: 'Przykład: Z informacji uzyskanych od Biura Obsługi Interesantów wynika, że od czasu wydania opinii i uwag do jej treści, Sąd nie wydał zarządzenia o wyznaczeniu nowego terminu rozprawy lub nie wyznaczył posiedzenia niejawnego.'
+              showIf: { value: D }

@@ -1,0 +1,37 @@
+- title: 'Dane do wniosku'
+  description: 'Podaj dane do wniosku o zwrot oryginalnych dokumentów po zakończeniu postępowania.'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'
+      - label: 'Proszę o zwrot dokumentów w postaci…'
+        name: documents_to_return
+        type: textarea
+        description: 'Napisz, jakie dokładnie dokumenty sąd ma Ci zwrócić: np. opinia psychologiczna, zaświadczenie od lekarza psychiatry'
+      - heading: 'Adres doręczenia'
+        label: 'W trakcie postępowania zmieniał_m adres do doręczeń'
+        name: is_new_address
+        type: checkbox
+        subquestions:
+            - label: 'Pierwsza linia obecnego adresu'
+              name: new_address_1
+              description: 'Ulica, numer domu, mieszkania'
+              placeholder: 'Przykładowa 34B/12'
+              showIf: {}
+            - label: 'Druga linia obecnego adresu'
+              name: new_address_2
+              description: 'Opcjonalnie, w przypadku większości adresów nie jest potrzebna'
+              filledIfAny: [new_address_1]
+              showIf: {}
+            - label: 'Kod pocztowy'
+              name: new_zip_code
+              isRow: true
+              placeholder: '00-000'
+              showIf: {}
+              subquestions:
+                  - label: 'Miejscowość'
+                    name: new_city
+                    showIf: { answer: is_new_address }

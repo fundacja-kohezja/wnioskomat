@@ -3,14 +3,13 @@ import { courts } from '../helpers/datasets'
 
 const normalize = text => (text || '').trim()
 
-export default (mainFormAnswers, exemptionFormAnswers, documentCreatorInitializer) => {
+export default (mainFormAnswers, addressFormAnswers, documentCreatorInitializer) => {
 
     const a = {
         ...mainFormAnswers[0],
         ...mainFormAnswers[2],
-        ...exemptionFormAnswers[0],
-        ...exemptionFormAnswers[1],
-        ...exemptionFormAnswers[2],
+        ...addressFormAnswers[0],
+        ...addressFormAnswers[1],
     }
 
     const { p, font, setLineHeight, complete, save } = documentCreatorInitializer()
@@ -45,15 +44,25 @@ export default (mainFormAnswers, exemptionFormAnswers, documentCreatorInitialize
         p('......................', top)
     }
 
-    p({K: 'Wnioskodawczyni:', M: 'Wnioskodawca:'}[a.new_mark] || '', {
-        ...top,
-        spaceBefore: 5,
+    font({ style: 'bold' }, () => {
+        p({K: 'Wnioskodawczyni:', M: 'Wnioskodawca:'}[a.new_mark] || '', {
+            ...top,
+            spaceBefore: 5,
+        })
     })
     p([a.birth_name, a.birth_surname].map(normalize).join(' '), top)
+    p([a.new_address_1, a.new_address_2, (a.new_zip_code || '........') + ' ' + (a.new_city || '...................')]
+        .map(normalize)
+        .filter(x => x)
+        .join('\n'),
+    {
+        ...top,
+        mayBreak: true,
+    })
 
     font({ style: 'bold' }, () => {
         p('Sygn. akt: '+ (normalize(a.case_id) || '......................'))
-        p('Wniosek\no zwolnienie z kosztów', {
+        p('INFORMACJA\no zmianie adresu do doręczeń', {
             align: 'center',
             spaceBefore: 16,
             mayBreak: true,
@@ -62,14 +71,18 @@ export default (mainFormAnswers, exemptionFormAnswers, documentCreatorInitialize
 
     setLineHeight(1.15)
 
-    p(({
-        A: 'W związku z wezwaniem mnie do uiszczenia zaliczki na poczet opinii biegłych',
-        B: 'W związku z wydaniem przez Sąd postanowienia o przyznaniu biegłym wynagrodzenia',
-        C: 'W związku z ' + (normalize(a.exemption_other_reason) || '......................')
-    }[a.exemption_reason] || 'W związku z ......................') + ' wnoszę o zwolnienie mnie od obowiązku ponoszenia kosztów sądowych' + (['A', 'B'].includes(a.exemption_reason) ? ' – kosztów opinii biegłego w całości' : '') + ', ponieważ nie jestem w stanie ich ponieść bez uszczerbku utrzymania koniecznego dla siebie i rodziny.', {
+    p('Informuję, że zmianie uległ mój adres do doręczeń. Aktualny adres to:\n' + (
+        [a.new_address_1, a.new_address_2, (a.new_zip_code || '........') + ' ' + (a.new_city || '...................')]
+            .map(normalize)
+            .filter(x => x)
+            .join('\n')
+    ), {
         spaceBefore: 12,
-        spaceAfter: 12,
+        mayBreak: true,
+        align: 'left',
     })
+
+    p('Proszę o przesyłanie dalszej korespondencji na wskazany adres.', { spaceAfter: 6 })
 
     font({ style: 'italic' }, () => {
         p('Podpis', {
@@ -77,10 +90,6 @@ export default (mainFormAnswers, exemptionFormAnswers, documentCreatorInitialize
             spaceAfter: 8,
         })
     })
-
-
-    p('Załącznik:')
-    p('- oświadczenie o stanie rodzinnym, majątku, dochodach i źródłach utrzymania')
 
     complete()
 

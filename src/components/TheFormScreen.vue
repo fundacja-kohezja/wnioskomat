@@ -9,15 +9,21 @@ import {
     useRemoteTrialFormStore,
     useServiceProxyFormStore,
     useRescheduleTrialFormStore,
-    useWniosekOWydaniePismaFormStore,
+    useAddressChangeFormStore,
+    useUrgencyFormStore,
+    useExemptionRejectionJustificationFormStore,
+    useReturnDocumentsFormStore,
 } from '../stores/subforms'
 import useFormStore from '../stores/form'
 import mainApplicationsFormData from '../forms/glownyWniosek.yml'
 import exemptionFormData from '../forms/kosztyZwolnienie.yml'
 import serviceProxyFormData from '../forms/posrednikDoreczen.yml'
+import addressChangeFormData from '../forms/zmianaAdresu.yml'
 import remoteTrialFormData from '../forms/rozprawaZdalna.yml'
 import rescheduleTrialFormData from '../forms/zmianaTerminuRozprawy.yml'
-import wniosekOWydaniePismaFormData from '../forms/wniosekOWydaniePisma.yml'
+import urgencyFormData from '../forms/przyspieszenieSprawy.yml'
+import exemptionRejectionJustificationFormData from '../forms/uzasadnienieOddaleniaZwolnienia.yml'
+import returnDocumentsFormData from '../forms/zwrotDokumentow.yml'
 import StepStatuses from './StepStatuses.vue'
 import FormFields from './FormFields.vue'
 import FurtherSteps from './FurtherSteps.vue'
@@ -29,9 +35,12 @@ const { t } = useI18n()
 const mainApplicationFormStore = useMainApplicationFormStore()
 const exemptionFormStore = useExemptionFormStore()
 const serviceProxyFormStore = useServiceProxyFormStore()
+const addressChangeFormStore = useAddressChangeFormStore()
 const remoteTrialFormStore = useRemoteTrialFormStore()
 const rescheduleTrialFormStore = useRescheduleTrialFormStore()
-const wniosekOWydaniePismaFormStore = useWniosekOWydaniePismaFormStore()
+const urgencyFormStore = useUrgencyFormStore()
+const exemptionRejectionJustificationFormStore = useExemptionRejectionJustificationFormStore()
+const returnDocumentsFormStore = useReturnDocumentsFormStore()
 
 const forms = {
     mainApplication: {
@@ -49,6 +58,11 @@ const forms = {
         store: serviceProxyFormStore,
         hasSummary: false,
     },
+    addressChange: {
+        data: addressChangeFormData,
+        store: addressChangeFormStore,
+        hasSummary: false,
+    },
     remoteTrial: {
         data: remoteTrialFormData,
         store: remoteTrialFormStore,
@@ -59,9 +73,19 @@ const forms = {
         store: rescheduleTrialFormStore,
         hasSummary: false,
     },
-    wniosekOWydaniePisma: {
-        data: wniosekOWydaniePismaFormData,
-        store: wniosekOWydaniePismaFormStore,
+    urgency: {
+        data: urgencyFormData,
+        store: urgencyFormStore,
+        hasSummary: false,
+    },
+    exemptionRejectionJustification: {
+        data: exemptionRejectionJustificationFormData,
+        store: exemptionRejectionJustificationFormStore,
+        hasSummary: false,
+    },
+    returnDocuments: {
+        data: returnDocumentsFormData,
+        store: returnDocumentsFormStore,
         hasSummary: false,
     },
 }
@@ -70,11 +94,14 @@ const groups = {
     ongoing: [
         'exemption',
         'serviceProxy',
+        'addressChange',
         'remoteTrial',
         'rescheduleTrial',
+        'urgency',
+        'exemptionRejectionJustification',
     ],
     finishing: [
-        'wniosekOWydaniePisma'
+        'returnDocuments',
     ],
 }
 

@@ -5,8 +5,12 @@ import { storeToRefs } from 'pinia'
 import MainDownloads from './MainDownloads.vue'
 import ExemptionDownloads from './ExemptionDownloads.vue'
 import ProxyDownloads from './ProxyDownloads.vue'
+import AddressDownloads from './AddressDownloads.vue'
 import RemoteDownloads from './RemoteDownloads.vue'
 import RescheduleDownloads from './RescheduleDownloads.vue'
+import UrgencyDownloads from './UrgencyDownloads.vue'
+import JustificationDownloads from './JustificationDownloads.vue'
+import ReturnDownloads from './ReturnDownloads.vue'
 
 const props = defineProps({
     name: {
@@ -27,8 +31,12 @@ const components = {
     mainApplication: MainDownloads,
     exemption: ExemptionDownloads,
     serviceProxy: ProxyDownloads,
+    addressChange: AddressDownloads,
     remoteTrial: RemoteDownloads,
     rescheduleTrial: RescheduleDownloads,
+    urgency: UrgencyDownloads,
+    exemptionRejectionJustification: JustificationDownloads,
+    returnDocuments: ReturnDownloads,
 }
 
 </script>

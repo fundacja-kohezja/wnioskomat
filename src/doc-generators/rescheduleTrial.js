@@ -3,13 +3,13 @@ import { courts } from '../helpers/datasets'
 
 const normalize = text => (text || '').trim()
 
-export default (mainFormAnswers, exemptionFormAnswers, documentCreatorInitializer) => {
+export default (mainFormAnswers, rescheduleFormAnswers, documentCreatorInitializer) => {
 
     const a = {
         ...mainFormAnswers[0],
         ...mainFormAnswers[2],
-        ...exemptionFormAnswers[0],
-        ...exemptionFormAnswers[1],
+        ...rescheduleFormAnswers[0],
+        ...rescheduleFormAnswers[1],
     }
 
     const { p, font, setLineHeight, complete, save } = documentCreatorInitializer()
@@ -28,14 +28,18 @@ export default (mainFormAnswers, exemptionFormAnswers, documentCreatorInitialize
     }
 
     if (a.chosen_court) {
-        p(a.chosen_court, top)
+        font({ style: 'bold' }, () => {
+            p(a.chosen_court, top)
+        })
         p(normalize(a.court_department) || 'Wydział Cywilny', top)
         p(courts[a.chosen_court]?.address || '', { // TODO ability to manually provide court address
             ...top,
             mayBreak: true,
         })
     } else {
-        p('Sąd Rejonowy w ......................', top)
+        font({ style: 'bold' }, () => {
+            p('Sąd Rejonowy w ......................', top)
+        })
         p(normalize(a.court_department) || 'Wydział Cywilny', top)
         p('......................', top)
     }

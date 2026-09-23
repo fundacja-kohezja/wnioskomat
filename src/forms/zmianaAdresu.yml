@@ -1,0 +1,25 @@
+- title: 'Dane do wniosku'
+  description: 'Jeśli zmienił się Twój adres, możesz poinformować o tym sąd, by przesyłał dalszą korespondencję już do nowego miejsca.'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'
+      - heading: 'Nowy adres'
+        label: 'Pierwsza linia adresu'
+        name: new_address_1
+        description: 'Ulica, numer domu, mieszkania'
+        placeholder: 'Przykładowa 34B/12'
+      - label: 'Druga linia adresu'
+        name: new_address_2
+        description: 'Opcjonalnie, w przypadku większości adresów nie jest potrzebna'
+        filledIfAny: [new_address_1]
+      - label: 'Kod pocztowy'
+        name: new_zip_code
+        isRow: true
+        placeholder: '00-000'
+        subquestions:
+            - label: 'Miejscowość'
+              name: new_city
