@@ -1,0 +1,32 @@
+- title: 'Dane do wniosku'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Data wydania postanowienia'
+        name: decision_date
+        type: date
+      - heading: 'Adres doręczenia'
+        label: 'Od momentu złożenia wniosku zmienił się mój adres do doręczeń'
+        name: is_new_address
+        type: checkbox
+        subquestions:
+            - label: 'Pierwsza linia adresu'
+              name: new_address_1
+              description: 'Ulica, numer domu, mieszkania'
+              placeholder: 'Przykładowa 34B/12'
+              showIf: {}
+            - label: 'Druga linia adresu'
+              name: new_address_2
+              description: 'Opcjonalnie, w przypadku większości adresów nie jest potrzebna'
+              filledIfAny: [new_address_1]
+              showIf: {}
+            - label: 'Kod pocztowy'
+              name: new_zip_code
+              isRow: true
+              placeholder: '00-000'
+              showIf: {}
+              subquestions:
+                  - label: 'Miejscowość'
+                    name: new_city
+                    showIf: { answer: is_new_address }

@@ -13,6 +13,10 @@ import {
     useUrgencyFormStore,
     useExemptionRejectionJustificationFormStore,
     useReturnDocumentsFormStore,
+    useExtendDeadlineFormStore,
+    useRequestCopyFormStore,
+    useCopyUrgencyFormStore,
+    useRejectionJustificationFormStore,
 } from '../stores/subforms'
 import useFormStore from '../stores/form'
 import mainApplicationsFormData from '../forms/glownyWniosek.yml'
@@ -21,9 +25,13 @@ import serviceProxyFormData from '../forms/posrednikDoreczen.yml'
 import addressChangeFormData from '../forms/zmianaAdresu.yml'
 import remoteTrialFormData from '../forms/rozprawaZdalna.yml'
 import rescheduleTrialFormData from '../forms/zmianaTerminuRozprawy.yml'
+import extendDeadlineFormData from '../forms/wydluzenieTerminu.yml'
 import urgencyFormData from '../forms/przyspieszenieSprawy.yml'
 import exemptionRejectionJustificationFormData from '../forms/uzasadnienieOddaleniaZwolnienia.yml'
+import requestCopyFormData from '../forms/wydanieOdpisu.yml'
 import returnDocumentsFormData from '../forms/zwrotDokumentow.yml'
+import copyUrgencyFormData from '../forms/wyslanieDoUSC.yml'
+import rejectionJustificationFormData from '../forms/uzasadnienieOddalenia.yml'
 import StepStatuses from './StepStatuses.vue'
 import FormFields from './FormFields.vue'
 import FurtherSteps from './FurtherSteps.vue'
@@ -38,9 +46,13 @@ const serviceProxyFormStore = useServiceProxyFormStore()
 const addressChangeFormStore = useAddressChangeFormStore()
 const remoteTrialFormStore = useRemoteTrialFormStore()
 const rescheduleTrialFormStore = useRescheduleTrialFormStore()
+const extendDeadlineFormStore = useExtendDeadlineFormStore()
 const urgencyFormStore = useUrgencyFormStore()
 const exemptionRejectionJustificationFormStore = useExemptionRejectionJustificationFormStore()
+const requestCopyFormStore = useRequestCopyFormStore()
 const returnDocumentsFormStore = useReturnDocumentsFormStore()
+const copyUrgencyFormStore = useCopyUrgencyFormStore()
+const rejectionJustificationFormStore = useRejectionJustificationFormStore()
 
 const forms = {
     mainApplication: {
@@ -73,6 +85,11 @@ const forms = {
         store: rescheduleTrialFormStore,
         hasSummary: false,
     },
+    extendDeadline: {
+        data: extendDeadlineFormData,
+        store: extendDeadlineFormStore,
+        hasSummary: false,
+    },
     urgency: {
         data: urgencyFormData,
         store: urgencyFormStore,
@@ -83,9 +100,24 @@ const forms = {
         store: exemptionRejectionJustificationFormStore,
         hasSummary: false,
     },
+    requestCopy: {
+        data: requestCopyFormData,
+        store: requestCopyFormStore,
+        hasSummary: false,
+    },
     returnDocuments: {
         data: returnDocumentsFormData,
         store: returnDocumentsFormStore,
+        hasSummary: false,
+    },
+    copyUrgency: {
+        data: copyUrgencyFormData,
+        store: copyUrgencyFormStore,
+        hasSummary: false,
+    },
+    rejectionJustification: {
+        data: rejectionJustificationFormData,
+        store: rejectionJustificationFormStore,
         hasSummary: false,
     },
 }
@@ -97,11 +129,15 @@ const groups = {
         'addressChange',
         'remoteTrial',
         'rescheduleTrial',
+        'extendDeadline',
         'urgency',
         'exemptionRejectionJustification',
     ],
     finishing: [
+        'requestCopy',
         'returnDocuments',
+        'copyUrgency',
+        'rejectionJustification',
     ],
 }
 

@@ -1,0 +1,9 @@
+- title: 'Dane do wniosku'
+  description: 'Jeśli od zakończenia postępowania minęło już kilka tygodni, a Urząd Stanu Cywilnego wciąż nie otrzymał odpisu postanowienia, możesz sprobówać ponaglić sąd odpowiednim wnioskiem.'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'

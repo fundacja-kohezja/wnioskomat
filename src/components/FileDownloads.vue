@@ -8,9 +8,13 @@ import ProxyDownloads from './ProxyDownloads.vue'
 import AddressDownloads from './AddressDownloads.vue'
 import RemoteDownloads from './RemoteDownloads.vue'
 import RescheduleDownloads from './RescheduleDownloads.vue'
+import DeadlineDownloads from './DeadlineDownloads.vue'
 import UrgencyDownloads from './UrgencyDownloads.vue'
 import JustificationDownloads from './JustificationDownloads.vue'
+import CopyDownloads from './CopyDownloads.vue'
 import ReturnDownloads from './ReturnDownloads.vue'
+import CopyUrgencyDownloads from './CopyUrgencyDownloads.vue'
+import RejectionDownloads from './RejectionDownloads.vue'
 
 const props = defineProps({
     name: {
@@ -34,9 +38,13 @@ const components = {
     addressChange: AddressDownloads,
     remoteTrial: RemoteDownloads,
     rescheduleTrial: RescheduleDownloads,
+    extendDeadline: DeadlineDownloads,
     urgency: UrgencyDownloads,
     exemptionRejectionJustification: JustificationDownloads,
+    requestCopy: CopyDownloads,
     returnDocuments: ReturnDownloads,
+    copyUrgency: CopyUrgencyDownloads,
+    rejectionJustification: RejectionDownloads,
 }
 
 </script>

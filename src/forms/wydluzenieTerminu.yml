@@ -1,0 +1,48 @@
+- title: 'Dane do wniosku'
+  description: 'Jeśli sąd wezwał Cię do zrobienia czegoś w określonym terminie i potrzebujesz więcej czasu, bo to załatwić, możesz sporządzić stosowny wniosek w tym formularzu. Nie zwlekaj – jeśli wyznaczony przez sąd termin minie przed wysłaniem wniosku, wniosek nie zostanie uwzględniony!'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'
+      - heading: 'Informacje o zobowiązaniu'
+        label: 'Do czego zobowiązał Cię sąd?'
+        name: obligation
+        prefix: 'do'
+      - label: 'Data powstania zobowiązania'
+        name: obligation_date
+        type: date
+        description: 'Data widnieje na piśmie ze zobowiązaniem od sądu'
+      - heading: 'Przedłużenie terminu'
+        label: 'Chcę przedłużyć termin'
+        name: extension_type
+        type: radio
+        options:
+            days: 'o określoną liczbę dni'
+            date: 'do konkretnej daty'
+        subquestions:
+          - label: 'O ile dni chcesz przedłużyć termin?'
+            name: extension_days
+            validation: number
+            suffix: 'dni'
+            showIf: { value: days }
+          - label: 'Do kiedy chcesz przedłużyć termin?'
+            name: extension_date
+            type: date
+            showIf: { value: date }
+      - label: 'Z czego wynika, że nie możesz wywiązać się z terminu?'
+        name: extension_reason
+        type: textarea
+        description: 'Odwołaj się do faktów. Muszą to być okoliczności niezależne od Ciebie, np. poinformowano cię w urzędzie, że aby uzyskać jakiś dokument potrzebujesz więcej czasu niż zakreślił Sąd, albo przebywasz na zwolnieniu lekarskim w czasie, gdy upływa termin. Możesz zacząć od słów: „Wynika to z…”'
+      - label: 'Chcę dołączyć dowody'
+        name: extension_reason_has_proof
+        type: checkbox
+        description: 'Nie jest to konieczne, ale jeśli masz jakieś dowody, np. zwolnienie lekarskie albo mail od osoby opiniującej, że wyda uzupełniającą opinię w późniejszym termieni, warto je załączyć'
+        subquestions:
+            - label: 'Wnoszę o dopuszczenie dowodu z:'
+              name: extension_reason_proof
+              type: textarea
+              description: 'Wymień dowody, jakimi dysponujesz. Jeśli masz więcej niż jeden, wymień każdy w oddzielnej linii'
+              showIf: {}

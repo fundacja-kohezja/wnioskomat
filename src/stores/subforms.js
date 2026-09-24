@@ -6,9 +6,13 @@ import serviceProxy from '../forms/posrednikDoreczen.yml'
 import addressChange from '../forms/zmianaAdresu.yml'
 import remoteTrial from '../forms/rozprawaZdalna.yml'
 import rescheduleTrial from '../forms/zmianaTerminuRozprawy.yml'
+import extendDeadline from '../forms/wydluzenieTerminu.yml'
 import urgency from '../forms/przyspieszenieSprawy.yml'
 import exemptionRejectionJustification from '../forms/uzasadnienieOddaleniaZwolnienia.yml'
+import requestCopy from '../forms/wydanieOdpisu.yml'
 import returnDocuments from '../forms/zwrotDokumentow.yml'
+import copyUrgency from '../forms/wyslanieDoUSC.yml'
+import rejectionJustification from '../forms/uzasadnienieOddalenia.yml'
 import useFormWithAnswers from '../composables/useFormWithAnswers'
 
 const config = {
@@ -29,9 +33,13 @@ export const useServiceProxyFormStore = defineStore('serviceProxyForm', () => us
 export const useAddressChangeFormStore = defineStore('addressChangeForm', () => useFormWithAnswers(addressChange), config)
 export const useRemoteTrialFormStore = defineStore('remoteTrialForm', () => useFormWithAnswers(remoteTrial), config)
 export const useRescheduleTrialFormStore = defineStore('rescheduleTrialForm', () => useFormWithAnswers(rescheduleTrial), config)
+export const useExtendDeadlineFormStore = defineStore('extendDeadlineForm', () => useFormWithAnswers(extendDeadline), config)
 export const useUrgencyFormStore = defineStore('urgencyForm', () => useFormWithAnswers(urgency), config)
 export const useExemptionRejectionJustificationFormStore = defineStore('exemptionRejectionJustificationForm', () => useFormWithAnswers(exemptionRejectionJustification), config)
+export const useRequestCopyFormStore = defineStore('requestCopyForm', () => useFormWithAnswers(requestCopy), config)
 export const useReturnDocumentsFormStore = defineStore('returnDocumentsForm', () => useFormWithAnswers(returnDocuments), config)
+export const useCopyUrgencyFormStore = defineStore('copyUrgencyForm', () => useFormWithAnswers(copyUrgency), config)
+export const useRejectionJustificationFormStore = defineStore('rejectionJustificationForm', () => useFormWithAnswers(rejectionJustification), config)
 
 export const subforms = [
     useMainApplicationFormStore,
@@ -40,7 +48,11 @@ export const subforms = [
     useAddressChangeFormStore,
     useRemoteTrialFormStore,
     useRescheduleTrialFormStore,
+    useExtendDeadlineFormStore,
     useUrgencyFormStore,
     useExemptionRejectionJustificationFormStore,
-    useReturnDocumentsFormStore
+    useRequestCopyFormStore,
+    useReturnDocumentsFormStore,
+    useCopyUrgencyFormStore,
+    useRejectionJustificationFormStore,
 ]
