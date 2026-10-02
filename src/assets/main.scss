@@ -667,6 +667,10 @@ a {
     margin-bottom: auto;
     gap: 3em;
     padding-bottom: 1em;
+
+    hr {
+        margin-block: 1.5em;
+    }
 }
 
 .side-nav {
@@ -856,6 +860,10 @@ a {
         display: flex;
         align-items: center;
         gap: 0.25em;
+    }
+
+    .generated-docs ~ & {
+        margin-top: 2em;
     }
 
     .next {
@@ -1416,39 +1424,31 @@ a {
 }
 
 .downloads-info {
-    margin-block: 1em;
+    margin-block: 0.75em;
     font-weight: 600;
-
-    + ul {
-        padding-left: 1.5em;
-
-         li {
-             margin-bottom: 0.5em;
-         }
-    }
 }
 
 .generated-docs {
     display: inline-flex;
     gap: 1em;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
     flex-direction: column;
 }
 
 .docs-instruction {
-    margin-top: 2em;
-    margin-bottom: 2.5em;
+    margin-top: 0.75em;
     display: flex;
     flex-direction: column;
     gap: 1em;
     max-width: 42em;
-    font-weight: 600;
-
-    details :not(summary) {
-        font-weight: 400;
-    }
 
     details b {
         font-weight: bold;
+    }
+
+    summary {
+        font-weight: 600;
     }
 
     li {
@@ -1465,6 +1465,15 @@ a {
         white-space: pre-wrap;
         margin-top: 0.25em;
         font-weight: 400;
+    }
+
+    + ul {
+        padding-left: 1.5em;
+        margin-block: 0.75em;
+
+         li {
+             margin-bottom: 0.5em;
+         }
     }
 
     .address {

@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n'
 import AnswerInput from './AnswerInput.vue'
 import DataSummary from './DataSummary.vue'
 import { isShown } from '../helpers/answers'
-import FileDownloads from './FileDownloads.vue'
+import DownloadsStep from './DownloadsStep.vue'
 
 const props = defineProps({
     formName: {
@@ -84,7 +84,7 @@ const nextStep = () => {
             />
         </form>
         <DataSummary v-else-if="hasSummary && currentIndex === steps.length" />
-        <FileDownloads v-else :name="formName" :store="formStore" />
+        <DownloadsStep v-else :name="formName" :store="formStore" />
         <nav class="prev-next">
             <button v-if="currentIndex > 0" class="btn-link prev" @click="prevStep">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" width="18" height="18">

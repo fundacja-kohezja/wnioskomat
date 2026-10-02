@@ -1,10 +1,10 @@
 <script setup>
-import { useExemptionFormStore, useMainApplicationFormStore } from '../stores/subforms'
-import generateStatementOfMeans from '../doc-generators/statementOfMeans'
-import generateExemption from '../doc-generators/exemption'
-import { initPdf } from '../doc-generators/pdf'
-import { initDocx } from '../doc-generators/docx'
-import GeneratedDoc from './GeneratedDoc.vue'
+import { useExemptionFormStore, useMainApplicationFormStore } from '@/stores/subforms'
+import generateStatementOfMeans from '@/doc-generators/statementOfMeans'
+import generateExemption from '@/doc-generators/exemption'
+import { initPdf } from '@/doc-generators/pdf'
+import { initDocx } from '@/doc-generators/docx'
+import FileDownloads from '../FileDownloads.vue'
 
 const mainApplicationFormStore = useMainApplicationFormStore()
 const exemptionFormStore = useExemptionFormStore()
@@ -25,8 +25,5 @@ const documents = [
 </script>
 
 <template>
-    <p class="downloads-info">Wydrukuj oba poniższe dokumenty i podpisz je – własnoręcznie i czytelnie</p>
-    <div class="generated-docs">
-        <GeneratedDoc v-for="document of documents" v-bind="document" />
-    </div>
+    <FileDownloads :documents="documents" />
 </template>

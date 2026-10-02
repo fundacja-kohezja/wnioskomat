@@ -1,0 +1,95 @@
+<script setup>
+import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
+
+import MainApplication from './file-downloads/MainApplication.vue'
+import ExemptionDownloads from './file-downloads/ExemptionDownloads.vue'
+import ServiceProxy from './file-downloads/ServiceProxy.vue'
+import AddressChange from './file-downloads/AddressChange.vue'
+import RemoteTrial from './file-downloads/RemoteTrial.vue'
+import RescheduleTrial from './file-downloads/RescheduleTrial.vue'
+import ExtendDeadline from './file-downloads/ExtendDeadline.vue'
+import UrgencyDownloads from './file-downloads/UrgencyDownloads.vue'
+import ExemptionRejectionJustification from './file-downloads/ExemptionRejectionJustification.vue'
+import RequestCopy from './file-downloads/RequestCopy.vue'
+import ReturnDocuments from './file-downloads/ReturnDocuments.vue'
+import CopyUrgency from './file-downloads/CopyUrgency.vue'
+import RejectionJustification from './file-downloads/RejectionJustification.vue'
+import CorrectionDownloads from './file-downloads/CorrectionDownloads.vue'
+
+const props = defineProps({
+    name: {
+        type: String,
+        required: true,
+    },
+    store: {
+        type: Object,
+        required: true,
+    },
+})
+
+const { t } = useI18n()
+
+const { ignoreWarning, anyInvalid, anyIncomplete } = storeToRefs(props.store)
+
+const components = {
+    mainApplication: MainApplication,
+    exemption: ExemptionDownloads,
+    serviceProxy: ServiceProxy,
+    addressChange: AddressChange,
+    remoteTrial: RemoteTrial,
+    rescheduleTrial: RescheduleTrial,
+    extendDeadline: ExtendDeadline,
+    urgency: UrgencyDownloads,
+    exemptionRejectionJustification: ExemptionRejectionJustification,
+    requestCopy: RequestCopy,
+    returnDocuments: ReturnDocuments,
+    copyUrgency: CopyUrgency,
+    correction: CorrectionDownloads,
+    rejectionJustification: RejectionJustification,
+}
+
+</script>
+
+<template>
+    <div class="confirm-message" v-if="!ignoreWarning && (anyInvalid || anyIncomplete)">
+        <template v-if="anyInvalid">
+            <div class="validation-message message">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="32" height="32">
+                    <title>{{ t('warning') }}</title>
+                    <path fill-rule="evenodd" d="M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                </svg>
+                <p>{{ t('some_invalid') }}</p>
+            </div>
+            <p>{{ t('some_invalid_0') }}<strong>{{ t('some_invalid_1') }}</strong>{{ t('some_invalid_2') }}</p>
+        </template>
+        <template v-else>
+            <div class="message">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="32" height="32">
+                    <title>{{ t('warning') }}</title>
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                </svg>
+                <p>{{ t('some_incomplete') }}</p>
+            </div>
+            <p>{{ t('some_incomplete_0') }}<strong>{{ t('some_incomplete_1') }}</strong>{{ t('some_incomplete_2') }}</p>
+        </template>
+        <div class="confirm-buttons">
+            <button class="btn" @click="ignoreWarning = true">
+                {{ t('generate_anyway') }}
+            </button>
+        </div>
+    </div>
+    <template v-else>
+        <h2>{{ t('documents_ready') }}</h2>
+        <div v-if="anyInvalid || anyIncomplete" class="box invalid-warning warning">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="32" height="32">
+                <title>{{ t('warning') }}</title>
+                <path fill-rule="evenodd" d="M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+            </svg>
+            <span>
+                {{ t('warning_generated_0') }}{{ anyInvalid && anyIncomplete ? t('warning_generated_1') : anyInvalid ? t('warning_generated_2') : t('warning_generated_3') }}{{ t('warning_generated_4') }}
+            </span>
+        </div>
+        <component :is="components[name]" />
+    </template>
+</template>
