@@ -150,9 +150,15 @@ const groups = {
         'rejectionJustification',
     ],
 }
+const groupMap = {}
+for (const group in groups) {
+    groups[group].forEach(form => {
+        groupMap[form] = group
+    })
+}
 
 const mainApplicationNavContainer = ref()
-const extraDocsNavContainer = ref()
+const groupContainers = ref({})
 const docNavContainers = ref({})
 
 const { currentForm, currentStep } = storeToRefs(useFormStore())
@@ -163,11 +169,18 @@ const changeStep = (form, step) => {
     history.pushState({ ...history.state, form: currentForm.value, step: currentStep.value }, '')
 }
 
+const closeAllNav = () => {
+    mainApplicationNavContainer.value.open = false
+    Object.values(groupContainers.value).forEach(el => el.open = false)
+    Object.values(docNavContainers.value).forEach(el => el.open = false)
+}
+
 const revealCurrentNavItem = () => {
     if (currentForm.value !== 'mainApplication' && currentForm.value !== 'furtherSteps') {
-        mainApplicationNavContainer.value.open = false
-        extraDocsNavContainer.value.open = true
+        groupContainers.value[groupMap[currentForm.value]].open = true
         docNavContainers.value[currentForm.value].open = true
+    } else {
+        mainApplicationNavContainer.value.open = true
     }
 }
 
@@ -175,12 +188,8 @@ useEventListener('popstate', event => {
     const { form, step } = event.state
     currentForm.value = form
     currentStep.value = step
-    if (currentForm.value === 'mainApplication') {
-        mainApplicationNavContainer.value.open = true
-        extraDocsNavContainer.value.open = false
-    } else {
-        revealCurrentNavItem()
-    }
+    closeAllNav()
+    revealCurrentNavItem()
 })
 
 watchEffect(() => {
@@ -197,8 +206,8 @@ onMounted(revealCurrentNavItem)
 <template>
     <div class="cols-layout">
         <nav class="side-nav">
-            <details open ref="mainApplicationNavContainer">
-                <summary><h2>{{ t('mainApplication') }}</h2></summary>
+            <details ref="mainApplicationNavContainer">
+                <summary class="main"><h2>{{ t('mainApplication') }}</h2></summary>
                 <StepStatuses
                     :steps="forms.mainApplication.data"
                     :formStore="forms.mainApplication.store"
@@ -210,20 +219,17 @@ onMounted(revealCurrentNavItem)
             <button class="nav-link" @click="changeStep('furtherSteps', 0)" :aria-current="currentForm === 'furtherSteps' ? true : undefined" :class="{ current: currentForm === 'furtherSteps' }">
                 {{ t('further_steps') }}
             </button>
-            <details ref="extraDocsNavContainer">
-                <summary><h2>{{ t('extra_documents') }}</h2></summary>
-                <template v-for="(group, title) in groups">
-                    <h3>{{ t(title) }}</h3>
-                    <details v-for="form of group" :ref="el => docNavContainers[form] = el">
-                        <summary><h4>{{ t(form) }}</h4></summary>
-                        <StepStatuses
-                            :steps="forms[form].data"
-                            :formStore="forms[form].store"
-                            :currentIndex="form === currentForm ? currentStep : undefined"
-                            @changeCurrentIndex="changeStep(form, $event)"
-                        />
-                    </details>
-                </template>
+            <details v-for="(group, title) in groups" :ref="el => groupContainers[title] = el">
+                <summary><h2>{{ t(title) }}</h2></summary>
+                <details v-for="form of group" :ref="el => docNavContainers[form] = el">
+                    <summary><h3>{{ t(form) }}</h3></summary>
+                    <StepStatuses
+                        :steps="forms[form].data"
+                        :formStore="forms[form].store"
+                        :currentIndex="form === currentForm ? currentStep : undefined"
+                        @changeCurrentIndex="changeStep(form, $event)"
+                    />
+                </details>
             </details>
         </nav>
         <FurtherSteps v-if="currentForm === 'furtherSteps'" />
