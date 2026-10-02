@@ -172,10 +172,20 @@ const shown = computed(() => !props.question.showIf || isShown(
             />
         </template>
     </div>
-    <details v-if="question.extraInfo" v-show="shown">
-        <summary>{{ question.extraInfo.title }}</summary>
-        <p v-for="paragraph of question.extraInfo.content">
-            {{ paragraph }}
-        </p>
-    </details>
+    <div v-if="question.extraInfo" v-show="shown" class="extra-info">
+        <template v-if="Array.isArray(question.extraInfo)">
+            <details v-for="({ title, content }) of question.extraInfo">
+                <summary>{{ title }}</summary>
+                <p v-for="paragraph of content">
+                    {{ paragraph }}
+                </p>
+            </details>
+        </template>
+        <details v-else>
+            <summary>{{ question.extraInfo.title }}</summary>
+            <p v-for="paragraph of question.extraInfo.content">
+                {{ paragraph }}
+            </p>
+        </details>
+    </div>
 </template>

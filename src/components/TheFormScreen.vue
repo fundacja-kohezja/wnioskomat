@@ -2,6 +2,7 @@
 import { onMounted, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
+import { useEventListener } from '@vueuse/core'
 
 import {
     useExemptionFormStore,
@@ -17,6 +18,7 @@ import {
     useRequestCopyFormStore,
     useCopyUrgencyFormStore,
     useRejectionJustificationFormStore,
+    useCorrectionFormStore,
 } from '../stores/subforms'
 import useFormStore from '../stores/form'
 import mainApplicationsFormData from '../forms/glownyWniosek.yml'
@@ -31,6 +33,7 @@ import exemptionRejectionJustificationFormData from '../forms/uzasadnienieOddale
 import requestCopyFormData from '../forms/wydanieOdpisu.yml'
 import returnDocumentsFormData from '../forms/zwrotDokumentow.yml'
 import copyUrgencyFormData from '../forms/wyslanieDoUSC.yml'
+import correctionFormData from '../forms/sprostowaniePostanowienia.yml'
 import rejectionJustificationFormData from '../forms/uzasadnienieOddalenia.yml'
 import StepStatuses from './StepStatuses.vue'
 import FormFields from './FormFields.vue'
@@ -52,6 +55,7 @@ const exemptionRejectionJustificationFormStore = useExemptionRejectionJustificat
 const requestCopyFormStore = useRequestCopyFormStore()
 const returnDocumentsFormStore = useReturnDocumentsFormStore()
 const copyUrgencyFormStore = useCopyUrgencyFormStore()
+const correctionFormStore = useCorrectionFormStore()
 const rejectionJustificationFormStore = useRejectionJustificationFormStore()
 
 const forms = {
@@ -115,6 +119,11 @@ const forms = {
         store: copyUrgencyFormStore,
         hasSummary: false,
     },
+    correction: {
+        data: correctionFormData,
+        store: correctionFormStore,
+        hasSummary: false,
+    },
     rejectionJustification: {
         data: rejectionJustificationFormData,
         store: rejectionJustificationFormStore,
@@ -137,6 +146,7 @@ const groups = {
         'requestCopy',
         'returnDocuments',
         'copyUrgency',
+        'correction',
         'rejectionJustification',
     ],
 }
@@ -150,20 +160,37 @@ const { currentForm, currentStep } = storeToRefs(useFormStore())
 const changeStep = (form, step) => {
     currentForm.value = form
     currentStep.value = step
+    history.pushState({ ...history.state, form: currentForm.value, step: currentStep.value }, '')
 }
+
+const revealCurrentNavItem = () => {
+    if (currentForm.value !== 'mainApplication' && currentForm.value !== 'furtherSteps') {
+        mainApplicationNavContainer.value.open = false
+        extraDocsNavContainer.value.open = true
+        docNavContainers.value[currentForm.value].open = true
+    }
+}
+
+useEventListener('popstate', event => {
+    const { form, step } = event.state
+    currentForm.value = form
+    currentStep.value = step
+    if (currentForm.value === 'mainApplication') {
+        mainApplicationNavContainer.value.open = true
+        extraDocsNavContainer.value.open = false
+    } else {
+        revealCurrentNavItem()
+    }
+})
 
 watchEffect(() => {
     if (!forms[currentForm.value] && currentForm.value !== 'furtherSteps') currentForm.value = 'mainApplication'
     if (!(currentStep.value >= 0) || !Number.isInteger(+currentStep.value)) currentStep.value = 0
 })
 
-onMounted(() => {
-    if (currentForm.value !== 'mainApplication' && currentForm.value !== 'furtherSteps') {
-        mainApplicationNavContainer.value.open = false
-        extraDocsNavContainer.value.open = true
-        docNavContainers.value[currentForm.value].open = true
-    }
-})
+history.replaceState({ ...history.state, form: currentForm.value, step: currentStep.value }, '')
+
+onMounted(revealCurrentNavItem)
 
 </script>
 

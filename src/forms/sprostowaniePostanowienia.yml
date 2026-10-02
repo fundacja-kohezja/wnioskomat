@@ -1,0 +1,51 @@
+- title: 'Dane do wniosku'
+  description: 'Tu wygenerujesz wniosek o sprostowanie, jeśli sąd pomylił się w wydanym postanowieniu, np. błędnie wpisując Twoje imię czy nazwisko.'
+  questions:
+      - label: 'Sygnatura sprawy'
+        name: case_id
+        description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - label: 'Nazwa wydziału'
+        name: court_department
+        description: 'Wydział sądu, który zajmuje się Twoją sprawą, np. Wydział VII Cywilny'
+      - label: 'Data wydania postanowienia'
+        name: issue_date
+        type: date
+        description: 'Widnieje na postanowieniu w prawym górnym rogu'
+      - label: 'Co jest błędnie napisane?'
+        name: corrected_field
+        type: radio_vertical
+        options:
+            firstname: 'Imię'
+            surname: 'Nazwisko'
+            birth_certificate_id: 'Numer aktu urodzenia'
+            new_firstname: 'Nowe imię (gdy wnioskował_ś o zmianę imienia)'
+            new_surname: 'Nowe nazwisko (gdy wnioskował_ś o zmianę nazwiska)'
+            something_else: 'Coś innego'
+      - label: 'Jak napisano błędnie w postanowieniu'
+        name: 'incorrect_value'
+        showIf:
+            answer: corrected_field
+            value: [firstname, surname, birth_certificate_id, new_firstname, new_surname]
+      - label: 'Jak powinno być poprawnie'
+        name: 'correct_value'
+        showIf:
+            answer: corrected_field
+            value: [firstname, surname, birth_certificate_id, new_firstname, new_surname]
+      - name: correction_1
+        prefix: 'w miejsce'
+        description: "Przykład:\nw miejsce imienia „Ana”"
+        showIf: { answer: corrected_field, value: something_else }
+      - name: correction_2
+        prefix: '…należy wpisać'
+        description: "Przykład:\n…należy wpisać „Anna”"
+        showIf: { answer: corrected_field, value: something_else }
+      - label: 'Co zamiast czego sąd błędnie wpisał?'
+        name: correction_3
+        type: textarea
+        description: "Zacznij od słów „Sąd błędnie…”. Przykłady:\nSąd błędnie wpisał jako właściwe, sprostowane imię X, zamiast żądanego przez wnioskodawczynię Y\nSąd błędnie oznaczył numer aktu urodzenia wskazując X zamiast Y"
+        showIf: { answer: corrected_field, value: something_else }
+      - label: 'Stan faktyczny'
+        name: correction_4
+        type: textarea
+        description: "Przykłady:\nimię wnioskodawcy to …\nwnioskodawczyni wnosiła już w piśmie inicjującym postępowanie o sprostowanie jej imienia i nazwiska na …"
+        showIf: { answer: corrected_field, value: something_else }

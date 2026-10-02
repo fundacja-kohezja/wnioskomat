@@ -7,6 +7,7 @@
       - label: 'Data wydania postanowienia'
         name: issue_date
         type: date
+        description: 'Widnieje na postanowieniu w prawym górnym rogu'
       - heading: 'Koszty sądowe'
         subheading: 'Wniosek podlega opłacie 100 zł. Możesz ją wnieść na konto sądu rejonowego, który wydał postanowienie wpisując jako tytuł przelewu „Opłata od wniosku o doręczenie postanowienia z uzasadnieniem w sprawie …”. Możesz też dokonać zakupu znaków sądowych na stronie Ministerstwa Sprawiedliwości.'
         label: 'Składał_m wcześniej wniosek o zwolenienie z kosztów sądowych i uzyskał_m zwolenienie w całości'

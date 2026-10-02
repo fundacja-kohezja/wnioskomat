@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 
@@ -37,6 +37,7 @@ const heading = ref()
 const currentStep = computed(() => props.steps[props.currentIndex])
 const isLastStep = computed(() => (props.hasSummary && props.currentIndex > props.steps.length) || (!props.hasSummary && props.currentIndex === props.steps.length))
 
+onMounted(() => heading.value.scrollIntoView({ block: 'nearest' }))
 watch(() => props.currentIndex, () => {
     nextTick(() => heading.value.scrollIntoView({ block: 'nearest' }))
 })

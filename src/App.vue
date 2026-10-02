@@ -1,7 +1,8 @@
 <script setup>
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { useEventListener } from '@vueuse/core'
 import { ModalsContainer, useModal } from 'vue-final-modal'
 
 import usePrefsStore from './stores/prefs'
@@ -26,7 +27,15 @@ const currentScreen = ref('start')
 
 const navigate = function (screen) {
     currentScreen.value = screen
+    history.pushState({ screen }, '')
 }
+
+history.replaceState({ screen: 'start' }, '')
+
+useEventListener('popstate', event => {
+    if (!event.state) return
+    currentScreen.value = event.state.screen
+})
 
 const { open: openHelp, close: closeHelp } = useModal({
     component: HelpModal,

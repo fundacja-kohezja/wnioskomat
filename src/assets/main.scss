@@ -1251,8 +1251,14 @@ a {
         }
     }
 
-    details {
+    .extra-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75em;
         max-width: 50em;
+    }
+
+    details {
         border: 1px solid light-dark($gray-300, $gray-750);
         border-radius: 4px;
 

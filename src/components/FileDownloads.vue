@@ -15,6 +15,7 @@ import CopyDownloads from './CopyDownloads.vue'
 import ReturnDownloads from './ReturnDownloads.vue'
 import CopyUrgencyDownloads from './CopyUrgencyDownloads.vue'
 import RejectionDownloads from './RejectionDownloads.vue'
+import CorrectionDownloads from './CorrectionDownloads.vue'
 
 const props = defineProps({
     name: {
@@ -44,6 +45,7 @@ const components = {
     requestCopy: CopyDownloads,
     returnDocuments: ReturnDownloads,
     copyUrgency: CopyUrgencyDownloads,
+    correction: CorrectionDownloads,
     rejectionJustification: RejectionDownloads,
 }
 

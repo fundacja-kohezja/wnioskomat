@@ -12,6 +12,7 @@ import exemptionRejectionJustification from '../forms/uzasadnienieOddaleniaZwoln
 import requestCopy from '../forms/wydanieOdpisu.yml'
 import returnDocuments from '../forms/zwrotDokumentow.yml'
 import copyUrgency from '../forms/wyslanieDoUSC.yml'
+import correction from '../forms/sprostowaniePostanowienia.yml'
 import rejectionJustification from '../forms/uzasadnienieOddalenia.yml'
 import useFormWithAnswers from '../composables/useFormWithAnswers'
 
@@ -39,6 +40,7 @@ export const useExemptionRejectionJustificationFormStore = defineStore('exemptio
 export const useRequestCopyFormStore = defineStore('requestCopyForm', () => useFormWithAnswers(requestCopy), config)
 export const useReturnDocumentsFormStore = defineStore('returnDocumentsForm', () => useFormWithAnswers(returnDocuments), config)
 export const useCopyUrgencyFormStore = defineStore('copyUrgencyForm', () => useFormWithAnswers(copyUrgency), config)
+export const useCorrectionFormStore = defineStore('correctionForm', () => useFormWithAnswers(correction), config)
 export const useRejectionJustificationFormStore = defineStore('rejectionJustificationForm', () => useFormWithAnswers(rejectionJustification), config)
 
 export const subforms = [
@@ -54,5 +56,6 @@ export const subforms = [
     useRequestCopyFormStore,
     useReturnDocumentsFormStore,
     useCopyUrgencyFormStore,
+    useCorrectionFormStore,
     useRejectionJustificationFormStore,
 ]
