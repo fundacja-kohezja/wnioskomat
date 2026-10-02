@@ -1,3 +1,29 @@
+- title: 'Podstawowe informacje'
+  description: 'Informacje, które były już podane w głównym wniosku. Jeśli był on generowany we Wnioskomacie, możesz automatycznie wypełnić tę sekcję tymi samymi danymi.'
+  questions:
+      - label: 'Zmieniasz oznaczenie płci na:'
+        name: new_mark
+        type: radio_featured
+        options:
+            K: 'K'
+            M: 'M'
+      - label: 'Twoja miejscowość'
+        name: city
+        description: 'Do wstawienia na górze dokumentu, obok bieżącej daty'
+      - label: 'Twój PESEL'
+        name: pesel
+        validation: pesel
+      - heading: 'Wybór sądu'
+        subheading: 'Wybierz sąd, który prowadzi Twoją sprawę'
+        label: 'Znajdź wpisując miejscowość/dzielnicę'
+        name: chosen_court
+        datalist: courts
+      - heading: 'Dane z aktu urodzenia'
+        label: 'Imię/imiona'
+        name: birth_name
+      - label: 'Nazwisko'
+        name: birth_surname
+
 - title: 'Informacje o sprawie'
   description: 'Ten wniosek składa się już po wysłaniu właściwego wniosku i rozpoczęciu postępowania, dlatego trzeba podać jego dane, by sąd wiedział której sprawy tyczy się dokument. Znajdziesz je na korespondencji z sądu albo ustalisz dzwoniąc do sądu na Biuro Obsługi Interesanta.'
   questions:
@@ -18,7 +44,6 @@
             - prefix: 'W związku z'
               name: exemption_other_reason
               showIf: { value: C }
-
 
 - title: 'Majątek i dochody'
   description: 'Tu wprowadzisz dane o swoim majątku i źródłach dochodu, które posłużą do wygenerowania oświadczenia o stanie majątkowym.'
@@ -318,7 +343,7 @@
         name: has_peer_expenses
         type: checkbox
         description: 'Jeżeli osoby, które prowadzą z Tobą wspólne gospodarstwo domowe, mają większe stałe wydatki lub zobowiązania, warto je opisać.'
-        showIf: { step: 1, answer: has_peers }
+        showIf: { step: 2, answer: has_peers }
         subquestions:
             - label: 'Opis tych wydatków'
               name: peer_expenses

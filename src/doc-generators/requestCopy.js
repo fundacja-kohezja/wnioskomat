@@ -1,11 +1,10 @@
 const normalize = text => (text || '').trim()
 
-export default (mainFormAnswers, requestCopyFormAnswers, documentCreatorInitializer) => {
+export default (requestCopyFormAnswers, documentCreatorInitializer) => {
 
     const a = {
-        ...mainFormAnswers[0],
-        ...mainFormAnswers[2],
         ...requestCopyFormAnswers[0],
+        ...requestCopyFormAnswers[1],
     }
 
     const { p, font, setLineHeight, complete, save } = documentCreatorInitializer()
@@ -32,6 +31,16 @@ export default (mainFormAnswers, requestCopyFormAnswers, documentCreatorInitiali
             spaceBefore: 5,
         })
         p([a.birth_name, a.birth_surname].map(normalize).join(' '), top)
+        if (a.is_new_address) {
+            p([a.new_address_1, a.new_address_2, (a.new_zip_code || '........') + ' ' + (a.new_city || '...................')]
+                .map(normalize)
+                .filter(x => x)
+                .join('\n'),
+            {
+                ...top,
+                mayBreak: true,
+            })
+        }
 
         p('Sygn. akt: '+ (normalize(a.case_id) || '......................'))
         p('WNIOSEK\no doręczenie odpisu prawomocnego postanowienia', {

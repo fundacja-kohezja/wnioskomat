@@ -4,13 +4,13 @@ import { estimateLines } from '@/helpers/misc'
 
 const normalize = text => (text || '').trim()
 
-export default (mainFormAnswers, exemptionFormAnswers, documentCreatorInitializer) => {
+export default (exemptionFormAnswers, documentCreatorInitializer) => {
 
     const a = {
-        ...mainFormAnswers[2],
         ...exemptionFormAnswers[0],
         ...exemptionFormAnswers[1],
         ...exemptionFormAnswers[2],
+        ...exemptionFormAnswers[3],
     }
 
     const { p, li, table, row, cell, font, setLineHeight, newPage, complete, save } = documentCreatorInitializer({

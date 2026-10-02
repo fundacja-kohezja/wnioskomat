@@ -3,12 +3,11 @@ import { courts } from '../helpers/datasets'
 
 const normalize = text => (text || '').trim()
 
-export default (mainFormAnswers, dealineFormAnswers, documentCreatorInitializer) => {
+export default (deadlineFormAnswers, documentCreatorInitializer) => {
 
     const a = {
-        ...mainFormAnswers[0],
-        ...mainFormAnswers[2],
-        ...dealineFormAnswers[0],
+        ...deadlineFormAnswers[0],
+        ...deadlineFormAnswers[1],
     }
 
     const { p, font, setLineHeight, complete, save } = documentCreatorInitializer()
@@ -50,14 +49,6 @@ export default (mainFormAnswers, dealineFormAnswers, documentCreatorInitializer)
         })
     })
     p([a.birth_name, a.birth_surname].map(normalize).join(' '), top)
-    p([a.address_1, a.address_2, (a.zip_code || '........') + ' ' + (a.city || '...................')]
-        .map(normalize)
-        .filter(x => x)
-        .join('\n'),
-    {
-        ...top,
-        mayBreak: true,
-    })
 
     font({ style: 'bold' }, () => {
         p('Sygn. akt: '+ (normalize(a.case_id) || '......................'))

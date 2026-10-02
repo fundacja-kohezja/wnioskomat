@@ -3,11 +3,9 @@ import { courts } from '../helpers/datasets'
 
 const normalize = text => (text || '').trim()
 
-export default (mainFormAnswers, addressFormAnswers, documentCreatorInitializer) => {
+export default (addressFormAnswers, documentCreatorInitializer) => {
 
     const a = {
-        ...mainFormAnswers[0],
-        ...mainFormAnswers[2],
         ...addressFormAnswers[0],
         ...addressFormAnswers[1],
     }

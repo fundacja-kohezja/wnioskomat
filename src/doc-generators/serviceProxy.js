@@ -1,8 +1,8 @@
 const normalize = text => (text || '').trim()
 
-export default (mainFormAnswers, documentCreatorInitializer, proxyFormAnswers) => {
+export default (answers, documentCreatorInitializer, isFromProxyForm) => {
 
-    const a = proxyFormAnswers ? { ...mainFormAnswers[2], ...proxyFormAnswers[0] } : { ...mainFormAnswers[2] }
+    const a = isFromProxyForm ? { ...answers[0] } : { ...answers[2] }
 
     const { p, font, setLineHeight, complete, save } = documentCreatorInitializer()
 
@@ -27,7 +27,7 @@ export default (mainFormAnswers, documentCreatorInitializer, proxyFormAnswers) =
     text += ', PESEL '
     text += (a.proxy_pesel || '......................')
     text += ' do dokonywania w moim imieniu niektórych czynności procesowych w postaci odbioru kierowanych do mnie pism sądowych '
-    if (proxyFormAnswers) {
+    if (isFromProxyForm) {
         text += 'w postępowaniu zawisłym przed ' + (normalize(a.chosen_court).replace('Sąd Rejonowy', 'Sądem Rejonowym') || 'Sądem Rejonowym w ...................') + ' pod sygnaturą akt ' + (normalize(a.case_id) || '......................')
     } else {
         text += 'w postępowaniu z mojego wniosku u sprostowanie aktu urodzenia'

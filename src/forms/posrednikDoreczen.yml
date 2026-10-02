@@ -4,6 +4,15 @@
       - label: 'Sygnatura sprawy'
         name: case_id
         description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
+      - heading: 'Podstawowe dane'
+        subheading: 'Informacje, które były już podane w głównym wniosku. Jeśli był on generowany we Wnioskomacie, możesz automatycznie wypełnić tę sekcję tymi samymi danymi.'
+        label: 'Wybierz sąd, który prowadzi Twoją sprawę'
+        name: chosen_court
+        description: 'Znajdź wpisując miejscowość/dzielnicę'
+        datalist: courts
+      - label: 'Twoja miejscowość'
+        name: city
+        description: 'Do wstawienia na górze dokumentu, obok bieżącej daty'
       - heading: 'Dane pełnomocnika'
         label: 'Imię i nazwisko'
         name: proxy_name

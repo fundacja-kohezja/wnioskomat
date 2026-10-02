@@ -3,13 +3,12 @@ import { courts } from '../helpers/datasets'
 
 const normalize = text => (text || '').trim()
 
-export default (mainFormAnswers, rescheduleFormAnswers, documentCreatorInitializer) => {
+export default (rescheduleFormAnswers, documentCreatorInitializer) => {
 
     const a = {
-        ...mainFormAnswers[0],
-        ...mainFormAnswers[2],
         ...rescheduleFormAnswers[0],
         ...rescheduleFormAnswers[1],
+        ...rescheduleFormAnswers[2],
     }
 
     const { p, font, setLineHeight, complete, save } = documentCreatorInitializer()
