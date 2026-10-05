@@ -5,7 +5,7 @@
         name: case_id
         description: 'Składa się z cyfry rzymskiej, wskazującej na numer wydziału, litery (najczęściej Ns) i numeru porządkowego zapisanego cyframi arabskimi, np. I Ns 100/25'
       - heading: 'Podstawowe dane'
-        subheading: 'Informacje, które były już podane w głównym wniosku. Jeśli był on generowany we Wnioskomacie, możesz automatycznie wypełnić tę sekcję tymi samymi danymi.'
+        subheading: 'Informacje, które były już podane w głównym wniosku.'
         label: 'Wybierz sąd, który prowadzi Twoją sprawę'
         name: chosen_court
         description: 'Znajdź wpisując miejscowość/dzielnicę'

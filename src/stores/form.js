@@ -7,7 +7,6 @@ export default defineStore('form', () => {
 
     const formStores = subforms.map(useStore => useStore())
 
-    /** @type import('vue').Ref< 'mainApplication' | 'exemption' | 'serviceProxy' | 'furtherSteps' > */
     const currentForm = ref('mainApplication')
     const currentStep = ref(0)
 

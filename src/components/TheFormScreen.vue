@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
+import { useModal } from 'vue-final-modal'
 import { useEventListener } from '@vueuse/core'
 
 import {
@@ -38,6 +39,7 @@ import rejectionJustificationFormData from '../forms/uzasadnienieOddalenia.yml'
 import StepStatuses from './StepStatuses.vue'
 import FormFields from './FormFields.vue'
 import FurtherSteps from './FurtherSteps.vue'
+import ConfirmModal from './modals/ConfirmModal.vue'
 
 const emit = defineEmits(['goToStart'])
 
@@ -163,6 +165,60 @@ const docNavContainers = ref({})
 
 const { currentForm, currentStep } = storeToRefs(useFormStore())
 
+const autofillStatus = computed(() => {
+    if (!forms[currentForm.value]) return
+    const populate = forms[currentForm.value].data[currentStep.value]?.populate
+    if (!populate) return
+
+    let areEmptyFieldsAvailableForAutofill = false
+    let areFilledFieldsAvailableForAutofill = false
+    for (const step of forms[populate.source].store.answers) {
+        for (const field of populate.fields) {
+            if (!step[field]) continue
+            const valueInCurrentForm = forms[currentForm.value].store.answers[currentStep.value][field]
+            if (!valueInCurrentForm) {
+                areEmptyFieldsAvailableForAutofill = true
+            } else if (valueInCurrentForm !== step[field]) {
+                areFilledFieldsAvailableForAutofill = true
+            }
+        }
+    }
+    if (areEmptyFieldsAvailableForAutofill && areFilledFieldsAvailableForAutofill) return 'replaceSome'
+    if (areEmptyFieldsAvailableForAutofill) return 'fill'
+    if (areFilledFieldsAvailableForAutofill) return 'replace'
+})
+
+const populateCurrentForm = (onlyEmptyFields = false) => {
+    const populate = forms[currentForm.value].data[currentStep.value].populate
+    const currentAnswers = forms[currentForm.value].store.answers[currentStep.value]
+    for (const answers of forms[populate.source].store.answers) {
+        for (const field of populate.fields) {
+            if (answers[field] && (!onlyEmptyFields || !currentAnswers[field])) {
+                currentAnswers[field] = answers[field]
+            }
+        }
+    }
+}
+
+const { open: openConfirmation, close } = useModal({
+    component: ConfirmModal,
+    attrs: {
+        message: computed(() => autofillStatus.value === 'replaceSome' ? 'Wypełnić tylko puste pola, czy wszystkie, zastępując to co już jest wpisane?' : ('W obecnym formularzu są już wpisane dane. Czy chcesz je zastąpić ' + forms[currentForm.value].data[currentStep.value].populate.label + '?')),
+        cancelLabel: computed(() => autofillStatus.value === 'replaceSome' ? 'Wypełnij puste' : 'Nie zastępuj'),
+        confirmLabel: computed(() => autofillStatus.value === 'replaceSome' ? 'Wypełnij wszystkie i zastąp' : ('Zastąp ' + forms[currentForm.value].data[currentStep.value].populate.label)),
+        onCancel() {
+            if (autofillStatus.value === 'replaceSome') {
+                populateCurrentForm(true)
+            }
+            close()
+        },
+        onConfirm() {
+            populateCurrentForm()
+            close()
+        },
+    },
+})
+
 const changeStep = (form, step) => {
     currentForm.value = form
     currentStep.value = step
@@ -240,10 +296,12 @@ onMounted(revealCurrentNavItem)
             :steps="forms[currentForm].data"
             :formStore="forms[currentForm].store"
             :hasSummary="forms[currentForm].hasSummary"
+            :populationAvailability="autofillStatus"
             :currentIndex="currentStep"
             @changeCurrentIndex="currentStep = $event"
             @decrementIndex="currentStep--"
             @incrementIndex="currentStep++"
+            @populate="() => { autofillStatus === 'fill' ? populateCurrentForm() : openConfirmation() }"
         />
     </div>
 </template>

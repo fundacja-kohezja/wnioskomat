@@ -1,5 +1,8 @@
 - title: 'Podstawowe informacje'
-  description: 'Informacje, które były już podane w głównym wniosku. Jeśli był on generowany we Wnioskomacie, możesz automatycznie wypełnić tę sekcję tymi samymi danymi.'
+  populate:
+      source: mainApplication
+      fields: [new_mark, city, chosen_court, birth_name, birth_surname]
+      label: 'danymi z głównego wniosku'
   questions:
       - label: 'Zmieniasz oznaczenie płci na:'
         name: new_mark

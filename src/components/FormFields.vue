@@ -25,9 +25,10 @@ const props = defineProps({
         type: Number,
     },
     hasSummary: Boolean,
+    populationAvailability: String,
 })
 
-const emit = defineEmits(['changeCurrentIndex', 'decrementIndex', 'incrementIndex'])
+const emit = defineEmits(['changeCurrentIndex', 'decrementIndex', 'incrementIndex', 'populate'])
 
 const { t } = useI18n()
 
@@ -69,6 +70,13 @@ const nextStep = () => {
         <div class="step-title" ref="heading">
             <template v-if="currentIndex < steps.length">
                 <h2>{{ currentStep.title }}</h2>
+                <button
+                    v-if="populationAvailability"
+                    class="btn"
+                    @click="emit('populate')"
+                >
+                    Wypełnij {{ currentStep.populate.label }}{{ populationAvailability === 'fill' ? '' : '…' }}
+                </button>
                 <p v-if="currentStep.description" class="step-description">{{ currentStep.description }}</p>
             </template>
             <h2 v-else-if="hasSummary && currentIndex === steps.length">{{ t('summary') }}</h2>

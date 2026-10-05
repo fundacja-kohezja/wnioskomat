@@ -895,6 +895,7 @@ a {
 }
 
 .questions {
+    flex-grow: 1;
 
     input,
     textarea,
@@ -1139,15 +1140,6 @@ a {
         > .btn {
             padding: 0.5em 1em;
             align-self: start;
-            background-color: light-dark($gray-50, $gray-800);
-
-            &:hover {
-                background-color: light-dark($white, $gray-750);
-            }
-
-            &:active {
-                background-color: light-dark($gray-100, $gray-900);
-            }
         }
 
         > .btn-secondary {
@@ -1234,6 +1226,34 @@ a {
     .step-title {
         margin-bottom: 0.5em;
         scroll-margin: 2em;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 1em;
+
+        .btn {
+            font-size: 14px;
+            padding: 0.4em 0.5em;
+        }
+
+        p {
+            width: 100%;
+        }
+    }
+
+    .repeater,
+    .step-title {
+
+        > .btn {
+            background-color: light-dark($gray-50, $gray-800);
+
+            &:hover {
+                background-color: light-dark($white, $gray-750);
+            }
+
+            &:active {
+                background-color: light-dark($gray-100, $gray-900);
+            }
+        }
     }
 
     .help-text,
