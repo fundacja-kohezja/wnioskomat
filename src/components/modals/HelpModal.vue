@@ -4,9 +4,9 @@ import { storeToRefs } from 'pinia'
 
 import BaseModal from './BaseModal.vue'
 import usePrefsStore from '../../stores/prefs'
-import HelpPl from './help/HelpPl.vue'
-import HelpEn from './help/HelpEn.vue'
-import HelpUk from './help/HelpUk.vue'
+import HelpPl from './help/HelpPl.md'
+import HelpEn from './help/HelpEn.md'
+import HelpUk from './help/HelpUk.md'
 
 const { t } = useI18n()
 

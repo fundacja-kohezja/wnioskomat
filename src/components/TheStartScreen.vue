@@ -49,7 +49,7 @@ const startOver = () => {
                 </svg>
             </button>
             <button v-if="anyAnswers" class="btn-secondary" @click="startOver">
-                {{ t('start_over') }}
+                {{ t('start_over') }}…
             </button>
         </div>
 

@@ -27,11 +27,14 @@
         label: 'Składam wniosek przed ukończeniem 18 lat, za pośrednictwem rodziców'
         name: is_underage
         type: checkbox
-        extraInfo:
-            title: 'Więcej informacji o przypadku osób niepełnoletnich'
-            content:
-                - 'Przed ukończeniem 18. roku życia nie można samodzielnie złożyć wniosku. Jeśli jesteś osobą niepełnoletnią, przed sądem muszą reprezentować Cię rodzice i to oni podpisują i składają wniosek. W kolejnych krokach podasz ich dane – Wnioskomat wszystko uwzględni i wygeneruje odpowiednio przygotowane dokumenty.'
-                - 'Jeśli jesteś w sytuacji, w której tylko jedno z Twoich rodziców zgadza się na postępowanie, a drugie nie, zmiana oznaczenia płci nadal jest możliwa, ale sprawa robi się trudniejsza – Wnioskomat nie jest przygotowany do takich przypadków, rekomendujemy wtedy kontakt z prawnikiem.'
+        extraInfo: |
+            :::spoiler Więcej informacji o przypadku osób niepełnoletnich
+
+            Przed ukończeniem 18. roku życia nie można samodzielnie złożyć wniosku. Jeśli jesteś osobą niepełnoletnią, przed sądem muszą reprezentować Cię rodzice i to oni podpisują i składają wniosek. W kolejnych krokach podasz ich dane – Wnioskomat wszystko uwzględni i wygeneruje odpowiednio przygotowane dokumenty.
+
+            Jeśli jesteś w sytuacji, w której tylko jedno z Twoich rodziców zgadza się na postępowanie, a drugie nie, zmiana oznaczenia płci nadal jest możliwa, ale sprawa robi się trudniejsza – Wnioskomat nie jest przygotowany do takich przypadków, rekomendujemy wtedy kontakt z prawnikiem.
+
+            :::
 
 - title: 'Potrzebne dokumenty'
   displayAsListInSummary: true

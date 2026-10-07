@@ -4,9 +4,9 @@ import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 
 import usePrefsStore from '../stores/prefs'
-import FurtherStepsPl from './further-steps/FurtherStepsPl.vue'
-import FurtherStepsEn from './further-steps/FurtherStepsEn.vue'
-import FurtherStepsUk from './further-steps/FurtherStepsUk.vue'
+import FurtherStepsPl from './further-steps/FurtherStepsPl.md'
+import FurtherStepsEn from './further-steps/FurtherStepsEn.md'
+import FurtherStepsUk from './further-steps/FurtherStepsUk.md'
 
 const { t } = useI18n()
 const { selectedLang } = storeToRefs(usePrefsStore())
@@ -24,6 +24,8 @@ onMounted(() => {
 <template>
     <div class="further-steps-wrap">
         <h2 ref="heading">{{ t('further_steps') }}</h2>
-        <component :is="furtherSteps[selectedLang]" />
+        <div class="further-steps">
+            <component :is="furtherSteps[selectedLang]" />
+        </div>
     </div>
 </template>

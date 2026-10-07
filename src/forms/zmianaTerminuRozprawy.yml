@@ -70,11 +70,15 @@
         options:
             A: 'zaświadczenie od lekarza sądowego'
             B: 'zwolenienie lekarskie'
-        extraInfo:
-            title: 'Jak uzyskać zaświadczenie od lekarza sądowego'
-            content:
-                - 'Spis lekarzy sądowych znajdziesz na stronie sądu okręgowego, pod który podlega sąd rejonowy, który prowadzi Twoją sprawę.'
-                - 'Musisz zadzwonić i umówić się na wizytę – jest to bezpłatne.'
+        extraInfo: |
+            :::spoiler Jak uzyskać zaświadczenie od lekarza sądowego
+
+            Spis lekarzy sądowych znajdziesz na stronie sądu okręgowego, pod który podlega sąd rejonowy, który prowadzi Twoją sprawę.
+
+            Musisz zadzwonić i umówić się na wizytę – jest to bezpłatne.
+
+            :::
+
       - label: 'Z czego wynika, że nie możesz stawić się w sądzie?'
         name: 'absence_explanation'
         type: textarea
