@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
-import { computed, reactive, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+import messages from '../locales/pl.json'
 
 export default defineStore('prefs', () => {
 
@@ -14,53 +16,61 @@ export default defineStore('prefs', () => {
     })
 
     // locale
-    const { locale, setLocaleMessage, messages } = useI18n()
+    const { locale, setLocaleMessage } = useI18n()
 
-    const selectedLang = ref(locale.value)
-    const localesStatus = reactive({})
+    // bring all commented code back when there are translations
 
-    const isInitialLocaleLoading = computed(() => messages.value[locale.value] && localesStatus[locale.value] === 'fetching')
-    const isCurrentLocaleLoading = computed(() => localesStatus[selectedLang.value] === 'fetching')
+    // const selectedLang = ref(locale.value)
+    // const localesStatus = reactive({})
 
-    const importLocale = (lang) => {
-        localesStatus[lang] = 'fetching'
-        import(`../locales/${lang}.json`)
-            .then(messages => {
-                setLocaleMessage(lang, messages)
-                localesStatus[lang] = 'ready'
-                if (selectedLang.value === lang) {
-                    locale.value = lang
-                }
-            })
-            .catch(() => {
-                localesStatus[lang] = 'error'
-            })
-    }
-    importLocale(locale.value)
+    // const isInitialLocaleLoading = computed(() => messages.value[locale.value] && localesStatus[locale.value] === 'fetching')
+    // const isCurrentLocaleLoading = computed(() => localesStatus[selectedLang.value] === 'fetching')
 
-    watch(selectedLang, lang => {
-        if (localStorage) {
-            localStorage.lang = lang
-        }
-        switch (localesStatus[lang]) {
-            case 'ready':
-                locale.value = lang
-                break
+    // const importLocale = (lang) => {
+    //     localesStatus[lang] = 'fetching'
+    //     import(`../locales/${lang}.json`)
+    //         .then(messages => {
+    //             setLocaleMessage(lang, messages)
+    //             localesStatus[lang] = 'ready'
+    //             if (selectedLang.value === lang) {
+    //                 locale.value = lang
+    //             }
+    //         })
+    //         .catch(() => {
+    //             localesStatus[lang] = 'error'
+    //         })
+    // }
+    // importLocale(locale.value)
 
-            case 'fetching':
-                break // do nothing, things will update when fetching finishes
+    // watch(selectedLang, lang => {
+    //     if (localStorage) {
+    //         localStorage.lang = lang
+    //     }
+    //     switch (localesStatus[lang]) {
+    //         case 'ready':
+    //             locale.value = lang
+    //             break
 
-            case 'error':
-            case undefined:
-                importLocale(lang)
-        }
-    })
+    //         case 'fetching':
+    //             break // do nothing, things will update when fetching finishes
 
-    watch(locale, lang => { window.updateLanguage(lang) })
+    //         case 'error':
+    //         case undefined:
+    //             importLocale(lang)
+    //     }
+    // })
+
+    // this global function updates lang attr on html tag and the <title>
+    // watch(locale, lang => { window.updateLanguage(lang) })
+
+
+    // temporary until there are translations to other langs than polish
+    locale.value = 'pl'
+    setLocaleMessage('pl', messages)
 
     return {
-        theme, localesStatus, selectedLang, // state
-        isInitialLocaleLoading, isCurrentLocaleLoading, // getters
-        importLocale, // actions
+        theme, // localesStatus, selectedLang, // state
+        // isInitialLocaleLoading, isCurrentLocaleLoading, // getters
+        // importLocale, // actions
     }
 })

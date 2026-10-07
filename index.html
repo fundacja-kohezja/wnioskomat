@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/src/assets/main.scss">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title></title>
+        <title>Wnioskomat</title>
         <script>
             window.updateTheme = function (theme) {
                 switch (theme) {
@@ -19,27 +19,8 @@
                 }
             }
 
-            window.updateLanguage = function (lang) {
-                switch (lang) {
-                    case 'en':
-                        document.documentElement.lang = 'en'
-                        // TODO wymyślić lepszą angielską nazwę Wnioskomatu
-                        document.head.querySelector('title').innerText = 'Request paper generator'
-                        break
-                    case 'uk':
-                        document.documentElement.lang = 'uk'
-                        // TODO wymyślić ukraińską nazwę Wnioskomatu, ta jest przeklejona z tłumacza
-                        document.head.querySelector('title').innerText = 'Заявка'
-                        break
-                    default:
-                        document.documentElement.lang = 'pl'
-                        document.head.querySelector('title').innerText = 'Wnioskomat'
-                }
-            }
-
             if (localStorage) {
                 updateTheme(localStorage.theme)
-                updateLanguage(localStorage.lang)
             }
         </script>
     </head>

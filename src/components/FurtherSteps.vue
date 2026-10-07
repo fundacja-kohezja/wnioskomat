@@ -1,18 +1,20 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { storeToRefs } from 'pinia'
+// import { storeToRefs } from 'pinia'
 
-import usePrefsStore from '../stores/prefs'
+// import usePrefsStore from '../stores/prefs'
 import FurtherStepsPl from './further-steps/FurtherStepsPl.md'
-import FurtherStepsEn from './further-steps/FurtherStepsEn.md'
-import FurtherStepsUk from './further-steps/FurtherStepsUk.md'
+// import FurtherStepsEn from './further-steps/FurtherStepsEn.md'
+// import FurtherStepsUk from './further-steps/FurtherStepsUk.md'
 
 const { t } = useI18n()
-const { selectedLang } = storeToRefs(usePrefsStore())
 
-// TODO load these dynamically?
-const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsUk }
+// bring commented code back when there are translations
+// const { selectedLang } = storeToRefs(usePrefsStore())
+
+// load these dynamically?
+// const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsUk }
 
 const heading = ref()
 onMounted(() => {
@@ -25,7 +27,8 @@ onMounted(() => {
     <div class="further-steps-wrap">
         <h2 ref="heading">{{ t('further_steps') }}</h2>
         <div class="further-steps">
-            <component :is="furtherSteps[selectedLang]" />
+            <!-- <component :is="furtherSteps[selectedLang]" /> -->
+            <FurtherStepsPl />
         </div>
     </div>
 </template>
