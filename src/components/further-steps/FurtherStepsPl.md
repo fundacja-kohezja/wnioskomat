@@ -8,7 +8,7 @@
 
     Sąd może wezwać Cię na rozprawę. Zdarza się to często i nie jest powodem do niepokoju.
 
-    Musisz stawić się na rozprawie w wyznaczonym terminie. Masz prawo, aby towarzyszyła ci wskazana przez ciebie osoba zaufana (osoba partnerska, przyjaciel itd.).
+    Musisz stawić się na rozprawie w wyznaczonym terminie. Jeśli nie jesteś w stanie tego zrobić, we Wnioskomacie możesz wygenerować <ToForm form=remoteTrial>wniosek o rozprawę zdalną</ToForm> lub <ToForm form=rescheduleTrial>zmianę terminu rozprawy</ToForm>. Masz prawo, aby na rozprawie towarzyszyła ci wskazana przez ciebie osoba zaufana (osoba partnerska, przyjaciel itd.).
 
     W trakcie rozprawy będzie konieczne odpowiedzenie na pytania sędziego dotyczące tranzycji i transpłciowości. Najczęściej pojawiają się pytania o imię, wiek, wykonywany zawód oraz o doświadczenie transpłciowości (np. o to, od jak dawna czujesz się w ten sposób lub jak długo funkcjonujesz w danej roli płciowej).
 
@@ -36,13 +36,19 @@
 
     Możesz odmówić poddania się badaniu czy odpowiedzi na te pytania. Niestety w takim przypadku zwiększa się prawdopodobieństwo wydania negatywnej opinii. Jeśli biegły uważa takie pytania czy poddanie cię badaniu za niezbędne, prawdopodobnie napisze w opinii, że odmówiono przejścia przez istotne procedury diagnostyczne, co uniemożliwiło postawienie diagnozy i udzielenie odpowiedzi na pytania sądu. W takiej sytuacji zalecamy kontakt z prawnikiem. Być może konieczne będzie złożenie wniosków o dopuszczenie dowodu z opinii innego biegłego i podjęcie dalszych kroków ukierunkowanych na zapobieżenie oddaleniu wniosku. Jeśli pytania czy działania biegłego są sprzeczne z aktualną wiedzą naukową, może ci też przysługiwać skarga do Rzecznika Praw Pacjenta czy wszczęcie procedury dyscyplinarnej wobec biegłego, o ile jest on lekarzem.
 
-    Standardowa opłata za pracę biegłego wynosi ok. 500–2000 zł, ale jeśli sędzia wniesie o opinie paru różnych specjalistów, to koszt może wzrosnąć. Po powołaniu biegłych możesz złożyć wniosek o zwolnienie z kosztów – po uwzględnieniu go przez sąd, koszty weźmie na siebie Skarb Państwa.
+    Standardowa opłata za pracę biegłego wynosi ok. 500–2000 zł, ale jeśli sędzia wniesie o opinie paru różnych specjalistów, to koszt może wzrosnąć. Po powołaniu biegłych możesz złożyć <ToForm form=exemption>wniosek o zwolnienie z kosztów</ToForm> (do wygenerowania we Wnioskomacie) – po uwzględnieniu go przez sąd, koszty weźmie na siebie Skarb Państwa.
+
+    :::
+
+    :::spoiler Nic się nie dzieje w mojej sprawie od dłuższego czasu
+
+    Jeśli Twoja sprawa od kilku miesięcy czasu wydaje się stać w miejscu, warto zadzwonić do Biura Obsługi Interesantów sądu, by dowiedzieć się, czy sąd poczynił jakieś postępy. Jeśli nie, możesz wygenerować i wysłać do sądu <ToForm form=urgency>ponaglenie</ToForm>.
 
     :::
 
     :::spoiler Mój wniosek o zwolnienie z kosztów sądowych został oddalony
 
-    W pierwszej kolejności pamiętaj, że musisz złożyć wniosek o doręczenie ci postanowienia oddalającego wniosek wraz z uzasadnieniem. Masz na to 7 dni od momentu, w którym postanowienie sądu zostanie ci doręczone.
+    W pierwszej kolejności pamiętaj, że musisz złożyć <ToForm form=exemptionRejectionJustification>wniosek o doręczenie postanowienia wraz z uzasadnieniem</ToForm>, który możesz wygenerować we Wnioskomacie. Masz na to 7 dni od momentu, w którym postanowienie sądu zostanie ci doręczone.
 
     Po otrzymaniu postanowienia wraz z uzasadnieniem, masz 7 dni na złożenie zażalenia od postanowienia sądu bądź skargi na orzeczenie referendarza sądowego (zwróć uwagę na otrzymane pismo: jeśli w tytule jest „postanowienie” i nazwa sądu, to wnosi się zażalenie, a jeśli wymieniony jest referendarz sądowy, to wnosi się skargę).
 
@@ -52,7 +58,7 @@
 
     :::spoiler Mój wniosek o sprostowanie aktu urodzenia został oddalony
 
-    Taka sytuacja jest mało prawdopodobna, ale jeśli nastąpiła, **natychmiast skontaktuj się z prawnikiem**, ponieważ jeśli nie podejmiesz działań w ciągu 7 dni, postanowienie sądu staje się prawomocne.
+    Taka sytuacja jest mało prawdopodobna, ale jeśli nastąpiła, natychmiast złóż <ToForm form=rejectionJustification>wniosek o doręczenie postanowienia wraz z uzasadnieniem</ToForm> (masz na to tylko 7 dni) i jak najszybciej **skontaktuj się z prawnikiem**, by przygotował zażalenie, ponieważ trzeba będzie je złożyć w terminie 7 dni od momentu otrzymania postanowienia wraz z uzasadnieniem.
 
     :::
     
@@ -76,7 +82,7 @@
 
     Niezależnie od tego, jak toczyło się postępowanie, wszystkie znane nam sprawy ostatecznie zawsze kończyły się pozytywnym rozpatrzeniem. Informacja przyjdzie do Ciebie pocztą.
 
-    Po uprawomocnieniu warto złożyć wniosek o wydanie odpisu postanowienia – przyda ci się przy wyrabianiu nowych dokumentów.
+    Po uprawomocnieniu warto złożyć <ToForm form=requestCopy>wniosek o wydanie odpisu postanowienia</ToForm> – przyda ci się przy wyrabianiu nowych dokumentów.
 
     :::spoiler Co jeśli sąd nie przychylił się do zmiany imienia?
 
@@ -86,7 +92,7 @@
 
 3.  #### Upewnij się, że sąd przekazał postanowienie do Urzędu Stanu Cywilnego
 
-    Informacja o nadaniu nowego numeru PESEL powinna przyjść do ciebie listownie, jeśli tak się nie stanie, dobrze jest skontaktować się z urzędem (w razie potrzeby również z sądem) telefonicznie.
+    Informacja o nadaniu nowego numeru PESEL powinna przyjść do ciebie listownie, jeśli tak się nie stanie, dobrze jest skontaktować się z urzędem (w razie potrzeby również z sądem) telefonicznie. W razie potrzeby możesz <ToForm form=copyUrgency>wygenerować ponaglenie</ToForm>.
 
 4.  #### Wymień wszystkie dokumenty na te z nowym PESELem
 

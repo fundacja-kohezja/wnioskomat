@@ -1,9 +1,9 @@
 <script setup>
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, provide, onMounted, ref, watchEffect, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { useModal } from 'vue-final-modal'
-import { useEventListener } from '@vueuse/core'
+import { useEventListener, useResizeObserver } from '@vueuse/core'
 
 import {
     useExemptionFormStore,
@@ -160,6 +160,7 @@ for (const group in groups) {
 }
 
 const mainApplicationNavContainer = ref()
+const sideNav = ref()
 const groupContainers = ref({})
 const docNavContainers = ref({})
 
@@ -241,6 +242,7 @@ const revealCurrentNavItem = () => {
 }
 
 useEventListener('popstate', event => {
+    if (!event.state) return
     const { form, step } = event.state
     currentForm.value = form
     currentStep.value = step
@@ -253,15 +255,36 @@ watchEffect(() => {
     if (!(currentStep.value >= 0) || !Number.isInteger(+currentStep.value)) currentStep.value = 0
 })
 
+provide('changeForm', (form, step = 0) => {
+    changeStep(form, step)
+    closeAllNav()
+    revealCurrentNavItem()
+})
+provide('openness', [])
+
 history.replaceState({ ...history.state, form: currentForm.value, step: currentStep.value }, '')
 
-onMounted(revealCurrentNavItem)
+const adjustSideNav = () => {
+    if (sideNav.value.getBoundingClientRect().height > window.innerHeight - 60) {
+        sideNav.value.style.position = 'static'
+    } else {
+        sideNav.value.style.position = 'sticky'
+    }
+}
+
+onMounted(() => {
+    revealCurrentNavItem()
+    nextTick(adjustSideNav)
+})
+
+useEventListener('resize', adjustSideNav)
+useResizeObserver(sideNav, adjustSideNav)
 
 </script>
 
 <template>
     <div class="cols-layout">
-        <nav class="side-nav">
+        <nav class="side-nav" ref="sideNav">
             <details ref="mainApplicationNavContainer">
                 <summary class="main"><h2>{{ t('mainApplication') }}</h2></summary>
                 <StepStatuses

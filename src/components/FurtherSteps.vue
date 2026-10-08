@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 // import { storeToRefs } from 'pinia'
 
@@ -17,8 +17,19 @@ const { t } = useI18n()
 // const furtherSteps = { pl: FurtherStepsPl, en: FurtherStepsEn, uk: FurtherStepsUk }
 
 const heading = ref()
+const content = ref()
+const openness = inject('openness')
 onMounted(() => {
     heading.value.scrollIntoView({ block: 'nearest' })
+    content.value.querySelectorAll('details').forEach((el, i) => {
+        el.open = openness[i]
+    })
+})
+
+onBeforeUnmount(() => {
+    content.value.querySelectorAll('details').forEach((el, i) => {
+        openness[i] = el.open
+    })
 })
 
 </script>
@@ -26,7 +37,7 @@ onMounted(() => {
 <template>
     <div class="further-steps-wrap">
         <h2 ref="heading">{{ t('further_steps') }}</h2>
-        <div class="further-steps">
+        <div class="further-steps" ref="content">
             <!-- <component :is="furtherSteps[selectedLang]" /> -->
             <FurtherStepsPl />
         </div>
