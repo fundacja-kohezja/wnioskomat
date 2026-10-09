@@ -56,61 +56,6 @@ $sky-700: #0369a1;
 $sky-800: #075985;
 $sky-900: #0c4a6e;
 
-$indigo-100: #e0e7ff;
-$indigo-200: #c7d2fe;
-$indigo-300: #a5b4fc;
-$indigo-400: #818cf8;
-$indigo-500: #6366f1;
-$indigo-600: #4f46e5;
-$indigo-650: #493fd8; // for button hover
-$indigo-700: #4338ca;
-$indigo-800: #3730a3;
-$indigo-900: #312e81;
-
-$violet-100: #ede9fe;
-$violet-200: #ddd6fe;
-$violet-300: #c4b5fd;
-$violet-400: #a78bfa;
-$violet-500: #8b5cf6;
-$violet-600: #7c3aed;
-$violet-650: #7531e3; // for button hover
-$violet-700: #6d28d9;
-$violet-800: #5b21b6;
-$violet-900: #4c1d95;
-
-$purple-100: #f3e8ff;
-$purple-200: #e9d5ff;
-$purple-300: #d8b4fe;
-$purple-400: #c084fc;
-$purple-500: #a855f7;
-$purple-600: #9333ea;
-$purple-650: #892bdc; // for button hover
-$purple-700: #7e22ce;
-$purple-800: #6b21a8;
-$purple-900: #581c87;
-
-$fuchsia-100: #fae8ff;
-$fuchsia-200: #f5d0fe;
-$fuchsia-300: #f0abfc;
-$fuchsia-400: #e879f9;
-$fuchsia-500: #d946ef;
-$fuchsia-600: #c026d3;
-$fuchsia-650: #b121c1; // for button hover
-$fuchsia-700: #a21caf;
-$fuchsia-800: #86198f;
-$fuchsia-900: #701a75;
-
-$pink-100: #fce7f3;
-$pink-200: #fbcfe8;
-$pink-300: #f9a8d4;
-$pink-400: #f472b6;
-$pink-500: #ec4899;
-$pink-600: #db2777;
-$pink-650: #cd206a; // for button hover
-$pink-700: #be185d;
-$pink-800: #9d174d;
-$pink-900: #831843;
-
 $red-50: #fef2f2;
 $red-100: #fee2e2;
 $red-200: #fecaca;
@@ -133,23 +78,21 @@ $amber-700: #b45309;
 $amber-800: #78350f;
 $amber-900: #451a03;
 
-// universally teal
-$ui-accent-light-500: $indigo-500;
-$ui-accent-light-600: $indigo-600;
-$ui-accent-light-650: $indigo-650;
-$ui-accent-light-700: $indigo-700;
-$ui-accent-light-800: $indigo-800;
-$ui-accent-light-900: $indigo-900;
+$ui-accent-light-500: $teal-500;
+$ui-accent-light-600: $teal-600;
+$ui-accent-light-650: $teal-650;
+$ui-accent-light-700: $teal-700;
+$ui-accent-light-800: $teal-800;
+$ui-accent-light-900: $teal-900;
 
-// universally emerald
-$ui-accent-dark-200: $violet-200;
-$ui-accent-dark-300: $violet-300;
-$ui-accent-dark-400: $violet-400;
-$ui-accent-dark-500: $violet-500;
-$ui-accent-dark-600: $violet-600;
-$ui-accent-dark-650: $violet-650;
-$ui-accent-dark-700: $violet-700;
-$ui-accent-dark-800: $violet-800;
+$ui-accent-dark-200: $emerald-200;
+$ui-accent-dark-300: $emerald-300;
+$ui-accent-dark-400: $emerald-400;
+$ui-accent-dark-500: $emerald-500;
+$ui-accent-dark-600: $emerald-600;
+$ui-accent-dark-650: $emerald-650;
+$ui-accent-dark-700: $emerald-700;
+$ui-accent-dark-800: $emerald-800;
 
 :root {
     color-scheme: light dark;
