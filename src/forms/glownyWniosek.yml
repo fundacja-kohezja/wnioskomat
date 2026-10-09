@@ -148,7 +148,7 @@
         description: 'Dokumenty pokazujące trwałą indetyfikację z daną płcią – mogą być to zrzuty ekranu z facebooka/instagrama, zdjęcie identyfikatora z miejsca pracy, wydruki z portalu USOS.'
         subquestions:
             - name: proving_documents_type
-              type: radio
+              type: radio_vertical
               showIf: {}
               options:
                   A: 'wydruk z portali społecznościowych'

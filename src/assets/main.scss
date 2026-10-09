@@ -56,25 +56,60 @@ $sky-700: #0369a1;
 $sky-800: #075985;
 $sky-900: #0c4a6e;
 
+$indigo-100: #e0e7ff;
+$indigo-200: #c7d2fe;
+$indigo-300: #a5b4fc;
+$indigo-400: #818cf8;
+$indigo-500: #6366f1;
+$indigo-600: #4f46e5;
+$indigo-650: #493fd8; // for button hover
+$indigo-700: #4338ca;
+$indigo-800: #3730a3;
+$indigo-900: #312e81;
+
+$violet-100: #ede9fe;
+$violet-200: #ddd6fe;
+$violet-300: #c4b5fd;
+$violet-400: #a78bfa;
+$violet-500: #8b5cf6;
+$violet-600: #7c3aed;
+$violet-650: #7531e3; // for button hover
+$violet-700: #6d28d9;
+$violet-800: #5b21b6;
+$violet-900: #4c1d95;
+
+$purple-100: #f3e8ff;
+$purple-200: #e9d5ff;
+$purple-300: #d8b4fe;
+$purple-400: #c084fc;
+$purple-500: #a855f7;
+$purple-600: #9333ea;
+$purple-650: #892bdc; // for button hover
+$purple-700: #7e22ce;
+$purple-800: #6b21a8;
+$purple-900: #581c87;
+
 $fuchsia-100: #fae8ff;
 $fuchsia-200: #f5d0fe;
 $fuchsia-300: #f0abfc;
 $fuchsia-400: #e879f9;
 $fuchsia-500: #d946ef;
 $fuchsia-600: #c026d3;
+$fuchsia-650: #b121c1; // for button hover
 $fuchsia-700: #a21caf;
 $fuchsia-800: #86198f;
 $fuchsia-900: #701a75;
 
-$amber-100: #fef3c7;
-$amber-200: #fde68a;
-$amber-300: #fcd34d;
-$amber-400: #fbbf24;
-$amber-500: #f59e0b;
-$amber-600: #d97706;
-$amber-700: #b45309;
-$amber-800: #78350f;
-$amber-900: #451a03;
+$pink-100: #fce7f3;
+$pink-200: #fbcfe8;
+$pink-300: #f9a8d4;
+$pink-400: #f472b6;
+$pink-500: #ec4899;
+$pink-600: #db2777;
+$pink-650: #cd206a; // for button hover
+$pink-700: #be185d;
+$pink-800: #9d174d;
+$pink-900: #831843;
 
 $red-50: #fef2f2;
 $red-100: #fee2e2;
@@ -87,6 +122,34 @@ $red-700: #b91c1c;
 $red-800: #991b1b;
 $red-900: #7f1d1d;
 $red-950: #450a0a;
+
+$amber-100: #fef3c7;
+$amber-200: #fde68a;
+$amber-300: #fcd34d;
+$amber-400: #fbbf24;
+$amber-500: #f59e0b;
+$amber-600: #d97706;
+$amber-700: #b45309;
+$amber-800: #78350f;
+$amber-900: #451a03;
+
+// universally teal
+$ui-accent-light-500: $indigo-500;
+$ui-accent-light-600: $indigo-600;
+$ui-accent-light-650: $indigo-650;
+$ui-accent-light-700: $indigo-700;
+$ui-accent-light-800: $indigo-800;
+$ui-accent-light-900: $indigo-900;
+
+// universally emerald
+$ui-accent-dark-200: $violet-200;
+$ui-accent-dark-300: $violet-300;
+$ui-accent-dark-400: $violet-400;
+$ui-accent-dark-500: $violet-500;
+$ui-accent-dark-600: $violet-600;
+$ui-accent-dark-650: $violet-650;
+$ui-accent-dark-700: $violet-700;
+$ui-accent-dark-800: $violet-800;
 
 :root {
     color-scheme: light dark;
@@ -102,7 +165,7 @@ body {
     color: light-dark($gray-950, $gray-200);
     background-color: light-dark($white, $gray-900);
     height: 100%;
-    accent-color: light-dark($teal-600, $emerald-600);
+    accent-color: light-dark($ui-accent-light-600, $ui-accent-dark-600);
 }
 
 #app {
@@ -147,6 +210,7 @@ fieldset {
     margin: 0;
     padding: 0;
     border: none;
+    position: relative;
 }
 
 hr {
@@ -155,8 +219,26 @@ hr {
     border-top: 1px solid light-dark($gray-200, $gray-800);
 }
 
+@media (max-width: 48em) {
+
+    .mobile-collapse {
+        display: none;
+    }
+}
+
 .padding-x {
-    padding-inline: 2rem;
+    padding-inline: 1rem;
+
+    &.top-bar {
+        padding-inline: 0.5rem;
+    }
+
+    @media (min-width: 36em) {
+
+        &, &.top-bar {
+            padding-inline: 2rem;
+        }
+    }
 }
 
 .invisible {
@@ -169,6 +251,7 @@ hr {
     border-bottom: 1px solid light-dark($gray-300, $gray-800);
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 1.5em;
 
     label span,
@@ -178,9 +261,58 @@ hr {
         font-weight: 700;
     }
 
+    @media (pointer: coarse) {
+
+        .buttons-group label,
+        .btn {
+            padding-block: 0.5em;
+            box-sizing: border-box;
+            min-width: 4em;
+        }
+    }
+
     .section {
         display: flex;
-        gap: 0.75em;
+        gap: 0.25em;
+
+        &.buttons-group {
+            padding-left: 0.25em;
+        }
+
+        @media (min-width: 36em) {
+            gap: 0.75em;
+        }
+    }
+
+    @media (max-width: 48em) {
+
+        .show-menu:not(:checked) + label + .section.mobile-collapse {
+            display: none;
+        }
+
+        .show-menu:checked + label + .section.mobile-collapse {
+            flex-direction: column;
+            gap: 0.75em;
+            position: absolute;
+            right: 0.5em;
+            background-color: light-dark($white, $gray-900);
+            padding: 0.75em;
+            border-radius: 6px;
+            box-shadow: 0 0.25em 1.0em 0.15em light-dark(rgba(#000, 0.15), rgba(#000, 1));
+            z-index: 4;
+
+            .fade-in {
+                animation: none;
+            }
+
+            .btn {
+                min-height: 2.5em;
+
+                @media (pointer: coarse) {
+                    min-height: 3em;
+                }
+            }
+        }
     }
 
     hr {
@@ -200,8 +332,94 @@ hr {
         margin-top: 0.4em;
         padding: 0;
 
+        @media (pointer: coarse) {
+            margin-top: 0.6em;
+        }
+
         svg {
             margin-top: -0.15em;
+        }
+    }
+}
+
+@media (max-width: 48em) {
+
+    .show-menu {
+
+        + label + div.buttons-group {
+            display: none;
+        }
+
+        &:checked + label + div.buttons-group {
+            display: flex;
+            position: absolute;
+            background-color: light-dark($white, $gray-900);
+            padding: 0.5em;
+            border-radius: 6px;
+            box-shadow: 0 0.25em 1.0em 0.15em light-dark(rgba(#000, 0.15), rgba(#000, 1));
+            z-index: 4;
+            transform: translateY(0.5em);
+        }
+    }
+}
+
+.show-menu {
+    appearance: none;
+    position: absolute;
+    inset: 0;
+
+    &#show-menu:not(:checked) {
+        inset: auto 0 auto auto;
+    }
+
+    &:checked {
+        position: fixed;
+        z-index: 3;
+    }
+
+    + label {
+        color: light-dark($ui-accent-light-600, $ui-accent-dark-600);
+
+        svg {
+            margin-top: 0.5em;
+
+            @media (pointer: coarse) {
+                margin-top: 0.7em;
+            }
+        }
+
+        &.dots {
+            border-left: 1px solid light-dark($gray-200, $gray-800);
+            padding-left: 0.5em;
+
+            svg {
+                margin: 0.25em;
+                display: block;
+
+                @media (pointer: coarse) {
+                    margin: 0.4em;
+                }
+            }
+        }
+    }
+
+    &:hover + label {
+        color: light-dark($ui-accent-light-500, $ui-accent-dark-400);
+    }
+
+    &:active + label {
+        color: light-dark($ui-accent-light-700, $ui-accent-dark-700);
+    }
+
+    &:checked + label svg {
+        transform: rotate(180deg);
+    }
+
+    &, & + label {
+        display: none;
+
+        @media (max-width: 48em) {
+            display: inline;
         }
     }
 }
@@ -222,11 +440,40 @@ hr {
     animation: fadeIn 0.5s;
 }
 
+.mobile-only {
+    display: none;
+
+    @media (max-width: 48em) {
+        display: block;
+    }
+}
+
+.sr-only {
+    position:absolute;
+    left:-10000px;
+    top:auto;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+}
+
 .indicator {
     font-size: 12px;
     display: flex;
     align-items: center;
     gap: 0.25em;
+
+    &.mobile-only {
+        display: none;
+        appearance: none;
+        background-color: transparent;
+        border: none;
+
+        @media (max-width: 48em) {
+            display: flex;
+            margin-left: auto;
+        }
+    }
 }
 
 .vfm--fixed{position:fixed}
@@ -296,7 +543,7 @@ hr {
 .buttons-group label,
 .btn {
     background-color: light-dark($gray-100, $gray-800);
-    color: light-dark($teal-800, $emerald-300);
+    color: light-dark($ui-accent-light-800, $ui-accent-dark-300);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -304,12 +551,12 @@ hr {
 
     &:hover {
         background-color: light-dark($gray-50, $gray-750);
-        color: light-dark($teal-700, $emerald-200);
+        color: light-dark($ui-accent-light-700, $ui-accent-dark-200);
     }
 
     &:active {
         background-color: light-dark($gray-200, $gray-900);
-        color: light-dark($teal-800, $emerald-300);
+        color: light-dark($ui-accent-light-800, $ui-accent-dark-300);
     }
 }
 
@@ -325,12 +572,11 @@ hr {
 
     label {
         background-color: light-dark($gray-100, $gray-800);
-        color: light-dark($teal-800, $emerald-300);
+        color: light-dark($ui-accent-light-800, $ui-accent-dark-300);
         position: relative;
         padding: 0.15em 0.75em;
         min-width: 2.25em;
         min-height: 1.75em;
-        overflow: hidden;
 
         &:first-child,
         &:first-child input {
@@ -350,8 +596,8 @@ hr {
             border: 1px solid light-dark($gray-300, $gray-700);
 
             &:checked {
-                background-color: light-dark($teal-700, $emerald-700);
-                border: 2px solid light-dark($teal-900, $emerald-600);
+                background-color: light-dark($ui-accent-light-700, $ui-accent-dark-700);
+                border: 2px solid light-dark($ui-accent-light-900, $ui-accent-dark-600);
 
                 + span,
                 + svg {
@@ -364,6 +610,14 @@ hr {
         svg {
             position: relative;
             z-index: 1;
+        }
+    }
+
+    &.stretched {
+        margin-bottom: 0.5em;
+
+        label {
+            flex-grow: 1;
         }
     }
 }
@@ -400,18 +654,18 @@ hr {
         pointer-events: none;
 
         .part {
-            color: light-dark($teal-700, $emerald-400);
+            color: light-dark($ui-accent-light-700, $ui-accent-dark-400);
             font-weight: 700;
             text-decoration: underline;
         }
     }
 
     &:hover + &-help-text .part {
-        color: light-dark($teal-650, $emerald-300);
+        color: light-dark($ui-accent-light-650, $ui-accent-dark-300);
     }
 
     &:active + &-help-text .part {
-        color: light-dark($teal-800, $emerald-500);
+        color: light-dark($ui-accent-light-800, $ui-accent-dark-500);
     }
 }
 
@@ -468,6 +722,15 @@ hr {
     font-size: inherit;
 }
 
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-destructive,
+input[type=radio],
+input[type=checkbox] {
+    outline-offset: 2px;
+}
+
 .base-modal .btn,
 .btn-primary,
 .btn-destructive {
@@ -479,16 +742,16 @@ hr {
 }
 
 .btn-primary {
-    background-color: light-dark($teal-700, $emerald-700);
+    background-color: light-dark($ui-accent-light-700, $ui-accent-dark-700);
     color: $white;
     border: none;
 
     &:hover {
-        background-color: light-dark($teal-650, $emerald-650);
+        background-color: light-dark($ui-accent-light-650, $ui-accent-dark-650);
     }
 
     &:active {
-        background-color: light-dark($teal-800, $emerald-800);
+        background-color: light-dark($ui-accent-light-800, $ui-accent-dark-800);
     }
 }
 
@@ -516,21 +779,21 @@ hr {
 
 .btn-secondary {
     background-color: transparent;
-    border: 2px solid light-dark($teal-700, $emerald-700);
-    color: light-dark($teal-800, $gray-200);
+    border: 2px solid light-dark($ui-accent-light-700, $ui-accent-dark-700);
+    color: light-dark($ui-accent-light-800, $gray-200);
     padding: 0.25em 1em;
     border-radius: 4px;
 
     &:hover {
-        border-color: light-dark($teal-650, $emerald-650);
-        box-shadow: 0 0 0 1px light-dark($teal-650, $emerald-650) inset;
-        color: light-dark($teal-700, $gray-100);
+        border-color: light-dark($ui-accent-light-650, $ui-accent-dark-650);
+        box-shadow: 0 0 0 1px light-dark($ui-accent-light-650, $ui-accent-dark-650) inset;
+        color: light-dark($ui-accent-light-700, $gray-100);
     }
 
     &:active {
-        border-color: light-dark($teal-700, $emerald-800);
-        box-shadow: 0 0 0 1px light-dark($teal-700, $emerald-700) inset;
-        color: light-dark($teal-800, $gray-300);
+        border-color: light-dark($ui-accent-light-700, $ui-accent-dark-800);
+        box-shadow: 0 0 0 1px light-dark($ui-accent-light-700, $ui-accent-dark-700) inset;
+        color: light-dark($ui-accent-light-800, $gray-300);
         background-color: rgba(#000, 0.04);
     }
 }
@@ -550,14 +813,14 @@ hr {
 }
 
 .btn-link {
-    color: light-dark($teal-700, $emerald-400);
+    color: light-dark($ui-accent-light-700, $ui-accent-dark-400);
 
     &:hover {
-        color: light-dark($teal-650, $emerald-300);
+        color: light-dark($ui-accent-light-650, $ui-accent-dark-300);
     }
 
     &:active {
-        color: light-dark($teal-800, $emerald-500);
+        color: light-dark($ui-accent-light-800, $ui-accent-dark-500);
     }
 }
 
@@ -668,24 +931,95 @@ a {
 
 .cols-layout {
     display: flex;
+    flex-direction: column;
     margin-bottom: auto;
-    gap: 3em;
+    gap: 1.5em 3em;
     padding-bottom: 1em;
+
+    @media (min-width: 54em) {
+        flex-direction: row;
+    }
 
     hr {
         margin-block: 1.5em;
     }
 }
 
+#show-side-nav {
+    appearance: none;
+    vertical-align: top;
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3.75em;
+    transform: translateY(-1em);
+
+    &:checked + div {
+        display: none;
+
+        + * {
+            margin-top: 1.5em;
+        }
+    }
+
+    &:not(:checked) + div ~ * {
+        display: none;
+
+        @media (min-width: 54em) {
+            display: block;
+        }
+    }
+
+    + div {
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 0.15em;
+        margin-left: 0.5em;
+        font-weight: 500;
+    }
+}
+
+@media (min-width: 54em) {
+
+    #show-side-nav,
+    .show-side-nav-label,
+    #show-side-nav + div {
+        display: none;
+    }
+
+    #show-side-nav:checked + div + * {
+        margin-top: 0;
+    }
+}
+
 .side-nav {
-    width: 18em;
-    flex-shrink: 0;
-    border-right: 1px solid light-dark($gray-300, $gray-800);
-    align-self: start;
-    position: sticky;
-    top: 2em;
     padding-right: 0.75em;
+    padding-bottom: 1.5em;
     box-sizing: border-box;
+    border-bottom: 1px solid light-dark($gray-300, $gray-800);
+
+    &:has(#show-side-nav:checked) {
+        border-bottom: none;
+
+        ~ * {
+            display: none;
+        }
+    }
+
+    @media (min-width: 54em) {
+        width: 18em;
+        align-self: start;
+        flex-shrink: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+        border-right: 1px solid light-dark($gray-300, $gray-800);
+        position: sticky;
+        top: 2em;
+
+        &:has(#show-side-nav:checked) ~ * {
+            display: flex;
+        }
+    }
 
     h2, h3 {
         margin-left: 1.5rem;
@@ -767,7 +1101,7 @@ a {
         }
     }
 
-    > details:not(:first-child) {
+    > details:not(.first) {
         margin-top: 2em;
     }
 
@@ -778,11 +1112,11 @@ a {
         color: inherit;
 
         &:hover {
-            text-decoration-color: light-dark($teal-600, $emerald-500);
+            text-decoration-color: light-dark($ui-accent-light-600, $ui-accent-dark-500);
         }
 
         &:active {
-            text-decoration-color: light-dark($teal-800, $emerald-700);
+            text-decoration-color: light-dark($ui-accent-light-800, $ui-accent-dark-700);
         }
     }
 
@@ -802,10 +1136,6 @@ a {
         svg {
             color: light-dark($gray-400, $gray-600);
         }
-    }
-
-    > * + * {
-        margin-top: 1.25em;
     }
 
     > .nav-link {
@@ -979,17 +1309,17 @@ a {
             }
 
             &:checked {
-                background-color: light-dark($teal-600, $emerald-700);
-                border: 1px solid light-dark($teal-700, $emerald-650);
+                background-color: light-dark($ui-accent-light-600, $ui-accent-dark-700);
+                border: 1px solid light-dark($ui-accent-light-700, $ui-accent-dark-650);
 
                 &:hover {
-                    background-color: light-dark($teal-650, $emerald-650);
-                    border: 1px solid light-dark($teal-700, $emerald-600);
+                    background-color: light-dark($ui-accent-light-650, $ui-accent-dark-650);
+                    border: 1px solid light-dark($ui-accent-light-700, $ui-accent-dark-600);
                 }
 
                 &:active {
-                    background-color: light-dark($teal-700, $emerald-600);
-                    border: 1px solid light-dark($teal-800, $emerald-500);
+                    background-color: light-dark($ui-accent-light-700, $ui-accent-dark-600);
+                    border: 1px solid light-dark($ui-accent-light-800, $ui-accent-dark-500);
                 }
 
                 &:disabled {
@@ -1026,7 +1356,9 @@ a {
 
     .is-row {
         display: flex;
+        flex-wrap: wrap;
         max-width: 36em;
+        gap: 1em;
 
         > .text-input:first-child {
             max-width: 8em;
@@ -1035,6 +1367,7 @@ a {
         .subquestion {
             flex-grow: 1;
             margin-top: 0;
+            margin-left: 0;
         }
     }
 
@@ -1402,7 +1735,12 @@ a {
 
     &-lists {
         display: flex;
-        gap: 2em;
+        gap: 1em 2em;
+        flex-direction: column;
+
+        @media (min-width: 78em) {
+            flex-direction: row;
+        }
     }
 
     &-list,
@@ -1546,12 +1884,12 @@ summary {
 
     &::marker {
         content: '';
-        color: light-dark($teal-600, $emerald-600);
+        color: light-dark($ui-accent-light-600, $ui-accent-dark-600);
     }
 
     &::-webkit-details-marker {
         display: none;
-        color: light-dark($teal-600, $emerald-600);
+        color: light-dark($ui-accent-light-600, $ui-accent-dark-600);
     }
 
     &::before {
@@ -1559,18 +1897,18 @@ summary {
         width: 0.5em;
         height: 0.5em;
         display: inline-block;
-        border-top: 2px solid light-dark($teal-600, $emerald-600);
-        border-right: 2px solid light-dark($teal-600, $emerald-600);
+        border-top: 2px solid light-dark($ui-accent-light-600, $ui-accent-dark-600);
+        border-right: 2px solid light-dark($ui-accent-light-600, $ui-accent-dark-600);
         transform: rotate(45deg);
         margin-right: 0.75em;
     }
 
     &:hover::before {
-        border-color: light-dark($teal-500, $emerald-400);
+        border-color: light-dark($ui-accent-light-500, $ui-accent-dark-400);
     }
 
     &:active::before {
-        border-color: light-dark($teal-700, $emerald-700);
+        border-color: light-dark($ui-accent-light-700, $ui-accent-dark-700);
     }
 }
 

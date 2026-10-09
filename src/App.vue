@@ -8,7 +8,7 @@ import { ModalsContainer, useModal } from 'vue-final-modal'
 // import usePrefsStore from './stores/prefs'
 import useFormStore from './stores/form'
 // import TheLangSwitch from './components/TheLangSwitch.vue'
-import TheThemeSwitch from './components/TheThemeSwitch.vue'
+import ThemeSwitch from './components/ThemeSwitch.vue'
 // import TheLocaleError from './components/TheLocaleError.vue'
 import TheStartScreen from './components/TheStartScreen.vue'
 import TheFormScreen from './components/TheFormScreen.vue'
@@ -70,6 +70,8 @@ const { open: openExit, close: closeExit } = useModal({
     attrs: { onClose() { closeExit() } },
 })
 
+// TODO handle editing in few open tabs at once
+
 </script>
 
 <template>
@@ -82,11 +84,27 @@ const { open: openExit, close: closeExit } = useModal({
                     <path d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>{{ t('start') }}
             </button>
-            <hr v-if="currentScreen !== 'start'"/>
+            <hr v-if="currentScreen !== 'start'" class="mobile-collapse"/>
             <!-- <TheLangSwitch /> -->
-            <TheThemeSwitch />
+            <ThemeSwitch collapsible id="show-theme-select" :class="{ 'mobile-collapse': currentScreen !== 'start' }" />
         </div>
-        <div class="section">
+        <button v-if="anyAnswers && currentScreen !== 'start'" class="indicator fade-in mobile-only" @click="openExport">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
+                <path d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" />
+            </svg>
+            <span>{{ t('state_persisted') }}</span>
+        </button>
+        <template v-if="currentScreen !== 'start'">
+            <input type="checkbox" id="show-menu" class="show-menu" />
+            <label for="show-menu" class="dots">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24">
+                    <title>Pokaż menu</title>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                </svg>
+            </label>
+        </template>
+        <div class="section" :class="{ 'mobile-collapse': currentScreen !== 'start' }">
+            <ThemeSwitch id="show-theme-select-mobile" class="mobile-only" v-if="currentScreen !== 'start'" />
             <div v-if="anyAnswers && currentScreen !== 'start'" class="compound-button fade-in">
                 <div class="indicator">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="16" height="16">
@@ -102,8 +120,15 @@ const { open: openExit, close: closeExit } = useModal({
                 </button>
             </div>
             <fieldset v-else-if="anyAnswers">
-                <legend>Postęp wypełeniania</legend>
-                <div class="buttons-group">
+                <legend>Postęp wypełniania</legend>
+                <input type="checkbox" id="show-import-export-options" class="show-menu" />
+                <label for="show-import-export-options">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" width="16" height="16">
+                        <title>Rozwiń</title>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </label>
+                <div class="buttons-group section">
                     <button class="btn" @click="openRestore">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
                             <path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm4.75 11.25a.75.75 0 0 0 1.5 0v-2.546l.943 1.048a.75.75 0 1 0 1.114-1.004l-2.25-2.5a.75.75 0 0 0-1.114 0l-2.25 2.5a.75.75 0 1 0 1.114 1.004l.943-1.048v2.546Z" clip-rule="evenodd" />

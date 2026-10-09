@@ -49,6 +49,8 @@ const components = {
     rejectionJustification: RejectionJustification,
 }
 
+// TODO use worker to generate documents asynchronously
+
 </script>
 
 <template>

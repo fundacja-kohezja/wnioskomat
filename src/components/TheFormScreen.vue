@@ -221,6 +221,7 @@ const { open: openConfirmation, close } = useModal({
 })
 
 const changeStep = (form, step) => {
+    document.getElementById('show-side-nav').checked = false
     currentForm.value = form
     currentStep.value = step
     history.pushState({ ...history.state, form: currentForm.value, step: currentStep.value }, '')
@@ -264,11 +265,16 @@ provide('openness', [])
 
 history.replaceState({ ...history.state, form: currentForm.value, step: currentStep.value }, '')
 
+const openNav = () => {
+    closeAllNav()
+    revealCurrentNavItem()
+}
+
 const adjustSideNav = () => {
     if (sideNav.value.getBoundingClientRect().height > window.innerHeight - 60) {
         sideNav.value.style.position = 'static'
     } else {
-        sideNav.value.style.position = 'sticky'
+        sideNav.value.style.position = ''
     }
 }
 
@@ -285,7 +291,15 @@ useResizeObserver(sideNav, adjustSideNav)
 <template>
     <div class="cols-layout">
         <nav class="side-nav" ref="sideNav">
-            <details ref="mainApplicationNavContainer">
+            <label for="show-side-nav" class="show-side-nav-label">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24">
+                    <title>Pokaż nawigację</title>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </label>
+            <input type="checkbox" id="show-side-nav" @change="openNav" />
+            <div>{{ t(currentForm) }}</div>
+            <details ref="mainApplicationNavContainer" class="first">
                 <summary class="main"><h2>{{ t('mainApplication') }}</h2></summary>
                 <StepStatuses
                     :steps="forms.mainApplication.data"
