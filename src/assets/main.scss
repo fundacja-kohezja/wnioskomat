@@ -241,7 +241,7 @@ hr {
             background-color: light-dark($white, $gray-900);
             padding: 0.75em;
             border-radius: 6px;
-            box-shadow: 0 0.25em 1.0em 0.15em light-dark(rgba(#000, 0.15), rgba(#000, 1));
+            box-shadow: 0 0.25em 1.0em 0.15em light-dark(rgba(#000, 0.15), rgba(#000, 0.5));
             z-index: 4;
 
             .fade-in {
@@ -299,7 +299,7 @@ hr {
             background-color: light-dark($white, $gray-900);
             padding: 0.5em;
             border-radius: 6px;
-            box-shadow: 0 0.25em 1.0em 0.15em light-dark(rgba(#000, 0.15), rgba(#000, 1));
+            box-shadow: 0 0.25em 1.0em 0.15em light-dark(rgba(#000, 0.15), rgba(#000, 0.5));
             z-index: 4;
             transform: translateY(0.5em);
         }
@@ -308,8 +308,12 @@ hr {
 
 .show-menu {
     appearance: none;
+    width: auto;
+    height: auto;
+    border-radius: 0;
     position: absolute;
     inset: 0;
+    -webkit-tap-highlight-color: transparent;
 
     &#show-menu:not(:checked) {
         inset: auto 0 auto auto;
@@ -536,6 +540,9 @@ hr {
             position: absolute;
             inset: 0;
             margin: 0;
+            border-radius: 0;
+            height: auto;
+            width: auto;
             border: 1px solid light-dark($gray-300, $gray-700);
 
             &:checked {
@@ -894,6 +901,8 @@ a {
     position: absolute;
     left: 0;
     right: 0;
+    width: auto;
+    border-radius: 0;
     height: 3.75em;
     transform: translateY(-1em);
 
@@ -919,6 +928,7 @@ a {
         margin-top: 0.15em;
         margin-left: 0.5em;
         font-weight: 500;
+        max-width: calc(100% - 2em);
     }
 }
 
@@ -982,17 +992,14 @@ a {
     details {
 
         summary {
-            display: flex;
 
             &::before {
-                flex-shrink: 0;
                 margin-top: 0.25em;
             }
 
             &.main {
 
                 &::before {
-                    flex-shrink: 0;
                     margin-top: 0.3em;
                 }
 
@@ -1824,22 +1831,22 @@ a {
 
 summary {
     cursor: default;
+    display: flex;
 
     &::marker {
-        content: '';
-        color: light-dark($ui-accent-light-600, $ui-accent-dark-600);
+        content: none;
     }
 
     &::-webkit-details-marker {
         display: none;
-        color: light-dark($ui-accent-light-600, $ui-accent-dark-600);
     }
 
     &::before {
+        flex-shrink: 0;
         content: '';
         width: 0.5em;
         height: 0.5em;
-        display: inline-block;
+        margin-top: 0.3em;
         border-top: 2px solid light-dark($ui-accent-light-600, $ui-accent-dark-600);
         border-right: 2px solid light-dark($ui-accent-light-600, $ui-accent-dark-600);
         transform: rotate(45deg);
@@ -1894,6 +1901,8 @@ details[open] > summary::before {
 
     .btn-link {
         cursor: pointer;
+        text-align: left;
+        text-underline-offset: auto;
     }
 }
 

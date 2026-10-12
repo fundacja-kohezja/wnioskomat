@@ -79,8 +79,8 @@ const { open: openExit, close: closeExit } = useModal({
     <!-- then everything else was in <template v-else> -->
     <div class="padding-x top-bar">
         <div class="section">
-            <button class="nav-link" v-if="currentScreen !== 'start'" @click="navigate('start')">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="18" height="18">
+            <button class="btn-link" v-if="currentScreen !== 'start'" @click="navigate('start')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="18" height="18">
                     <path d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>{{ t('start') }}
             </button>
