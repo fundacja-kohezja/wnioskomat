@@ -26,6 +26,8 @@ const { t } = useI18n()
 /** @type import('vue').Ref< 'start' | 'form' > */
 const currentScreen = ref('start')
 
+const menuOpenBtn = ref()
+
 const navigate = function (screen) {
     currentScreen.value = screen
     history.pushState({ screen }, '')
@@ -95,7 +97,7 @@ const { open: openExit, close: closeExit } = useModal({
             <span>{{ t('state_persisted') }}</span>
         </button>
         <template v-if="currentScreen !== 'start'">
-            <input type="checkbox" id="show-menu" class="show-menu" />
+            <input type="checkbox" id="show-menu" class="show-menu" ref="menuOpenBtn" />
             <label for="show-menu" class="dots">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24">
                     <title>Pokaż menu</title>
@@ -112,7 +114,7 @@ const { open: openExit, close: closeExit } = useModal({
                     </svg>
                     <span>{{ t('state_persisted') }}</span>
                 </div>
-                <button class="btn" @click="openExport">
+                <button class="btn" @click="openExport(); if (menuOpenBtn) menuOpenBtn.checked = false">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
                         <path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm4.75 6.75a.75.75 0 0 1 1.5 0v2.546l.943-1.048a.75.75 0 0 1 1.114 1.004l-2.25 2.5a.75.75 0 0 1-1.114 0l-2.25-2.5a.75.75 0 1 1 1.114-1.004l.943 1.048V8.75Z" clip-rule="evenodd" />
                     </svg>
@@ -150,13 +152,13 @@ const { open: openExit, close: closeExit } = useModal({
                 <span>{{ t('restore_progress') }}</span>
             </button>
             <hr v-if="anyAnswers || currentScreen === 'start'"/>
-            <button class="btn" @click="openHelp">
+            <button class="btn" @click="openHelp(); if (menuOpenBtn) menuOpenBtn.checked = false">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM8.94 6.94a.75.75 0 1 1-1.061-1.061 3 3 0 1 1 2.871 5.026v.345a.75.75 0 0 1-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 1 0 8.94 6.94ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
                 </svg>
                 <span>{{ t('help') }}</span>
             </button>
-            <button v-if="currentScreen !== 'start'" class="btn" @click="openExit">
+            <button v-if="currentScreen !== 'start'" class="btn" @click="openExit(); if (menuOpenBtn) menuOpenBtn.checked = false">
                 <span>{{ t('exit') }}…</span>
             </button>
         </div>

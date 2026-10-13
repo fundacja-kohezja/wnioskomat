@@ -451,7 +451,7 @@ hr {
     max-width: calc(100vw - 2em);
     border-radius: 6px;
     box-shadow: 0 0.5em 1.5em 0.25em rgba(#000, 0.25);
-    max-height: calc(100vh - 2em);
+    max-height: calc(100svh - 2em);
     box-sizing: border-box;
     overflow: auto;
 
@@ -737,12 +737,12 @@ input[type=checkbox] {
     }
 
     &:hover {
-        background-color: light-dark(rgba($red-50, 0.5), #530E0E);
+        background-color: light-dark(#FFF9F9, #530E0E);
         color: light-dark($red-700, $red-300);
     }
 
     &:active {
-        background-color: light-dark($red-100, rgba($red-950, 0.5));
+        background-color: light-dark($red-100, #2B0E0E);
         color: light-dark($red-900, $red-300);
     }
 }
@@ -1426,7 +1426,7 @@ a {
     .repeater {
         display: flex;
         flex-direction: column;
-        gap: 0.75em;
+        gap: 1em;
 
         &.has-nested-repeater {
             gap: 1.25em;
@@ -1437,10 +1437,17 @@ a {
         }
 
         .buttons-group {
-            align-self: center;
+            position: absolute;
+            right: 0.25em;
+            top: -0.5em;
 
             .btn:last-child {
                 margin-left: 0.5em;
+
+                @media (pointer: coarse) {
+                    margin-left: 1em;
+                }
+
             }
         }
 
@@ -1449,70 +1456,90 @@ a {
             align-self: start;
         }
 
-        > .btn-secondary {
-            align-self: start;
-            padding-block: 0.5em;
-        }
-
         &-row {
             display: flex;
+            flex-direction: column;
             gap: 1em;
-            align-items: end;
             border-radius: 6px;
-            padding: 0.5em;
+            padding: 0.75em 0.5em 0.5em;
+            position: relative;
+            background-color: light-dark($gray-50, $gray-900);
+            border: 1px solid light-dark($gray-300, $gray-750);
+
+            @media (pointer: coarse) {
+                padding-top: 1.5em;
+            }
+
+            @media (min-width: 45em) {
+                flex-direction: row;
+                align-items: end;
+            }
+
+            @media (min-width: 54em) {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            @media (min-width: 66em) {
+                flex-direction: row;
+                align-items: end;
+            }
 
             .radio-buttons {
                 margin-bottom: 0.5em;
             }
 
             .btn {
-                padding: 0.4em;
+                padding: 0.4em 0.5em;
+
+                @media (pointer: coarse) {
+                    padding: 0.5em 0.8em;
+                }
 
                 &:active {
                     background-color: light-dark($gray-200, $gray-950);
                 }
 
                 &:disabled {
-                    background-color: transparent;
+                    background-color: light-dark($gray-100, $gray-950);
                     border-color: light-dark($gray-200, $gray-800);
                     color: light-dark($gray-300, $gray-700);
+                }
+
+                &-remove {
+                    padding: 0.25em 0.67em 0.33em;
+                    color: light-dark($red-800, $red-400);
+
+                    @media (pointer: coarse) {
+                        padding: 0.33em 0.75em 0.4em;
+                    }
+
+                    &:hover {
+                        color: light-dark($red-700, $red-300);
+                    }
+
+                    &:active {
+                        color: light-dark($red-900, $red-400);
+                    }
                 }
             }
         }
 
-        &:not(.has-nested-repeater) .repeater-row {
-            background-color: light-dark($gray-50, $gray-900);
-        }
-
         &.has-nested-repeater > .repeater-row {
-            border: 1px solid light-dark($gray-350, $gray-700);
-            padding: 1em;
+            padding: 1.5em 1em 1em;
             flex-wrap: wrap;
 
             > :nth-last-child(2) {
                 flex-basis: 100%;
                 order: 100;
+
+                .repeater-row {
+                    border: 1px solid light-dark($gray-350, $gray-700);
+                }
             }
 
             > :last-child {
                 order: 99;
-                align-self: start;
-
-                .btn {
-                    background-color: light-dark($gray-50, $gray-800);
-
-                    &:hover {
-                        background-color: light-dark($white, $gray-750);
-                    }
-
-                    &:active {
-                        background-color: light-dark($gray-100, $gray-900);
-                    }
-
-                    &:disabled {
-                        background-color: transparent;
-                    }
-                }
             }
         }
 
@@ -1547,7 +1574,7 @@ a {
         }
     }
 
-    .repeater,
+    :not(.repeater-subfield) > .repeater,
     .step-title {
 
         > .btn {
@@ -1840,11 +1867,15 @@ a {
 
     .buttons {
         display: flex;
+        flex-wrap: wrap;
         gap: 0.5em;
     }
 
     button {
         border-radius: 4px;
+        flex-grow: 1;
+        justify-content: center;
+        min-height: 2.5em;
     }
 }
 
