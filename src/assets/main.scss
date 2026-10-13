@@ -243,6 +243,12 @@ hr {
             border-radius: 6px;
             box-shadow: 0 0.25em 1.0em 0.15em light-dark(rgba(#000, 0.15), rgba(#000, 0.5));
             z-index: 4;
+            transform-origin: top right;
+            animation: enlarge 150ms cubic-bezier(0, 1, 0, 1), fadeIn 150ms cubic-bezier(0, 1, 0, 1);
+
+            @media (prefers-reduced-motion: reduce) {
+                animation: none;
+            }
 
             .fade-in {
                 animation: none;
@@ -456,7 +462,10 @@ hr {
 
 .base-modal .vfm__content {
     gap: 1.5em;
-    padding: 2em;
+
+    @media (min-width: 36em) {
+        padding: 2em;
+    }
 
     &, .container {
         display: flex;
@@ -484,6 +493,17 @@ hr {
     .message {
         text-align: center;
         width: 100%;
+    }
+
+    @media (max-width: 32em) {
+
+        .btn,
+        .btn-primary,
+        .btn-secondary,
+        .btn-destructive {
+            width: 100%;
+            justify-content: center;
+        }
     }
 }
 
@@ -1515,7 +1535,7 @@ a {
         scroll-margin: 2em;
         display: flex;
         flex-wrap: wrap;
-        gap: 0 1em;
+        gap: 0.5em 1em;
 
         .btn {
             font-size: 14px;
@@ -1666,6 +1686,11 @@ a {
     display: flex;
     margin-left: auto;
     gap: 0.5em;
+
+    @media (max-width: 32em) {
+        flex-direction: column;
+        width: 100%;
+    }
 
     .btn {
         padding-inline: 0.75em;
@@ -1952,6 +1977,15 @@ details[open] > summary::before {
     }
     100% {
         opacity: 0.25;
+    }
+}
+
+@keyframes enlarge {
+    0% {
+        transform: scale(0.67);
+    }
+    100% {
+        transform: scale(1);
     }
 }
 

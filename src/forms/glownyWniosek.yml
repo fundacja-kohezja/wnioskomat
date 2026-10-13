@@ -340,7 +340,7 @@
               showIf: {}
       - label: 'W sferze społecznej funkcjonuję zgodnie z moją tożsamością płciową'
         name: areas
-        type: radio
+        type: radio_vertical
         options:
             some: 'w niektórych obszarach'
             all: 'w większości obszarów'
