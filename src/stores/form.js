@@ -18,8 +18,6 @@ export default defineStore('form', () => {
         })
         currentForm.value = 'mainApplication'
         currentStep.value = 0
-
-        // TODO wipe whole local storage, check if something else needs cleaning up not to leave any trace of visit
     }
 
     const exportAnswers = (filename) => {
