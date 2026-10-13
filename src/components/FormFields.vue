@@ -28,7 +28,7 @@ const props = defineProps({
     populationAvailability: String,
 })
 
-const emit = defineEmits(['changeCurrentIndex', 'decrementIndex', 'incrementIndex', 'populate'])
+const emit = defineEmits(['decrementIndex', 'incrementIndex', 'populate'])
 
 const { t } = useI18n()
 

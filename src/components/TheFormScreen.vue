@@ -335,9 +335,8 @@ useResizeObserver(sideNav, adjustSideNav)
             :hasSummary="forms[currentForm].hasSummary"
             :populationAvailability="autofillStatus"
             :currentIndex="currentStep"
-            @changeCurrentIndex="currentStep = $event"
-            @decrementIndex="currentStep--"
-            @incrementIndex="currentStep++"
+            @decrementIndex="changeStep(currentForm, currentStep - 1)"
+            @incrementIndex="changeStep(currentForm, currentStep + 1)"
             @populate="() => { autofillStatus === 'fill' ? populateCurrentForm() : openConfirmation() }"
         />
     </div>
