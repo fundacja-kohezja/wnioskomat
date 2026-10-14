@@ -1,4 +1,6 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 import GeneratedDoc from './GeneratedDoc.vue'
 
 const props = defineProps({
@@ -8,14 +10,16 @@ const props = defineProps({
     },
 })
 
+const { t } = useI18n()
+
 </script>
 
 <template>
     <div class="generated-docs">
         <GeneratedDoc v-for="document of documents" v-bind="document" />
     </div>
-    <p class="downloads-info">Po pobraniu {{ documents.length > 1 ? 'dokumentów przeczytaj je' : 'dokumentu przeczytaj go' }} dokładnie, by upewnić się, że wszystko się zgadza!</p>
-    <p class="docs-instruction">Następnie wydrukuj i podpisz {{ documents.length > 1 ? 'każdy z nich' : 'go' }} – własnoręcznie i czytelnie.</p>
+    <p class="downloads-info">{{ t(documents.length > 1 ? 'downloads_info_0_multiple' : 'downloads_info_0_single') }}</p>
+    <p class="docs-instruction">{{ t(documents.length > 1 ? 'downloads_info_1_multiple' : 'downloads_info_1_single') }}</p>
     <slot></slot>
     <hr />
 </template>

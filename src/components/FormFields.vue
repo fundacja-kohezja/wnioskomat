@@ -75,7 +75,7 @@ const nextStep = () => {
                     class="btn"
                     @click="emit('populate')"
                 >
-                    Wypełnij {{ currentStep.populate.label }}{{ populationAvailability === 'fill' ? '' : '…' }}
+                    {{ t('fill') }} {{ currentStep.populate.label }}{{ populationAvailability === 'fill' ? '' : '…' }}
                 </button>
                 <p v-if="currentStep.description" class="step-description">{{ currentStep.description }}</p>
             </template>
@@ -93,15 +93,15 @@ const nextStep = () => {
         </form>
         <DataSummary v-else-if="hasSummary && currentIndex === steps.length" />
         <DownloadsStep v-else :name="formName" :store="formStore" />
-        <nav class="prev-next">
+        <nav class="prev-next" :aria-label="t('prev_next')">
             <button v-if="currentIndex > 0" class="btn-link prev" @click="prevStep">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" width="18" height="18">
                     <path d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>
-                {{ isLastStep ? 'Poprzedni krok' : t('prev') }}
+                {{ isLastStep ? t('prev_step') : t('prev') }}
             </button>
             <button v-if="!isLastStep" class="btn-primary next" @click="nextStep">
-                {{ t('next') }}
+                {{ t('next_step') }}
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" width="18" height="18">
                     <path d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                 </svg>

@@ -25,12 +25,12 @@ defineProps({
             <input type="checkbox" :id="id" class="show-menu" />
             <label :for="id">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" width="16" height="16">
-                    <title>Rozwiń</title>
+                    <title>{{ t('expand') }}</title>
                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                 </svg>
             </label>
         </template>
-        <div class="buttons-group" :class="{stretched: !collapsible}">
+        <div class="buttons-group" :class="{ stretched: !collapsible }">
             <label>
                 <input type="radio" :name="id" v-model="theme" value="auto" />
                 <span>{{ t('auto') }}</span>

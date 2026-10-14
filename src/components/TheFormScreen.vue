@@ -204,9 +204,9 @@ const populateCurrentForm = (onlyEmptyFields = false) => {
 const { open: openConfirmation, close } = useModal({
     component: ConfirmModal,
     attrs: {
-        message: computed(() => autofillStatus.value === 'replaceSome' ? 'Wypełnić tylko puste pola, czy wszystkie, zastępując to co już jest wpisane?' : ('W obecnym formularzu są już wpisane dane. Czy chcesz je zastąpić ' + forms[currentForm.value].data[currentStep.value].populate.label + '?')),
-        cancelLabel: computed(() => autofillStatus.value === 'replaceSome' ? 'Wypełnij puste' : 'Nie zastępuj'),
-        confirmLabel: computed(() => autofillStatus.value === 'replaceSome' ? 'Wypełnij wszystkie i zastąp' : ('Zastąp ' + forms[currentForm.value].data[currentStep.value].populate.label)),
+        message: computed(() => autofillStatus.value === 'replaceSome' ? t('empty_only_or_replace') : (t('whether_replace_0') + forms[currentForm.value].data[currentStep.value].populate.label + t('whether_replace_1'))),
+        cancelLabel: computed(() => autofillStatus.value === 'replaceSome' ? t('fill_empty') : t('dont_replace')),
+        confirmLabel: computed(() => autofillStatus.value === 'replaceSome' ? t('fill_and_replace') : (t('replace') + forms[currentForm.value].data[currentStep.value].populate.label)),
         onCancel() {
             if (autofillStatus.value === 'replaceSome') {
                 populateCurrentForm(true)
@@ -290,10 +290,10 @@ useResizeObserver(sideNav, adjustSideNav)
 
 <template>
     <div class="cols-layout">
-        <nav class="side-nav" ref="sideNav">
+        <nav class="side-nav" ref="sideNav" :aria-label="t('main_nav')">
             <label for="show-side-nav" class="show-side-nav-label">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24">
-                    <title>Pokaż nawigację</title>
+                    <title>{{ t('show_nav') }}</title>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
             </label>
