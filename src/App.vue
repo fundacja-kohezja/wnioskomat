@@ -16,6 +16,7 @@ import HelpModal from './components/modals/HelpModal.vue'
 import ExportModal from './components/modals/ExportModal.vue'
 import ExitModal from './components/modals/ExitModal.vue'
 import RestorationModal from './components/modals/RestorationModal.vue'
+import { subforms } from './stores/subforms'
 
 // bring commented code back when there are translations
 // const { isInitialLocaleLoading, isCurrentLocaleLoading } = storeToRefs(usePrefsStore())
@@ -72,7 +73,13 @@ const { open: openExit, close: closeExit } = useModal({
     attrs: { onClose() { closeExit() } },
 })
 
-// TODO handle editing in few open tabs at once
+// this is so that changes are synced when app is open in few tabs and switching between them
+const formStores = subforms.map(useStore => useStore())
+useEventListener('focus', () => {
+    formStores.forEach(store => {
+        store.$hydrate()
+    })
+})
 
 </script>
 

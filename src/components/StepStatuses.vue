@@ -48,7 +48,7 @@ const statuses = computedWithControl(currentStep, () => {
 })
 watch(() => answerStatuses.value[props.currentIndex], () => {
     if (statuses.value[props.currentIndex] === 'empty') return
-    statuses.trigger() // TODO this makes them not update when modal clears answer data
+    statuses.trigger()
 })
 
 </script>
