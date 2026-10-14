@@ -1,5 +1,4 @@
 <script setup>
-import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 
 // TODO load it asynchronously?
@@ -13,7 +12,6 @@ import { initPdf } from '@/doc-generators/pdf'
 import { initDocx } from '@/doc-generators/docx'
 import FileDownloads from '../FileDownloads.vue'
 
-const { t } = useI18n()
 const { answers } = storeToRefs(useMainApplicationFormStore())
 
 const documents = []
@@ -41,37 +39,37 @@ if (answers.value[2].has_proxy) {
 
 const normalize = text => (text || '').trim()
 
-const attached = [t('s_10'), t('s_9')]
+const attached = ['Dowód uiszczenia opłaty sądowej', 'Skrócony odpis aktu urodzenia']
 
 if (answers.value[1].psychologist) {
-    attached.push([t('s_11'), t('s_12')].join(''))
+    attached.push(['Opinię ', 'psychologa'].join(''))
 }
 if (answers.value[1].psychologist_sexologist) {
-    attached.push([t('s_11'), t('s_13')].join(''))
+    attached.push(['Opinię ', 'psychologa-seksuologa'].join(''))
 }
 if (!answers.value[1].psychologist && !answers.value[1].psychologist_sexologist) {
-    attached.push([t('s_11'), '…'].join(''))
+    attached.push(['Opinię ', '…'].join(''))
 }
 
 if (answers.value[1].psychiatrist) {
-    attached.push([t('s_14'), t('s_15')].join(''))
+    attached.push(['Zaświadczenie od ', 'psychiatry'].join(''))
 }
 if (answers.value[1].sexologist) {
-    attached.push([t('s_14'), t('s_16')].join(''))
+    attached.push(['Zaświadczenie od ', 'seksuologa'].join(''))
 }
 if (!answers.value[1].psychiatrist && !answers.value[1].sexologist) {
-    attached.push([t('s_14'), '…'].join(''))
+    attached.push(['Zaświadczenie od ', '…'].join(''))
 }
 
-if(answers.value[1].hrt_certificate) attached.push(t('s_20'))
-if(answers.value[1].pts_guidelines ) attached.push(t('s_21'))
-if(answers.value[1].long_guidelines) attached.push(t('s_22'))
+if(answers.value[1].hrt_certificate) attached.push('Zaświadczenie o wdrożeniu terapii hormonalnej')
+if(answers.value[1].pts_guidelines ) attached.push('Zalecenia Polskiego Towarzystwa Seksuologicznego')
+if(answers.value[1].long_guidelines) attached.push('Publikację „Postępowania w sprawach o uzgodnienie płci. Przewodnik”')
 
 if (!answers.value[0].is_new_firstname && answers.value[1].name_change_confirmation) {
-    attached.push(t('s_23'))
+    attached.push('Decyzję o zmianie imienia')
 }
 if (answers.value[1].proving_documents) {
-    attached.push(answers.value[1].proving_documents_type ? { A: 'Wydruk z portali społecznościowych', B: 'Identyfikator z miejsca pracy', C: 'Wydruk z portalu USOS' }[answers.value[1].proving_documents_type] : t('s_24'))
+    attached.push(answers.value[1].proving_documents_type ? { A: 'Wydruk z portali społecznościowych', B: 'Identyfikator z miejsca pracy', C: 'Wydruk z portalu USOS' }[answers.value[1].proving_documents_type] : 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci: …')
 }
 
 
