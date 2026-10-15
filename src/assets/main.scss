@@ -938,7 +938,7 @@ a {
         display: none;
 
         @media (min-width: 54em) {
-            display: block;
+            display: flex;
         }
     }
 
@@ -990,28 +990,31 @@ a {
         top: 2em;
 
         &:has(#show-side-nav:checked) ~ * {
-            display: flex;
+            display: block;
         }
     }
 
-    h2, h3 {
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75em;
+        list-style-type: none;
+        padding-left: 0;
+
+        ul {
+            margin-top: 1.25em;
+            gap: 1.25em;
+        }
+    }
+
+    > ul > li > .nav-link {
         margin-left: 1.5rem;
-        line-height: 1.1;
-    }
-
-    h2 {
-        font-weight: 500;
-        font-size: 1em;
-    }
-
-    h3 {
-        font-size: 0.9em;
-        font-weight: 400;
     }
 
     details {
 
         summary {
+            font-size: 0.9em;
 
             &::before {
                 margin-top: 0.25em;
@@ -1020,29 +1023,24 @@ a {
             &.main {
 
                 &::before {
-                    margin-top: 0.3em;
+                    margin-top: 0.4em;
                 }
 
-                h2 {
-                    font-size: 1.1em;
+                span {
+                    font-size: 1.15em;
                 }
-            }
-
-            h2, h3 {
-                margin-left: 0;
             }
         }
 
-        &[open] h2 {
-            margin-bottom: 0.25em;
+        &[open] summary.main {
+            margin-bottom: 1.25em;
         }
 
         details {
-            margin-top: 1.25em;
             margin-left: 1em;
 
             &[open] {
-                margin-bottom: 2em;
+                margin-bottom: 0.75em;
 
                 summary {
                     margin-bottom: 1.25em;
@@ -1061,18 +1059,6 @@ a {
         ol {
             margin-block: 1em;
         }
-
-        > .nav-link {
-            margin-left: 3.5rem;
-        }
-
-        > .step.final:not(:last-child) {
-            margin-bottom: 1.125em;
-        }
-    }
-
-    > details:not(.first) {
-        margin-top: 2em;
     }
 
     .nav-link {
@@ -1106,12 +1092,6 @@ a {
         svg {
             color: light-dark($gray-400, $gray-600);
         }
-    }
-
-    > .nav-link {
-        display: block;
-        margin-top: 2em;
-        margin-left: 1.5rem;
     }
 
     ol {
@@ -1196,6 +1176,14 @@ a {
     display: flex;
     flex-direction: column;
     gap: 1.5em;
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1.17em;
+    }
 }
 
 .questions {
@@ -1797,9 +1785,16 @@ a {
     }
 }
 
-.downloads-info {
-    margin-block: 0.75em;
-    font-weight: 600;
+.downloads {
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    &-info {
+        margin-block: 0.75em;
+        font-weight: 600;
+    }
 }
 
 .generated-docs {
@@ -1946,7 +1941,7 @@ details[open] > summary::before {
         }
     }
 
-    h4 {
+    h2 {
         font-size: inherit;
         font-weight: inherit;
     }

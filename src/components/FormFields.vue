@@ -66,10 +66,10 @@ const nextStep = () => {
 </script>
 
 <template>
-    <div :class="{ questions: !isLastStep }">
+    <main :class="isLastStep ? 'downloads' : 'questions'">
         <div class="step-title" ref="heading">
             <template v-if="currentIndex < steps.length">
-                <h2>{{ currentStep.title }}</h2>
+                <h1>{{ currentStep.title }}</h1>
                 <button
                     v-if="populationAvailability"
                     class="btn"
@@ -79,7 +79,7 @@ const nextStep = () => {
                 </button>
                 <p v-if="currentStep.description" class="step-description">{{ currentStep.description }}</p>
             </template>
-            <h2 v-else-if="hasSummary && currentIndex === steps.length">{{ t('summary') }}</h2>
+            <h1 v-else-if="hasSummary && currentIndex === steps.length">{{ t('summary') }}</h1>
         </div>
         <form v-if="currentIndex < steps.length">
             <AnswerInput
@@ -107,5 +107,5 @@ const nextStep = () => {
                 </svg>
             </button>
         </nav>
-    </div>
+    </main>
 </template>

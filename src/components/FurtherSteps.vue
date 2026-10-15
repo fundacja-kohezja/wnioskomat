@@ -35,11 +35,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="further-steps-wrap">
-        <h2 ref="heading">{{ t('further_steps') }}</h2>
+    <main class="further-steps-wrap">
+        <h1 ref="heading">{{ t('further_steps') }}</h1>
         <div class="further-steps" ref="content">
             <!-- <component :is="furtherSteps[selectedLang]" /> -->
             <FurtherStepsPl />
         </div>
-    </div>
+    </main>
 </template>

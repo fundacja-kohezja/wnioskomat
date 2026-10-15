@@ -299,31 +299,43 @@ useResizeObserver(sideNav, adjustSideNav)
             </label>
             <input type="checkbox" id="show-side-nav" @change="openNav" />
             <div>{{ t(currentForm) }}</div>
-            <details ref="mainApplicationNavContainer" class="first">
-                <summary class="main"><h2>{{ t('mainApplication') }}</h2></summary>
-                <StepStatuses
-                    :steps="forms.mainApplication.data"
-                    :formStore="forms.mainApplication.store"
-                    :currentIndex="'mainApplication' === currentForm ? currentStep : undefined"
-                    hasSummary
-                    @changeCurrentIndex="changeStep('mainApplication', $event)"
-                />
-            </details>
-            <button class="nav-link" @click="changeStep('furtherSteps', 0)" :aria-current="currentForm === 'furtherSteps' ? true : undefined" :class="{ current: currentForm === 'furtherSteps' }">
-                {{ t('further_steps') }}
-            </button>
-            <details v-for="(group, title) in groups" :ref="el => groupContainers[title] = el">
-                <summary><h2>{{ t(title) }}</h2></summary>
-                <details v-for="form of group" :ref="el => docNavContainers[form] = el">
-                    <summary><h3>{{ t(form) }}</h3></summary>
-                    <StepStatuses
-                        :steps="forms[form].data"
-                        :formStore="forms[form].store"
-                        :currentIndex="form === currentForm ? currentStep : undefined"
-                        @changeCurrentIndex="changeStep(form, $event)"
-                    />
-                </details>
-            </details>
+            <ul>
+                <li>
+                    <details ref="mainApplicationNavContainer" class="first">
+                        <summary class="main"><span>{{ t('mainApplication') }}</span></summary>
+                        <StepStatuses
+                            :steps="forms.mainApplication.data"
+                            :formStore="forms.mainApplication.store"
+                            :currentIndex="'mainApplication' === currentForm ? currentStep : undefined"
+                            hasSummary
+                            @changeCurrentIndex="changeStep('mainApplication', $event)"
+                        />
+                    </details>
+                </li>
+                <li>
+                    <button class="nav-link" @click="changeStep('furtherSteps', 0)" :aria-current="currentForm === 'furtherSteps' ? true : undefined" :class="{ current: currentForm === 'furtherSteps' }">
+                        {{ t('further_steps') }}
+                    </button>
+                </li>
+                <li v-for="(group, title) in groups">
+                    <details :ref="el => groupContainers[title] = el">
+                        <summary>{{ t(title) }}</summary>
+                        <ul>
+                            <li v-for="form of group">
+                                <details :ref="el => docNavContainers[form] = el">
+                                    <summary>{{ t(form) }}</summary>
+                                    <StepStatuses
+                                        :steps="forms[form].data"
+                                        :formStore="forms[form].store"
+                                        :currentIndex="form === currentForm ? currentStep : undefined"
+                                        @changeCurrentIndex="changeStep(form, $event)"
+                                    />
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+            </ul>
         </nav>
         <FurtherSteps v-if="currentForm === 'furtherSteps'" />
         <FormFields

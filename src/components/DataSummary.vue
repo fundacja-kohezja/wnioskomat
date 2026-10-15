@@ -19,7 +19,7 @@ const summary = computed(() => generateSummary(answers.value, t))
 
 <template>
     <template v-for="({ type, content, items, crossedItems, crossedItemsLabel, rows }) of summary">
-        <h3 v-if="type === 'h'" class="summary-heading">{{ content }}</h3>
+        <h2 v-if="type === 'h'" class="summary-heading">{{ content }}</h2>
         <div v-else-if="type === 'list'" :class="{ 'summary-lists': crossedItems && crossedItems.length }">
             <ul class="summary-list">
                 <li v-for="item of items">

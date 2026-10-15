@@ -58,7 +58,7 @@ const shown = computed(() => !props.question.showIf || isShown(
 
 <template>
     <div v-if="question.heading || question.subheading" v-show="shown">
-        <h3 v-if="question.heading" class="section-heading">{{ question.heading }}</h3>
+        <h2 v-if="question.heading" class="section-heading">{{ question.heading }}</h2>
         <p v-if="question.subheading" class="help-text">{{ question.subheading }}</p>
     </div>
     <div

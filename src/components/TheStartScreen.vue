@@ -34,7 +34,7 @@ const startOver = () => {
 </script>
 
 <template>
-    <div class="introduction">
+    <main class="introduction">
         <h1>{{ t('title') }}</h1>
 
         <p>
@@ -62,5 +62,5 @@ const startOver = () => {
                 {{ t('intro_info') }}
             </p>
         </div>
-</div>
+    </main>
 </template>

@@ -86,7 +86,7 @@ useEventListener('focus', () => {
 <template>
     <!-- <div v-if="isInitialLocaleLoading" class="loading"></div> -->
     <!-- then everything else was in <template v-else> -->
-    <div class="padding-x top-bar">
+    <header class="padding-x top-bar">
         <div class="section">
             <button class="btn-link" v-if="currentScreen !== 'start'" @click="navigate('start')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="18" height="18">
@@ -169,12 +169,12 @@ useEventListener('focus', () => {
                 <span>{{ t('exit') }}…</span>
             </button>
         </div>
-    </div>
-    <main class="padding-x main-content">
+    </header>
+    <div class="padding-x main-content">
         <!-- <TheLocaleError /> -->
 
         <TheFormScreen v-if="currentScreen === 'form'" @go-to-start="navigate('start')" />
         <TheStartScreen v-else @go-to-form="navigate('form')" />
-    </main>
+    </div>
     <ModalsContainer />
 </template>

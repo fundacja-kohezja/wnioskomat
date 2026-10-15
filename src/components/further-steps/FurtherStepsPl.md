@@ -1,4 +1,4 @@
-1.  #### Przejdź przez postępowanie sądowe
+1.  ## Przejdź przez postępowanie sądowe
 
     Tu wiele zależy od sędziego, na jakiego trafisz. W idealnym wariancie sąd wyda od razu postanowienie, bez wzywania cię na rozprawę – w takim wypadku nie musisz nic więcej robić. Może się jednak zdarzyć, że napotkasz trudności.
 
@@ -78,7 +78,7 @@
 
     Informacje o Twoim postępowaniu możesz śledzić bieżąco na [Portalu Informacyjnym Sądów Powszechych](https://portal.wroclaw.sa.gov.pl/login){target="_blank"} po zalogowaniu profilem zaufanym.
 
-2.  #### Otrzymaj pozytywne rozpatrzenie
+2.  ## Otrzymaj pozytywne rozpatrzenie
 
     Niezależnie od tego, jak toczyło się postępowanie, wszystkie znane nam sprawy ostatecznie zawsze kończyły się pozytywnym rozpatrzeniem. Informacja przyjdzie do Ciebie pocztą.
 
@@ -90,11 +90,11 @@
 
     :::
 
-3.  #### Upewnij się, że sąd przekazał postanowienie do Urzędu Stanu Cywilnego
+3.  ## Upewnij się, że sąd przekazał postanowienie do Urzędu Stanu Cywilnego
 
     Informacja o nadaniu nowego numeru PESEL powinna przyjść do ciebie listownie, jeśli tak się nie stanie, dobrze jest skontaktować się z urzędem (w razie potrzeby również z sądem) telefonicznie. W razie potrzeby możesz <ToForm form=copyUrgency>wygenerować ponaglenie</ToForm>.
 
-4.  #### Wymień wszystkie dokumenty na te z nowym PESELem
+4.  ## Wymień wszystkie dokumenty na te z nowym PESELem
 
     Udaj się do dowolnego urzędu gminy, by złożyć wniosek o nowy dowód osobisty. Mając nowy dowód, możesz zacząć zmieniać inne dokumenty.
 

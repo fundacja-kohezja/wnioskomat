@@ -82,7 +82,7 @@ const components = {
         </div>
     </div>
     <template v-else>
-        <h2>{{ t('documents_ready') }}</h2>
+        <h1>{{ t('documents_ready') }}</h1>
         <div v-if="anyInvalid || anyIncomplete" class="box invalid-warning warning">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" width="32" height="32">
                 <title>{{ t('warning') }}</title>
