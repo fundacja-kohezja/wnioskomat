@@ -1083,7 +1083,7 @@ a {
         color: light-dark(currentColor, $white);
     }
 
-    li:not(.current) {
+    li {
 
         &::marker {
             color: $gray-500;
@@ -1091,6 +1091,21 @@ a {
 
         svg {
             color: light-dark($gray-400, $gray-600);
+        }
+
+        &.current {
+
+            &::marker {
+                color: currentColor;
+            }
+
+            svg {
+                color: currentColor;
+            }
+        }
+
+        svg.current {
+            color: currentColor;
         }
     }
 
@@ -1192,60 +1207,34 @@ a {
     input,
     textarea,
     select {
-        appearance: none;
         flex-shrink: 0;
-        border-radius: 4px;
-        background-color: light-dark($white, $gray-800);
-        border: 1px solid light-dark($gray-400, $gray-600);
-
-        &:hover {
-            border: 1px solid light-dark($gray-500, $gray-500);
-        }
     }
 
     .has-validation-error {
 
-        input,
-        textarea,
-        select {
-            border-color: light-dark(#c2410c, #fb923c);
-            box-shadow: inset 0 0 0 1px light-dark(#c2410c, #fb923c);
-            background-size: 24px 24px;
-            background-repeat: no-repeat;
-            background-position: right 0.5em center;
+        label {
+            position: relative;
+
+            &::after {
+                content: '';
+                position: absolute;
+                max-width: 36em;
+                pointer-events: none;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ea580c'%3E%3Cpath fill-rule='evenodd' d='M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z' clip-rule='evenodd' /%3E%3C/svg%3E%0A");
+                height: 2.5em;
+                background-repeat: no-repeat;
+                background-size: 24px 24px ;
+                background-position: right 0.5em center;
+            }
         }
 
         input[type=text],
         input[type=date] {
             padding-right: 2em;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ea580c'%3E%3Cpath fill-rule='evenodd' d='M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z' clip-rule='evenodd' /%3E%3C/svg%3E%0A");
         }
-    }
-
-    input[type=radio] {
-        border-radius: 50%;
-
-        &:checked {
-            background-image: radial-gradient($white 33%, transparent 34%);
-        }
-    }
-
-    input[type=checkbox]:checked {
-        background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22%23fff%22%3E%3Cpath%20d%3D%22M12.416%203.376a.75.75%200%200%201%20.208%201.04l-5%207.5a.75.75%200%200%201-1.154.114l-3-3a.75.75%200%200%201%201.06-1.06l2.353%202.353%204.493-6.74a.75.75%200%200%201%201.04-.207Z%22%2F%3E%3C%2Fsvg%3E');
-
-        &:disabled {
-            background-image:
-                linear-gradient(to left, light-dark(transparent, rgba($gray-900, 0.7)), light-dark(transparent, rgba($gray-900, 0.7))),
-                url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22%23f5f5f5%22%3E%3Cpath%20d%3D%22M12.416%203.376a.75.75%200%200%201%20.208%201.04l-5%207.5a.75.75%200%200%201-1.154.114l-3-3a.75.75%200%200%201%201.06-1.06l2.353%202.353%204.493-6.74a.75.75%200%200%201%201.04-.207Z%22%2F%3E%3C%2Fsvg%3E')
-            ;
-        }
-    }
-
-    select {
-        background-repeat: no-repeat;
-        background-size: 1.25em;
-        background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22%23737373%22%3E%3Cpath%20d%3D%22M4.22%206.22a.75.75%200%200%201%201.06%200L8%208.94l2.72-2.72a.75.75%200%201%201%201.06%201.06l-3.25%203.25a.75.75%200%200%201-1.06%200L4.22%207.28a.75.75%200%200%201%200-1.06Z%22%2F%3E%3C%2Fsvg%3E');
-        background-position: right;
     }
 
     .checkbox,
@@ -1256,35 +1245,6 @@ a {
         input {
             width: 1.25rem;
             height: 1.25rem;
-
-            &:active {
-                background-color: light-dark($gray-100, $gray-750);
-            }
-
-            &:disabled {
-                background-color: light-dark($gray-200, $gray-950);
-                border: 1px solid light-dark($gray-300, $gray-800);
-            }
-
-            &:checked {
-                background-color: light-dark($ui-accent-light-600, $ui-accent-dark-700);
-                border: 1px solid light-dark($ui-accent-light-700, $ui-accent-dark-650);
-
-                &:hover {
-                    background-color: light-dark($ui-accent-light-650, $ui-accent-dark-650);
-                    border: 1px solid light-dark($ui-accent-light-700, $ui-accent-dark-600);
-                }
-
-                &:active {
-                    background-color: light-dark($ui-accent-light-700, $ui-accent-dark-600);
-                    border: 1px solid light-dark($ui-accent-light-800, $ui-accent-dark-500);
-                }
-
-                &:disabled {
-                    background-color: light-dark($gray-350, $gray-900);
-                    border: 1px solid light-dark($gray-350, $gray-800);
-                }
-            }
 
             + span {
                 align-self: center;
@@ -1333,18 +1293,12 @@ a {
     .input-with-suffix {
         display: flex;
         align-items: center;
-        background-color: light-dark($gray-100, $gray-900);
-        border-radius: 4px;
-        border: 1px solid light-dark($gray-400, $gray-600);
-        box-sizing: border-box;
 
         span {
-            padding: 0.5em;
             color: light-dark($gray-700, $gray-300);
         }
 
         input {
-            border: none;
             flex-grow: 1;
         }
     }
@@ -1353,8 +1307,8 @@ a {
         max-width: 36em;
         flex-wrap: wrap;
 
-        input {
-            border-radius: 0 3px 3px 0;
+        span {
+            padding-right: 0.5em;
         }
     }
 
@@ -1362,15 +1316,13 @@ a {
         max-width: 18em;
 
         input {
-            border-radius: 3px 0 0 3px;
             min-width: 0;
             flex-basis: 0;
         }
-    }
 
-
-    label:hover .input-with-prefix {
-        border: 1px solid light-dark($gray-500, $gray-500);
+        span {
+            padding-left: 0.5em;
+        }
     }
 
     .radio-buttons,
