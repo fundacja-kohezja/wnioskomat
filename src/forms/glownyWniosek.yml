@@ -324,9 +324,14 @@
         name: experience
         type: textarea
         description: "Przykład: \nOkoło […] roku życia zaczęło pojawiać się u mnie poczucie rozbieżności pomiędzy płcią przypisaną mi przy urodzeniu a moją tożsamością płciową. Doprowadziło to do wykształcenia się u mnie dysforii, której towarzyszyło obniżenie nastroju."
-      - label: 'Od kiedy jesteś w terapii hormonalnej?'
-        name: hrt_since
-        type: month
+      - label: 'Jestem w terapii hormonalnej'
+        name: is_hrt
+        type: checkbox
+        subquestions:
+            - label: 'Od kiedy?'
+              name: hrt_since
+              type: month
+              showIf: {}
       - label: 'Poddano mnie badaniom psychologicznym'
         name: has_assessment
         type: checkbox

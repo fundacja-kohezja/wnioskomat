@@ -273,6 +273,7 @@ const openNav = () => {
 }
 
 const adjustSideNav = () => {
+    if (!sideNav.value) return
     if (sideNav.value.getBoundingClientRect().height > window.innerHeight - 60) {
         sideNav.value.style.position = 'static'
     } else {
