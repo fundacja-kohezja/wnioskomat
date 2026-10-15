@@ -164,7 +164,7 @@ const sideNav = ref()
 const groupContainers = ref({})
 const docNavContainers = ref({})
 
-const { currentForm, currentStep } = storeToRefs(useFormStore())
+const { currentForm, currentStep, isFinalStep } = storeToRefs(useFormStore())
 
 const autofillStatus = computed(() => {
     if (!forms[currentForm.value]) return
@@ -254,7 +254,9 @@ useEventListener('popstate', event => {
 watchEffect(() => {
     if (!forms[currentForm.value] && currentForm.value !== 'furtherSteps') currentForm.value = 'mainApplication'
     if (!(currentStep.value >= 0) || !Number.isInteger(+currentStep.value)) currentStep.value = 0
+    isFinalStep.value = forms[currentForm.value]?.data?.length > currentStep.value ? false : true
 })
+
 
 provide('changeForm', (form, step = 0) => {
     changeStep(form, step)

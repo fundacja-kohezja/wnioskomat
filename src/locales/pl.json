@@ -1,6 +1,6 @@
 {
     "title": "Wnioskomat",
-    "intro": "Witamy w narzędziu, które pomoże Ci stworzyć wniosek (i przejść przez procedurę) zmiany oznaczenia płci w dowodzie osobistym.",
+    "intro_text": "Witamy w narzędziu, które pomoże Ci stworzyć wniosek (i przejść przez procedurę) zmiany oznaczenia płci w dowodzie osobistym.",
     "theme": "Wygląd",
     "light": "Jasny",
     "dark": "Ciemny",
@@ -8,6 +8,7 @@
     "prev": "Poprzedni",
     "prev_step": "Poprzedni krok",
     "next_step": "Następny krok",
+    "step": "krok",
     "start": "Start",
     "summary": "Podsumowanie",
     "downloads": "Pliki do pobrania",
@@ -35,6 +36,7 @@
     "start_over": "Zacznij od nowa",
     "start_over_hint": "Jeśli zaczniesz od nowa, obecny postęp zostanie utracony. Zanim to zrobisz, zalecamy pobranie kopii zapasowej.",
     "delete_start_over": "Usuń postęp i zacznij od nowa",
+    "intro": "Wprowadzenie",
     "intro_info": "Wnioskomat jest obecnie w fazie testowej – prosimy nie składać wygenerowanych wniosków!",
     "state_persisted": "Zapisano postęp",
     "export_sync": "Eksportuj",

@@ -38,7 +38,7 @@ const startOver = () => {
         <h1>{{ t('title') }}</h1>
 
         <p>
-            {{ t('intro') }}
+            {{ t('intro_text') }}
         </p>
 
         <div class="intro-btns">

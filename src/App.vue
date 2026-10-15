@@ -17,6 +17,7 @@ import ExportModal from './components/modals/ExportModal.vue'
 import ExitModal from './components/modals/ExitModal.vue'
 import RestorationModal from './components/modals/RestorationModal.vue'
 import { subforms } from './stores/subforms'
+import useTitle from './composables/useTitle'
 
 // bring commented code back when there are translations
 // const { isInitialLocaleLoading, isCurrentLocaleLoading } = storeToRefs(usePrefsStore())
@@ -26,6 +27,8 @@ const { t } = useI18n()
 
 /** @type import('vue').Ref< 'start' | 'form' > */
 const currentScreen = ref('start')
+
+useTitle(currentScreen)
 
 const menuOpenBtn = ref()
 

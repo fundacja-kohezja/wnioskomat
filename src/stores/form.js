@@ -9,6 +9,7 @@ export default defineStore('form', () => {
 
     const currentForm = ref('mainApplication')
     const currentStep = ref(0)
+    const isFinalStep = ref(false) // TODO this should be a getter, but it would require deeper refactoring
 
     const anyAnswers = computed(() => formStores.some(store => store.anyAnswers))
 
@@ -38,7 +39,7 @@ export default defineStore('form', () => {
     }
 
     return {
-        currentForm, currentStep, // state
+        currentForm, currentStep, isFinalStep, // state
         anyAnswers, // getter
         clearAnswers, exportAnswers, // actions
     }
