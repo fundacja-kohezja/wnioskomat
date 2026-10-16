@@ -117,6 +117,7 @@
     "validation_email_0": "Podany adres nie jest prawdłowym adresem e-mail",
     "validation_underage_0": "Data musi być w przeszłości",
     "validation_underage_1": "Jeśli nie masz 18 lat, potrzebujesz pośrednictwa rodziców – wróć do pierwszego kroku i zaznacz odpowiednią opcję",
+    "validation_past_0": "Data musi być w przeszłości",
     "ongoing": "W trakcie postępowania",
     "finishing": "Na koniec postępowania",
     "mainApplication": "Główny wniosek",

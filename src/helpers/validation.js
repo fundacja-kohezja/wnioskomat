@@ -23,4 +23,8 @@ export default {
         // about 18 years, no need to be precise here
         (a, answers) => (!answers[0].a_3 && new Date - new Date(a) > 1000*60*60*24*366*18) || answers[0].a_3,
     ],
+
+    past: [
+        a => new Date > new Date(a),
+    ],
 }

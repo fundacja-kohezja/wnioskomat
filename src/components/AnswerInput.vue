@@ -130,7 +130,7 @@ const shown = computed(() => !props.question.showIf || isShown(
             class="text-input"
         >
             <span v-if="question.label">{{ question.label }}</span>
-            <textarea v-model.lazy="value" rows="4"></textarea>
+            <textarea v-model.lazy="value" rows="6"></textarea>
         </label>
         <fieldset v-else-if="question.type === 'month'">
             <legend v-if="question.label">{{ question.label }}</legend>
@@ -145,6 +145,7 @@ const shown = computed(() => !props.question.showIf || isShown(
                 </label>
             </div>
         </fieldset>
+        <p v-else :class="{ bullet: question.type === 'bullet' }">{{ question.label }}</p>
         <datalist v-if="question.datalist" :id="'q_'+step+'_'+answerNumber+'_datalist'">
             <option v-for="item of datasets[question.datalist]" :value="item"></option>
         </datalist>

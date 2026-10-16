@@ -1050,9 +1050,6 @@ a {
             summary::before {
                 margin-left: 0.15em;
                 margin-right: 0.67em;
-                margin-top: 0.2em;
-                border-top-width: 2px;
-                border-right-width: 2px;
             }
         }
 
@@ -1546,8 +1543,17 @@ a {
         max-width: 64em;
     }
 
+    .bullet,
+    .bullet + .help-text,
     .checkbox + .help-text {
         margin-left: 1.75rem;
+    }
+
+    .bullet::before {
+        content: '•';
+        font-weight: bold;
+        position: absolute;
+        transform: translateX(-1.25em);
     }
 
     .subquestion {
@@ -1568,6 +1574,7 @@ a {
         flex-direction: column;
         gap: 0.75em;
         max-width: 50em;
+        margin-top: -0.5em;
     }
 
     details {

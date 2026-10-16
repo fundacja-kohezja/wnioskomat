@@ -13,7 +13,7 @@ export default (screen) => {
 
     const title = computed(() => ({
         start: t('intro'),
-        form: t(currentForm.value) + (isFinalStep.value || currentForm.value === 'furtherSteps' ? '' : ', ' + t('step') + ' ' + (currentStep.value + 1)),
+        form: t(currentForm.value) + (isFinalStep.value || currentForm.value === 'furtherSteps' ? '' : ' (' + t('step') + ' ' + (currentStep.value + 1) + ')'),
     }[currentScreen.value]) + ' – ' + t('title'))
 
     useTitle(title)

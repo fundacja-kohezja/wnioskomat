@@ -1,8 +1,11 @@
 import validators from './validation'
 
-export const isShown = ({ step, answer, value = true }, answers, i, parent) => {
+export const isShown = ({ step, answer, value = true, valueNot }, answers, i, parent) => {
     if (step === undefined) step = i
     if (answer === undefined) answer = parent // if answer is unspecified, assume parent answer
+    if (valueNot !== undefined) {
+        return Array.isArray(valueNot) ? !valueNot.includes(answers[step][answer]) : answers[step][answer] !== valueNot
+    }
     return Array.isArray(value) ? value.includes(answers[step][answer]) : answers[step][answer] === value
 }
 

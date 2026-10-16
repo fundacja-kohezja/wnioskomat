@@ -24,110 +24,96 @@
               name: new_surname
               showIf: {}
       - heading: 'Osoby niepełnoletnie'
-        label: 'Składam wniosek przed ukończeniem 18 lat, za pośrednictwem rodziców'
+        label: 'Składam wniosek jako rodzic w imieniu osoby niepełnoletniej'
         name: is_underage
         type: checkbox
         extraInfo: |
             :::spoiler Więcej informacji o przypadku osób niepełnoletnich
 
-            Przed ukończeniem 18. roku życia nie można samodzielnie złożyć wniosku. Jeśli jesteś osobą niepełnoletnią, przed sądem muszą reprezentować Cię rodzice i to oni podpisują i składają wniosek. W kolejnych krokach podasz ich dane – Wnioskomat wszystko uwzględni i wygeneruje odpowiednio przygotowane dokumenty.
+            Przed ukończeniem 18. roku życia nie można samodzielnie złożyć wniosku. Osoby niepełnoletnie przed sądem muszą być reprezentowane przez rodziców – to oni podpisują i składają wniosek. Wnioskomat pozwala wygenerować taki wariant wniosku i dodaje wtedy dodatkowy krok, w którym podaje się dane rodziców.
 
-            Jeśli jesteś w sytuacji, w której tylko jedno z Twoich rodziców zgadza się na postępowanie, a drugie nie, zmiana oznaczenia płci nadal jest możliwa, ale sprawa robi się trudniejsza – Wnioskomat nie jest przygotowany do takich przypadków, rekomendujemy wtedy kontakt z prawnikiem.
+            W sytuacji, w której tylko jedno z rodziców zgadza się na postępowanie, a drugie nie, zmiana oznaczenia płci nadal jest możliwa, ale sprawa robi się trudniejsza – Wnioskomat nie jest przygotowany do takich przypadków, rekomendujemy wtedy kontakt z prawnikiem.
 
             :::
 
 - title: 'Potrzebne dokumenty'
   displayAsListInSummary: true
-  description: 'Zaznacz, które dokumenty zamierzasz załączyć. Im więcej, tym lepiej – zwiększa to szansę na szybsze rozpatrzenie sprawy. Niektóre z nich są zawsze wymagane, dlatego nie można ich odznaczyć.'
   questions:
-      - label: 'Skrócony odpis aktu urodzenia'
-        type: checkbox
+      - label: 'Skrócony odpis aktu urodzenia – wymagany'
+        type: bullet
         description: 'Można go pobrać w dowolnym urzędzie stanu cywilnego lub przez platformę ePUAP.'
-        initialValue: true
-        isDisabled: true
-      - label: 'Dowód uiszczenia opłaty sądowej (100 zł)'
-        type: checkbox
+      - label: 'Dowód uiszczenia opłaty sądowej (100 zł) – wymagany'
+        type: bullet
         description: 'Opłatę sądową można wnieść przelewem na numer konta podany na stronie internetowej sądu, osobiście w kasie sądu lub kupując znak sądowy na kwotę 100 zł na '
         descLink: 'https://oplaty.ms.gov.pl/znaki-oplaty-sadowej/zakup'
         descLinkText: 'stronie ministerstwa'
-        initialValue: true
-        isDisabled: true
-      - label: 'Przynajmniej jedna z opinii psychologicznych'
+      - heading: 'Opinie psychologiczne'
+        subheading: 'Zaznacz posiadane opinie (wymagana jest przynajmniej jedna) i postawione w nich diagnozy'
+        label: 'Psychologa'
+        name: psychologist
         type: checkbox
-        description: 'Zaznacz posiadane opinie i postawione w nich diagnozy'
-        initialValue: true
-        isDisabled: true
+        filledIfAny: [psychologist, psychologist_sexologist]
         subquestions:
-            - label: 'Psychologa'
-              name: psychologist
+            - label: 'F64.0 (wg. ICD-10)'
+              name: psychologist_f64
               type: checkbox
-              filledIfAny: [psychologist, psychologist_sexologist]
-              subquestions:
-                  - label: 'F64.0 (wg. ICD-10)'
-                    name: psychologist_f64
-                    type: checkbox
-                    filledIfAny: [psychologist_f64, psychologist_ha60]
-                    showIf: {}
-                  - label: 'HA60 (wg. ICD-11)'
-                    name: psychologist_ha60
-                    type: checkbox
-                    filledIfAny: [psychologist_f64, psychologist_ha60]
-                    showIf: {}
-            - label: 'Psychologa-seksuologa'
-              name: psychologist_sexologist
+              filledIfAny: [psychologist_f64, psychologist_ha60]
+              showIf: {}
+            - label: 'HA60 (wg. ICD-11)'
+              name: psychologist_ha60
               type: checkbox
-              filledIfAny: [psychologist, psychologist_sexologist]
-              subquestions:
-                  - label: 'F64.0 (wg. ICD-10)'
-                    name: psychologist_sexologist_f64
-                    type: checkbox
-                    filledIfAny: [psychologist_sexologist_f64, psychologist_sexologist_ha60]
-                    showIf: {}
-                  - label: 'HA60 (wg. ICD-11)'
-                    name: psychologist_sexologist_ha60
-                    type: checkbox
-                    filledIfAny: [psychologist_sexologist_f64, psychologist_sexologist_ha60]
-                    showIf: {}
-      - label: 'Przynajmniej jedno z zaświadczeń od lekarza'
+              filledIfAny: [psychologist_f64, psychologist_ha60]
+              showIf: {}
+      - label: 'Psychologa-seksuologa'
+        name: psychologist_sexologist
         type: checkbox
-        description: 'Zaznacz posiadane zaświadczenia i postawione w nich diagnozy'
-        initialValue: true
-        isDisabled: true
+        filledIfAny: [psychologist, psychologist_sexologist]
         subquestions:
-            - label: 'Psychiatry'
-              name: psychiatrist
+            - label: 'F64.0 (wg. ICD-10)'
+              name: psychologist_sexologist_f64
               type: checkbox
-              filledIfAny: [psychiatrist, sexologist]
-              subquestions:
-                  - label: 'F64.0 (wg. ICD-10)'
-                    name: psychiatrist_f64
-                    type: checkbox
-                    filledIfAny: [psychiatrist_f64, psychiatrist_ha60]
-                    showIf: {}
-                  - label: 'HA60 (wg. ICD-11)'
-                    name: psychiatrist_ha60
-                    type: checkbox
-                    filledIfAny: [psychiatrist_f64, psychiatrist_ha60]
-                    showIf: {}
-            - label: 'Seksuologa'
-              name: sexologist
+              filledIfAny: [psychologist_sexologist_f64, psychologist_sexologist_ha60]
+              showIf: {}
+            - label: 'HA60 (wg. ICD-11)'
+              name: psychologist_sexologist_ha60
               type: checkbox
-              filledIfAny: [psychiatrist, sexologist]
-              subquestions:
-                  - label: 'F64.0 (wg. ICD-10)'
-                    name: sexologist_f64
-                    type: checkbox
-                    filledIfAny: [sexologist_f64, sexologist_ha60]
-                    showIf: {}
-                  - label: 'HA60 (wg. ICD-11)'
-                    name: sexologist_ha60
-                    type: checkbox
-                    filledIfAny: [sexologist_f64, sexologist_ha60]
-                    showIf: {}
-      - label: 'Zaświadczenie lekarskie o wdrożeniu terapii hormonalnej'
-        name: hrt_certificate
+              filledIfAny: [psychologist_sexologist_f64, psychologist_sexologist_ha60]
+              showIf: {}
+      - heading: 'Zaświadczenia od lekarzy'
+        subheading: 'Zaznacz posiadane zaświadczenia (wymagane jest przynajmniej jedno) i postawione w nich diagnozy'
+        label: 'Psychiatry'
+        name: psychiatrist
         type: checkbox
-      - label: 'Zalecenia Polskiego Towarzystwa Seksuologicznego'
+        filledIfAny: [psychiatrist, sexologist]
+        subquestions:
+            - label: 'F64.0 (wg. ICD-10)'
+              name: psychiatrist_f64
+              type: checkbox
+              filledIfAny: [psychiatrist_f64, psychiatrist_ha60]
+              showIf: {}
+            - label: 'HA60 (wg. ICD-11)'
+              name: psychiatrist_ha60
+              type: checkbox
+              filledIfAny: [psychiatrist_f64, psychiatrist_ha60]
+              showIf: {}
+      - label: 'Seksuologa'
+        name: sexologist
+        type: checkbox
+        filledIfAny: [psychiatrist, sexologist]
+        subquestions:
+            - label: 'F64.0 (wg. ICD-10)'
+              name: sexologist_f64
+              type: checkbox
+              filledIfAny: [sexologist_f64, sexologist_ha60]
+              showIf: {}
+            - label: 'HA60 (wg. ICD-11)'
+              name: sexologist_ha60
+              type: checkbox
+              filledIfAny: [sexologist_f64, sexologist_ha60]
+              showIf: {}
+      - heading: 'Dokumenty pomocnicze dla sędziów'
+        subheading: 'Zaznacz, które zamierzasz dołączyć – nie są wymagane, ale mocno zalecane, by zwiększyć szansę na szybsze załatwienie sprawy'
+        label: 'Zalecenia Polskiego Towarzystwa Seksuologicznego'
         name: pts_guidelines
         type: checkbox
         description: 'Wielu sędziów nie ma dobrego rozeznania w kwestii transpłciowości, dlatego warto pokierować ich we właściwą stronę odpowiednim dokumentem. Do pobrania stąd: '
@@ -137,11 +123,16 @@
         name: long_guidelines
         type: checkbox
         description: 'Jest to bardzo obszerny dokument, ale warto go załączyć. Koszty można ograniczyć, drukując 4 strony tekstu na jednej stronie arkusza papieru dwustronnie. Upewnij się, że drukujesz najnowszą edycję – z 2024 r. (zwróć uwagę czy tytuł się zgadza).'
+      - heading: 'Dodatkowe dowody'
+        subheading: 'Zaznacz, które zamierzasz dołączyć – wszystkie są opcjalne, ale te które Cię dotyczą warto zaznaczyć, gdyż zwiększają szansę na szybsze załatwienie sprawy'
+        label: 'Zaświadczenie lekarskie o wdrożeniu terapii hormonalnej'
+        name: hrt_certificate
+        type: checkbox
       - label: 'Decyzja o zmianie imienia'
         name: name_change_confirmation
         type: checkbox
         description: 'Jeśli zmienił_ś już imię w USC, to dobrze jest załączyć decyzję jako jeden z dowodów na trwałość poczucia przynależności do swojej płci. Zamiast dokumentu z decyzją, możesz alternatywnie załączyć zupełny odpis aktu urodzenia – w przeciwieństwie do skróconego, wynika z niego zmiana imienia.'
-        showIf: { step: 0, answer: is_new_firstname, value: false }
+        showIf: { step: 0, answer: is_new_firstname, valueNot: true }
       - label: 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci'
         name: proving_documents
         type: checkbox
@@ -236,6 +227,12 @@
         name: birth_date
         type: date
         validation: underage
+        showIf: { step: 0, answer: is_underage, valueNot: true }
+      - label: 'Data urodzenia'
+        name: birth_date
+        type: date
+        validation: past
+        showIf: { step: 0, answer: is_underage }
       - label: 'Numer aktu'
         name: birth_certificate_id
         description: 'W przypadku odpisu zupełnego aktu numer znajdziesz na górze, jako „oznaczenie aktu…”. W przypadku odpisu skróconego aktu numer znajdziesz na dole, w rubryce „informacje o odpisie”, obok „podpis jest zgodny z treścią aktu o oznaczeniu…”.'
@@ -320,10 +317,16 @@
 - title: 'Opis doświadczeń'
   displayWithHeadingInSummary: false
   questions:
-      - label: 'Opisz krótko początki Twojego doświadczenia transpłciowości'
+      - label: 'Opisz jak przebiegało uświadamianie sobie Twojej tożsamości płciowej'
         name: experience
         type: textarea
-        description: "Przykład: \nOkoło […] roku życia zaczęło pojawiać się u mnie poczucie rozbieżności pomiędzy płcią przypisaną mi przy urodzeniu a moją tożsamością płciową. Doprowadziło to do wykształcenia się u mnie dysforii, której towarzyszyło obniżenie nastroju."
+        description: "Warto zawrzeć informacje, kiedy rozpoczął się u ciebie ten proces, kiedy nabrał_ś pewności co do swojej tożsamości i czy w trakcie tego procesu doświadczał_ś dysforii."
+        extraInfo: |
+            :::spoiler Przykład
+
+            Około […] roku życia zaczęło pojawiać się u mnie poczucie rozbieżności pomiędzy płcią przypisaną mi przy urodzeniu a moją tożsamością płciową. Doprowadziło to do wykształcenia się u mnie dysforii, której towarzyszyło obniżenie nastroju. Pewność co do mojej tożsamości płciowej uzyskał_m około […] roku.
+
+            :::
       - label: 'Jestem w terapii hormonalnej'
         name: is_hrt
         type: checkbox
@@ -332,10 +335,10 @@
               name: hrt_since
               type: month
               showIf: {}
-      - label: 'Poddano mnie badaniom psychologicznym'
+      - label: 'Poddano mnie testom psychologicznym'
         name: has_assessment
         type: checkbox
-        description: 'Jeśli psycholog, u którego był_ś, pracuje w modelu świadomej zgody, prawdopodobnie nie poddano cię żadnym badaniom psychologicznym, wówczas możesz odznaczyć to pole.'
+        description: 'Jeśli psycholog, u którego był_ś, pracuje w modelu świadomej zgody, prawdopodobnie nie poddano cię żadnym testom psychologicznym, wówczas możesz pozostawić to pole niezaznaczone.'
       - label: 'Chcę ujawnić sądowi imię, którego używam na co dzień'
         name: has_common_name
         type: checkbox
