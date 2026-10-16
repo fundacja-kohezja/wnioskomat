@@ -13,6 +13,9 @@ export const validateAnswer = (q, i, answers, parent) => {
     const parentForSubanswers = q.name
     const subanswers = q.subquestions ? q.subquestions.flatMap(q => validateAnswer(q, i, answers, parentForSubanswers)) : []
 
+    if (q.type === 'bullet') {
+        return subanswers
+    }
     if (q.showIf && !isShown(q.showIf, answers, i, parent)) {
         return subanswers
     }
