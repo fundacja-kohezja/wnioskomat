@@ -1,4 +1,4 @@
-This folder contain base64-encoded ttf files of the following font:
+This folder contains base64-encoded ttf files of the following font:
 DejaVu Sans
 The font is subsetted to Latin Extended and has alternate glyphs (I and J) flattened.
 

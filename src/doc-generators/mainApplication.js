@@ -187,7 +187,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
         })
     }
     if (a.proving_documents) {
-        li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS' }[a.proving_documents_type] || '......................')+' – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[a.new_mark] || '.......')+' w otoczeniu;', {
+        li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS', D: 'wydruku ze szkoły' }[a.proving_documents_type] || '......................')+' – na fakt występowania u mnie trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[a.new_mark] || '.......')+' w otoczeniu;', {
             level: 2,
         })
     }

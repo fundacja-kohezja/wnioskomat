@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { computedWithControl } from '@vueuse/core'
 
 import { isShown } from '../helpers/answers'
+import StepTitle from './StepTitle.vue'
 
 const props = defineProps({
     steps: {
@@ -65,7 +66,7 @@ watch(() => answerStatuses.value[props.currentIndex], () => {
                         <line v-if="statuses[index] === 'partial'" stroke-linecap="round" x1="9" y1="12" x2="15" y2="12" stroke-width="1.5" class="dash" />
                         <path v-if="statuses[index] === 'invalid'" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.25m0 3.5h.008v.008H12v-.008Z" stroke-width="2" class="exclamation" />
                     </svg>
-                    <button class="nav-link" @click="emit('changeCurrentIndex', index)">{{ step.title }}</button>
+                    <button class="nav-link" @click="emit('changeCurrentIndex', index)"><StepTitle :step="step" :answers="answers" /></button>
                 </span>
             </li>
         </template>

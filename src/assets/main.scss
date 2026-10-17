@@ -1209,6 +1209,16 @@ a {
 
     .has-validation-error {
 
+        input,
+        textarea,
+        select {
+
+            &:not(:focus) {
+                outline: 2px solid light-dark(#c2410c, #fb923c);
+                outline-offset: -1px;
+            }
+        }
+
         label {
             position: relative;
 
@@ -1545,7 +1555,8 @@ a {
 
     .bullet,
     .bullet + .help-text,
-    .checkbox + .help-text {
+    .checkbox + .help-text,
+    .checkbox + .help-text + .extra-info {
         margin-left: 1.75rem;
     }
 
@@ -1574,7 +1585,16 @@ a {
         flex-direction: column;
         gap: 0.75em;
         max-width: 50em;
-        margin-top: -0.5em;
+        margin-top: 1em;
+
+        hr {
+            margin-block: 0.5em;
+        }
+
+        blockquote {
+            border-left: 0.25em solid light-dark($gray-350, $gray-700);
+            color: light-dark($gray-700, $gray-400);
+        }
     }
 
     details {
@@ -1596,6 +1616,14 @@ a {
 
             &:first-of-type {
                 margin-top: 0.5em;
+            }
+        }
+
+        blockquote {
+            margin-left: 1.5em;
+
+            p {
+                margin-left: 0.75em;
             }
         }
     }

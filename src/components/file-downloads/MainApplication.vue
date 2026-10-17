@@ -62,14 +62,18 @@ if (!answers.value[1].psychiatrist && !answers.value[1].sexologist) {
 }
 
 if(answers.value[1].hrt_certificate) attached.push('Zaświadczenie o wdrożeniu terapii hormonalnej')
-if(answers.value[1].pts_guidelines ) attached.push('Zalecenia Polskiego Towarzystwa Seksuologicznego')
+if (answers.value[0].is_underage) {
+    if(answers.value[1].wpath_guidelines) attached.push('Ramowe zalecenia panelu ekspertów')
+} else {
+    if(answers.value[1].pts_guidelines) attached.push('Zalecenia Polskiego Towarzystwa Seksuologicznego')
+}
 if(answers.value[1].long_guidelines) attached.push('Publikację „Postępowania w sprawach o uzgodnienie płci. Przewodnik”')
 
 if (!answers.value[0].is_new_firstname && answers.value[1].name_change_confirmation) {
     attached.push('Decyzję o zmianie imienia')
 }
 if (answers.value[1].proving_documents) {
-    attached.push(answers.value[1].proving_documents_type ? { A: 'Wydruk z portali społecznościowych', B: 'Identyfikator z miejsca pracy', C: 'Wydruk z portalu USOS' }[answers.value[1].proving_documents_type] : 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci: …')
+    attached.push(answers.value[1].proving_documents_type ? { A: 'Wydruk z portali społecznościowych', B: 'Identyfikator z miejsca pracy', C: 'Wydruk z portalu USOS', D: 'Wydruk ze szkoły' }[answers.value[1].proving_documents_type] : 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci: …')
 }
 
 
@@ -77,13 +81,25 @@ if (answers.value[1].proving_documents) {
 
 <template>
     <FileDownloads :documents="documents">
+        <p v-if="answers[0].is_underage" class="docs-instruction">
+            Na końcu tego wniosku są potrzebne dwa podpisy – musi się podpisać także drugi rodzic.
+        </p>
         <hr />
         <p class="docs-instruction">Dodatkowo przygotuj:</p>
         <ul>
             <li v-for="attachment of attached">{{ attachment }}</li>
         </ul>
         <hr />
-        <div class="docs-instruction">
+        <template v-if="answers[0].is_underage">
+            <p class="docs-instruction">
+                Wniosek można złożyć:
+            </p>
+            <ul>
+                <li>wysyłając dokumenty listem poleconym</li>
+                <li>dostarczając dokumenty do sądu osobiście i składając je na biurze podawczym – trzeba mieć wtedy ze sobą <b>dodatkową kserokopię wniosku</b>, na którym w sądzie przybita zostanie pieczątka potwierdzająca jego złożenie.</li>
+            </ul>
+        </template>
+        <div class="docs-instruction" v-else>
             <p>Gdy przygotujesz wszystkie dokumenty, możesz je dostarczyć do sądu na dwa sposoby:</p>
             <details>
                 <summary>Zanieść osobiście</summary>

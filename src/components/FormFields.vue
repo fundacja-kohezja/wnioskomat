@@ -7,6 +7,7 @@ import AnswerInput from './AnswerInput.vue'
 import DataSummary from './DataSummary.vue'
 import { isShown } from '../helpers/answers'
 import DownloadsStep from './DownloadsStep.vue'
+import StepTitle from './StepTitle.vue'
 
 const props = defineProps({
     formName: {
@@ -69,7 +70,7 @@ const nextStep = () => {
     <main :class="isLastStep ? 'downloads' : 'questions'">
         <div class="step-title" ref="heading">
             <template v-if="currentIndex < steps.length">
-                <h1>{{ currentStep.title }}</h1>
+                <h1><StepTitle :step="currentStep" :answers="answers" /></h1>
                 <button
                     v-if="populationAvailability"
                     class="btn"

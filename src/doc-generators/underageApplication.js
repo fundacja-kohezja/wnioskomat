@@ -59,12 +59,6 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
         mayBreak: true,
     })
     p('PESEL ' + (normalize(a.pesel) || '......................'), top)
-    if (a.has_contact_info) {
-        p([normalize(a.email), normalize(a.phone) ? ('tel. ' + normalize(a.phone)) : ''].filter(x => x).join('\n'), {
-            ...top,
-            mayBreak: true,
-        })
-    }
 
     p({K: 'Reprezentowana przez', M: 'Reprezentowany przez'}[a.new_mark] || 'Reprezentowan_ przez', {
         ...top,
@@ -219,7 +213,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
             level: 2,
         })
     }
-    if (a.pts_guidelines) {
+    if (a.wpath_guidelines) {
         li(nb, 'dokumentu zatytułowanego |Ramowe zalecenia dotyczące procesu opieki nad zdrowiem nastoletnich osób transpłciowych (T) i niebinarnych (NB) doświadczających dysforii płciowej — stanowisko panelu ekspertów| – na fakt aktualnych polskich standardów opieki nad nastoletnimi osobami transpłciowymi, wymogów diagnostycznych niezbędnych do postawienia diagnozy F64.0 lub HA60, spełniania przez '+({ K: 'Wnioskodawczynię', M: 'Wnioskodawcę' }[a.new_mark] || '......................')+' kryteriów diagnostycznych;', {
             level: 2,
             italicSep: '|',
@@ -231,7 +225,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
         })
     }
     if (a.proving_documents) {
-        li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS' }[a.proving_documents_type] || '......................')+' – na fakt występowania u '+part0+' trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[a.new_mark] || '.......')+' w otoczeniu;', {
+        li(nb, ({ A: 'wydruku z portali społecznościowych', B: 'plakietki identyfikacyjnej z miejsca pracy', C: 'wydruku z portalu USOS', D: 'wydruku ze szkoły'}[a.proving_documents_type] || '......................')+' – na fakt występowania u '+part0+' trwałej identyfikacji z płcią '+part1+', funkcjonowania jako '+({ K: 'kobieta', M: 'mężczyzna' }[a.new_mark] || '.......')+' w otoczeniu;', {
             level: 2,
         })
     }
@@ -245,7 +239,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
 
     let text = 'Na wstępie wyjaśniamy, że zdajemy sobie sprawę z metrykalnego oznaczenia płci naszego dziecka jako '+({ K: 'męskiej', M: 'żeńskiej' }[a.new_mark] || '.......')+', jednak wskazuję, że w codziennym życiu '+({ K: 'córka', M: 'syn' }[a.new_mark] || '......')+' funkcjonuje jako '+({ K: 'kobieta', M: 'mężczyzna' }[a.new_mark] || '.......')+'. W związku z tym, że tożsamość płciowa jest jednym z dóbr osobistych człowieka, we wniosku będzimy używać '+({ K: 'żeńskich', M: 'męskich' }[a.new_mark] || '.......')+' form gramatycznych.'
     if (a.has_common_name) {
-        text += ' Jednocześnie wskazujemy, że na co dzień '+({ K: 'córka', M: 'syn' }[a.new_mak] || '......')+' używa imienia '+ (normalize(a.common_name) || '....... ') +'.'
+        text += ' Jednocześnie wskazujemy, że na co dzień '+({ K: 'córka', M: 'syn' }[a.new_mark] || '......')+' używa imienia '+ (normalize(a.common_name) || '....... ') +'.'
     }
     p(text, {
         spaceBefore: 6,
@@ -273,7 +267,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
         p('Dowód: odpis aktu urodzenia')
     })
 
-    p(normalize(a.experience) || '......................', {
+    p(normalize(a.underage_experience) || '......................', {
         mayBreak: true,
     })
     p('U osób transpłciowych występuje niezgodność pomiędzy płcią przypisaną przy urodzeniu a tożsamością płciową, czyli głębokim wewnętrznym przeżywaniem własnej płci. Ta rozbieżność może prowadzić do dysforii, czyli uczucia dyskomfortu wynikającego z rozdźwięku pomiędzy różnymi aspektami naszej płci (cechami płciowymi naszego ciała, tym jak wyglądamy, tym jak odbierają nas inni). Nasilona dysforia może wiązać się z poważnymi negatywnymi skutkami dla zdrowia psychicznego osoby transpłciowej. Formalnie u osób transpłciowych diagnozuje się „transseksualizm” według nomenklatury ICD-10 (F64.0). Według najnowszej nomenklatury ICD-11, nie wszędzie jeszcze wdrożonej, formalnie diagnozuje się „niezgodność płciową” (HA60), którą zdefiniowano jako utrzymującą się wyraźną niezgodność między doświadczaną przez osobę płcią oraz płcią przypisaną. Stan „niezgodności płciowej” został wyjęty z obszaru dotyczącego zaburzeń psychicznych, a przeniesiony do obszaru dotyczącego zdrowia seksualnego. Sama transpłciowość w tym ujęciu nie jest już stanem „patologicznym”, „chorobą” czy „zaburzeniem”. Po uzgodnieniu płci w toku tranzycji medycznej i/lub społecznej, w tym prawnej, niezgodność ta zanika. W okresie dzieciństwa stawia się diagnozę F 64.2. (w przypadku ICD-10 – zaburzenia identyfikacji płciowej w dzieciństwie) lub HA61 (w przypadku ICD-11 – niezgodność płciowa w dzieciństwie). Jednak diagnostyka w okresie dojrzewania powinna się już zakończyć diagnozą analogiczną jak dla osób dorosłych.')
@@ -493,7 +487,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
         })
 
         font({ style: 'italic' }, () => {
-            p('Podpis', {
+            p('Podpisy', {
                 shift: 120,
                 spaceAfter: 10,
             })
@@ -510,7 +504,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
     if (a.psychologist_sexologist) attachments.push('opinia psychologiczna')
     if (a.psychiatrist) attachments.push('zaświadczenie lekarza psychiatry')
     if (a.sexologist) attachments.push('zaświadczenie lekarza seksuologa')
-    if (a.pts_guidelines) attachments.push('zalecenia panelu ekspertów')
+    if (a.wpath_guidelines) attachments.push('zalecenia panelu ekspertów')
     if (a.long_guidelines) attachments.push('dokument zatytułowany |Postępowania w sprawach o uzgodnienie płci. Przewodnik|, wydany przez Rzecznika Praw Obywatelskich')
 
     const lastAttachment = attachments.pop()

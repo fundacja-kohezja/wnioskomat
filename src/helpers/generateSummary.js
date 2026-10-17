@@ -37,7 +37,7 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
         summary.push({
             type: 'paragraphs',
             items: [
-                ['Składasz wniosek jako osoba niepełnoletnia, za pośrednictwem rodziców.'],
+                ['Składasz wniosek jako rodzic w imieniu osoby niepełnoletniej.'],
             ],
         })
     }
@@ -91,13 +91,17 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
     }
     const push = (array, item) => array.push(item)
     push(a.hrt_certificate ? attached : unattached, 'Zaświadczenie o wdrożeniu terapii hormonalnej')
-    push(a.pts_guidelines  ? attached : unattached, 'Zalecenia Polskiego Towarzystwa Seksuologicznego')
+    if (a.is_underage) {
+        push(a.wpath_guidelines  ? attached : unattached, 'Ramowe zalecenia panelu ekspertów')
+    } else {
+        push(a.pts_guidelines  ? attached : unattached, 'Zalecenia Polskiego Towarzystwa Seksuologicznego')
+    }
     push(a.long_guidelines ? attached : unattached, 'Publikację „Postępowania w sprawach o uzgodnienie płci. Przewodnik”')
     if (!a.is_new_firstname) {
         (a.name_change_confirmation ? attached : unattached).push('Decyzję o zmianie imienia')
     }
     if (a.proving_documents) {
-        attached.push(a.proving_documents_type ? { A: 'Wydruk z portali społecznościowych', B: 'Identyfikator z miejsca pracy', C: 'Wydruk z portalu USOS' }[a.proving_documents_type] : 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci: …')
+        attached.push(a.proving_documents_type ? { A: 'Wydruk z portali społecznościowych', B: 'Identyfikator z miejsca pracy', C: 'Wydruk z portalu USOS', D: 'Wydruk ze szkoły' }[a.proving_documents_type] : 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci: …')
     } else {
         unattached.push('Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci')
     }
@@ -117,11 +121,11 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
     summary.push({
         type: 'table',
         rows: {
-            'Twój PESEL:': a.pesel || '…',
+            'PESEL:': a.pesel || '…',
             'Adres zamieszkania:': [(a.address_1 || '…'), a.address_2, (a.zip_code || '…') + ' ' + (a.city || '…')]
                 .filter(x => x)
                 .join('\n'),
-            ...(a.has_contact_info ? {
+            ...(!a.is_underage && a.has_contact_info ? {
                 'Dane kontaktowe:': ['', a.email + '\n', 'tel. ', a.phone]
             } : {}),
             ...(a.has_proxy ? {
@@ -180,12 +184,12 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
     summary.push({
         type: 'paragraphs',
         items: [
-            ['', a.experience || '…'],
+            ['', (a.is_underage ? a.underage_experience : a.experience) || '…'],
             ['Początek terapii hormonalnej: ', a.hrt_since ? (a.hrt_since[0] ? t(['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][a.hrt_since[0]-1]) : '') + ' ' + (a.hrt_since[1] || '…') : '…'],
             ...(a.has_assessment ? [['Poddano mnie badaniom psychologicznym']] : []),
-            ['W sferze społecznej funkcjonuję zgodnie z moją tożsamością płciową ', a.areas ? { some: 'w niektórych obszarach', all: 'w większości obszarów' }[a.areas] : '…'],
+            [a.is_underage ? 'W sferze społecznej funkcjonuje zgodnie z moją tożsamością płciową ' : 'W sferze społecznej funkcjonuję zgodnie z moją tożsamością płciową ', a.areas ? { some: 'w niektórych obszarach', all: 'w większości obszarów' }[a.areas] : '…'],
             ...(a.has_common_name ? [
-                ['Na co dzień używam imienia ', a.common_name || '…']
+                [a.is_underage ? 'Na co dzień używa imienia ' : 'Na co dzień używam imienia ', a.common_name || '…']
             ] : []),
         ],
     })

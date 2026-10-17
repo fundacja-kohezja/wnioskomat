@@ -160,6 +160,8 @@ const shown = computed(() => !props.question.showIf || isShown(
                 </svg>
             </a>
         </p>
+        <div v-if="question.extraInfo" v-show="shown" class="extra-info" v-html="question.extraInfo">
+        </div>
         <template v-if="question.subquestions">
             <AnswerInput
                 v-for="(subquestion, i) of question.subquestions"
@@ -172,7 +174,5 @@ const shown = computed(() => !props.question.showIf || isShown(
                 v-model="answers[step][subquestion.name]"
             />
         </template>
-    </div>
-    <div v-if="question.extraInfo" v-show="shown" class="extra-info" v-html="question.extraInfo">
     </div>
 </template>

@@ -47,12 +47,15 @@
         description: 'Opłatę sądową można wnieść przelewem na numer konta podany na stronie internetowej sądu, osobiście w kasie sądu lub kupując znak sądowy na kwotę 100 zł na '
         descLink: 'https://oplaty.ms.gov.pl/znaki-oplaty-sadowej/zakup'
         descLinkText: 'stronie ministerstwa'
+
+      # wariant dla dorosłych
       - heading: 'Opinie psychologiczne'
         subheading: 'Zaznacz posiadane opinie (wymagana jest przynajmniej jedna) i postawione w nich diagnozy'
         label: 'Psychologa'
         name: psychologist
         type: checkbox
         filledIfAny: [psychologist, psychologist_sexologist]
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
             - label: 'F64.0 (wg. ICD-10)'
               name: psychologist_f64
@@ -68,6 +71,7 @@
         name: psychologist_sexologist
         type: checkbox
         filledIfAny: [psychologist, psychologist_sexologist]
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
             - label: 'F64.0 (wg. ICD-10)'
               name: psychologist_sexologist_f64
@@ -85,6 +89,7 @@
         name: psychiatrist
         type: checkbox
         filledIfAny: [psychiatrist, sexologist]
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
             - label: 'F64.0 (wg. ICD-10)'
               name: psychiatrist_f64
@@ -100,6 +105,7 @@
         name: sexologist
         type: checkbox
         filledIfAny: [psychiatrist, sexologist]
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
             - label: 'F64.0 (wg. ICD-10)'
               name: sexologist_f64
@@ -111,32 +117,155 @@
               type: checkbox
               filledIfAny: [sexologist_f64, sexologist_ha60]
               showIf: {}
+      # wariant dla dorosłych – koniec
+
+      # wariant dla niepełnoletnich
+      - heading: 'Opinie psychologiczne'
+        subheading: "Zaznacz posiadane opinie (wymagana jest przynajmniej jedna) i postawione w nich diagnozy.\n\nJeśli opinia jest starsza niż pół roku, dołącz do niej uaktualnienie (zwróć się do specjalisty, by potwierdził/a w dwóch akapitach, że wnioski z poprzedniej opinii są aktualne)."
+        label: 'Psychologa'
+        name: psychologist
+        type: checkbox
+        filledIfAny: [psychologist, psychologist_sexologist]
+        showIf: { step: 0, answer: is_underage }
+        subquestions:
+            - label: 'F64.0 (wg. ICD-10)'
+              name: psychologist_f64
+              type: checkbox
+              description: 'Jeśli opinia ma diagnozę F64.2, trzeba ją zaktualizować do F64.0'
+              filledIfAny: [psychologist_f64, psychologist_ha60]
+              showIf: {}
+            - label: 'HA60 (wg. ICD-11)'
+              name: psychologist_ha60
+              type: checkbox
+              filledIfAny: [psychologist_f64, psychologist_ha60]
+              showIf: {}
+      - label: 'Psychologa-seksuologa'
+        name: psychologist_sexologist
+        type: checkbox
+        filledIfAny: [psychologist, psychologist_sexologist]
+        showIf: { step: 0, answer: is_underage }
+        subquestions:
+            - label: 'F64.0 (wg. ICD-10)'
+              name: psychologist_sexologist_f64
+              type: checkbox
+              description: 'Jeśli opinia ma diagnozę F64.2, trzeba ją zaktualizować do F64.0'
+              filledIfAny: [psychologist_sexologist_f64, psychologist_sexologist_ha60]
+              showIf: {}
+            - label: 'HA60 (wg. ICD-11)'
+              name: psychologist_sexologist_ha60
+              type: checkbox
+              filledIfAny: [psychologist_sexologist_f64, psychologist_sexologist_ha60]
+              showIf: {}
+      - heading: 'Zaświadczenia od lekarzy'
+        subheading: "Zaznacz posiadane zaświadczenia (wymagane jest przynajmniej jedno) i postawione w nich diagnozy\n\nJeśli zaświadczenie jest starsze niż pół roku, dołącz do niego uaktualnienie (zwróć się do specjalisty, by potwierdził/a w dwóch akapitach, że wnioski z poprzedniego zaświadczenia są aktualne)."
+        label: 'Psychiatry'
+        name: psychiatrist
+        type: checkbox
+        filledIfAny: [psychiatrist, sexologist]
+        showIf: { step: 0, answer: is_underage }
+        subquestions:
+            - label: 'F64.0 (wg. ICD-10)'
+              name: psychiatrist_f64
+              type: checkbox
+              description: 'Jeśli opinia ma diagnozę F64.2, trzeba ją zaktualizować do F64.0'
+              filledIfAny: [psychiatrist_f64, psychiatrist_ha60]
+              showIf: {}
+            - label: 'HA60 (wg. ICD-11)'
+              name: psychiatrist_ha60
+              type: checkbox
+              filledIfAny: [psychiatrist_f64, psychiatrist_ha60]
+              showIf: {}
+      - label: 'Seksuologa'
+        name: sexologist
+        type: checkbox
+        filledIfAny: [psychiatrist, sexologist]
+        showIf: { step: 0, answer: is_underage }
+        subquestions:
+            - label: 'F64.0 (wg. ICD-10)'
+              name: sexologist_f64
+              type: checkbox
+              description: 'Jeśli opinia ma diagnozę F64.2, trzeba ją zaktualizować do F64.0'
+              filledIfAny: [sexologist_f64, sexologist_ha60]
+              showIf: {}
+            - label: 'HA60 (wg. ICD-11)'
+              name: sexologist_ha60
+              type: checkbox
+              filledIfAny: [sexologist_f64, sexologist_ha60]
+              showIf: {}
+      # wariant dla niepełnoletnich – koniec
+
+      - heading: 'Dokumenty pomocnicze dla sędziów'
+        subheading: 'Zaznacz, które zamierzasz dołączyć – nie są wymagane, ale mocno zalecane, by zwiększyć szansę na szybsze załatwienie sprawy'
+        label: 'Ramowe zalecenia panelu ekspertów'
+        name: wpath_guidelines
+        type: checkbox
+        description: 'Wielu sędziów nie ma dobrego rozeznania w kwestii transpłciowości, zwłaszcza u niepełnoletnich osób, dlatego warto pokierować ich we właściwą stronę odpowiednim dokumentem.'
+        descLink: ''
+        showIf: { step: 0, answer: is_underage }
+        extraInfo: |
+            :::spoiler Informacje i link do pobrania
+
+            Pobierz: [Ramowe zalecenia dotyczące procesu opieki nad zdrowiem nastoletnich osób transpłciowych (T) i niebinarnych (NB) doświadczających dysforii płciowej — stanowisko panelu ekspertów](/ramowe-zalecenia-nieletni/Ramowe-zalecenia-dotyczace-procesu-opieki-nad-zdrowiem-nastoletnich-osob-transplciowych-i-niebinarnych-2025.pdf){download}
+
+            Dokument jest dostępny na licencji [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/){target=_blank}, [źródło](https://doi.org/10.5603/ep.104289){target=_blank}
+
+            :::
       - heading: 'Dokumenty pomocnicze dla sędziów'
         subheading: 'Zaznacz, które zamierzasz dołączyć – nie są wymagane, ale mocno zalecane, by zwiększyć szansę na szybsze załatwienie sprawy'
         label: 'Zalecenia Polskiego Towarzystwa Seksuologicznego'
         name: pts_guidelines
         type: checkbox
-        description: 'Wielu sędziów nie ma dobrego rozeznania w kwestii transpłciowości, dlatego warto pokierować ich we właściwą stronę odpowiednim dokumentem. Do pobrania stąd: '
-        descLink: 'https://pts-seksuologia.pl/sites/strona/118/zalecenia-pts-dotyczace-opieki-nad-zdrowiem-doroslych-osob-transplciowych--stanowisko-panelu-ekspertow'
-        descLinkText: 'Zalecenia PTS dotyczące opieki nad zdrowiem dorosłych osób transpłciowych'
+        description: 'Wielu sędziów nie ma dobrego rozeznania w kwestii transpłciowości, dlatego warto pokierować ich we właściwą stronę tym dokumentem'
+        showIf: { step: 0, answer: is_underage, valueNot: true }
+        extraInfo: |
+            :::spoiler Informacje i link do pobrania
+
+            Pobierz: [Zalecenia PTS dotyczące opieki nad zdrowiem dorosłych osób transpłciowych](/zalecenia-pts/Grabski_PsychiatrPolOnlineFirstNr187.pdf_____5f7ad3b021cb6.pdf){download}
+
+            Dokument jest dostępny na licencji [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/){target=_blank}, [źródło](https://doi.org/10.12740/PP/OnlineFirst/125785){target=_blank}
+
+            :::
       - label: 'Publikacja „Postępowania w sprawach o uzgodnienie płci. Przewodnik” wydana przez Rzecznika Praw Obywatelskich'
         name: long_guidelines
         type: checkbox
-        description: 'Jest to bardzo obszerny dokument, ale warto go załączyć. Koszty można ograniczyć, drukując 4 strony tekstu na jednej stronie arkusza papieru dwustronnie. Upewnij się, że drukujesz najnowszą edycję – z 2024 r. (zwróć uwagę czy tytuł się zgadza).'
+        description: 'Jest to bardzo obszerny dokument, ale warto go załączyć.'
+        extraInfo: |
+            :::spoiler Informacje i link do pobrania
+
+            Pobierz: [Postępowania w sprawach o uzgodnienie płci. Przewodnik](/przewodnik/Postepowania_w_sprawach_o_uzgodnienie_plci_Przewodnik_www.pdf){download}
+
+            Dokument jest dostępny na licencji [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/){target=_blank}, [źródło](https://bip.brpo.gov.pl/pl/content/postepowania-w-sprawach-o-uzgodnienie-plci-przewodnik){target=_blank}
+
+            Koszty drukowania tego dokumentu można ograniczyć, drukując 4 strony tekstu na jednej stronie arkusza papieru dwustronnie.
+
+            :::
       - heading: 'Dodatkowe dowody'
-        subheading: 'Zaznacz, które zamierzasz dołączyć – wszystkie są opcjalne, ale te które Cię dotyczą warto zaznaczyć, gdyż zwiększają szansę na szybsze załatwienie sprawy'
+        subheading: 'Zaznacz, które zamierzasz dołączyć – wszystkie są opcjonalne, ale te którymi dysponujesz lub możesz uzyskać, warto dołączyć, gdyż zwiększają szansę na szybsze załatwienie sprawy'
         label: 'Zaświadczenie lekarskie o wdrożeniu terapii hormonalnej'
         name: hrt_certificate
         type: checkbox
       - label: 'Decyzja o zmianie imienia'
         name: name_change_confirmation
         type: checkbox
-        description: 'Jeśli zmienił_ś już imię w USC, to dobrze jest załączyć decyzję jako jeden z dowodów na trwałość poczucia przynależności do swojej płci. Zamiast dokumentu z decyzją, możesz alternatywnie załączyć zupełny odpis aktu urodzenia – w przeciwieństwie do skróconego, wynika z niego zmiana imienia.'
+        description: 'Jeśli zmieniano już imię w USC, to dobrze jest załączyć decyzję jako jeden z dowodów na trwałość poczucia przynależności do swojej płci. Zamiast dokumentu z decyzją, można alternatywnie załączyć zupełny odpis aktu urodzenia – w przeciwieństwie do skróconego, wynika z niego zmiana imienia.'
         showIf: { step: 0, answer: is_new_firstname, valueNot: true }
       - label: 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci'
         name: proving_documents
         type: checkbox
+        description: 'Dokumenty pokazujące trwałą indetyfikację z daną płcią – mogą być to zrzuty ekranu z facebooka/instagrama, wydruki ze szkoły.'
+        showIf: { step: 0, answer: is_underage }
+        subquestions:
+            - name: proving_documents_type
+              type: radio_vertical
+              showIf: {}
+              options:
+                  A: 'wydruk z portali społecznościowych'
+                  D: 'wydruk ze szkoły'
+      - label: 'Dokumenty świadczące o funkcjonowaniu w otoczeniu jako osoba danej płci'
+        name: proving_documents
+        type: checkbox
         description: 'Dokumenty pokazujące trwałą indetyfikację z daną płcią – mogą być to zrzuty ekranu z facebooka/instagrama, zdjęcie identyfikatora z miejsca pracy, wydruki z portalu USOS.'
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
             - name: proving_documents_type
               type: radio_vertical
@@ -146,17 +275,32 @@
                   B: 'identyfikator z miejsca pracy'
                   C: 'wydruk z portalu USOS'
 
-- title: 'Dane do wniosku'
+- title:
+    'Dane osoby małoletniej': { step: 0, answer: is_underage }
+    'Dane do wniosku': null
   questions:
+      - label: 'PESEL'
+        name: pesel
+        validation: pesel
+        showIf: { step: 0, answer: is_underage }
       - label: 'Twój PESEL'
         name: pesel
         validation: pesel
-      - heading: 'Twój adres zamieszkania'
-        subheading: 'Wpisz adres, pod którym faktycznie mieszkasz. To nie musi być adres zameldowania. Jeśli jest to jest niejednoznaczne, np. mieszkasz w akademiku i jeździsz do domu rodzinnego w weekendy, do Ciebie należy decyzja, które z tych miejsc uznasz za swój adres zamieszkania. Na ten adres przyjdzie odpowiedź z sądu, chyba że wyznaczysz pełnomocnika do doręczeń.'
+        showIf: { step: 0, answer: is_underage, valueNot: true }
+      - heading: 'Adres zamieszkania'
+        subheading: '„Centrum życiowe” osoby niepełnoletniej. To nie musi być jej adres zameldowania. Jeśli jest to niejednoznaczne, np. jest w opiece naprzemiennej, to można wybrać który ades wskazać jako adres zamieszkania.'
         label: 'Pierwsza linia adresu'
         name: address_1
         description: 'Ulica, numer domu, mieszkania'
         placeholder: 'Przykładowa 34B/12'
+        showIf: { step: 0, answer: is_underage }
+      - heading: 'Twój adres zamieszkania'
+        subheading: 'Wpisz adres, pod którym faktycznie mieszkasz. To nie musi być adres zameldowania. Jeśli jest to niejednoznaczne, np. mieszkasz w akademiku i jeździsz do domu rodzinnego w weekendy, do Ciebie należy decyzja, które z tych miejsc uznasz za swój adres zamieszkania. Na ten adres przyjdzie odpowiedź z sądu, chyba że wyznaczysz pełnomocnika do doręczeń.'
+        label: 'Pierwsza linia adresu'
+        name: address_1
+        description: 'Ulica, numer domu, mieszkania'
+        placeholder: 'Przykładowa 34B/12'
+        showIf: { step: 0, answer: is_underage, valueNot: true }
       - label: 'Druga linia adresu'
         name: address_2
         description: 'Opcjonalnie, w przypadku większości adresów nie jest potrzebna'
@@ -169,7 +313,7 @@
             - label: 'Miejscowość'
               name: city
       - heading: 'Pełnomocnik do doręczeń'
-        subheading: 'Możesz wyznaczyć osobę, która pod swoim adresem będzie odbierać Twoją korenspondecję z sądu.'
+        subheading: 'Możesz wyznaczyć osobę, która pod swoim adresem będzie odbierać korenspondecję z sądu.'
         label: 'Chcę mieć pełnomocnika do doręczeń'
         name: has_proxy
         type: checkbox
@@ -201,15 +345,23 @@
                     name: proxy_city
                     showIf: { answer: has_proxy }
       - heading: 'Wybór sądu'
+        subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla miejsca zamieszkania osoby małoletniej, czyli adresu wpisanego powyżej. Możesz się upewnić, który sąd jest właściwy, dzwoniąc do Biura Obsługi Interesantów w najbliższym sądzie rejonowym.'
+        label: 'Znajdź wpisując miejscowość/dzielnicę'
+        name: chosen_court
+        datalist: courts
+        showIf: { step: 0, answer: is_underage }
+      - heading: 'Wybór sądu'
         subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla Twojego miejsca zamieszkania, czyli adresu, który wpisał_ś powyżej. Możesz się upewnić, który sąd jest właściwy, dzwoniąc do Biura Obsługi Interesantów w najbliższym sądzie rejonowym.'
         label: 'Znajdź wpisując miejscowość/dzielnicę'
         name: chosen_court
         datalist: courts
+        showIf: { step: 0, answer: is_underage, valueNot: true }
       - heading: 'Dane kontaktowe'
         label: 'Chcę podać swoje dane kontaktowe'
         name: has_contact_info
         type: checkbox
         description: 'Nie jest to konieczne, ale może ułatwić kontakt z sądem'
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
             - label: 'Adres e-mail'
               name: email
@@ -242,7 +394,6 @@
         prefix: 'Urząd Stanu Cywilnego w…'
 
 - title: 'Dane rodziców'
-  description: 'Wniosek zostanie wygenerowany w taki sposób, by złożyli go w Twoim imieniu rodzice – tylko w taki sposób można go złożyć przed osiągnięciem pełnoletności.'
   showIf: { step: 0, answer: is_underage }
   questions:
       - heading: 'Dane pierwszego rodzica'
@@ -317,10 +468,13 @@
 - title: 'Opis doświadczeń'
   displayWithHeadingInSummary: false
   questions:
+
+      # wariant dla dorosłych
       - label: 'Opisz jak przebiegało uświadamianie sobie Twojej tożsamości płciowej'
         name: experience
         type: textarea
         description: "Warto zawrzeć informacje, kiedy rozpoczął się u ciebie ten proces, kiedy nabrał_ś pewności co do swojej tożsamości i czy w trakcie tego procesu doświadczał_ś dysforii."
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         extraInfo: |
             :::spoiler Przykład
 
@@ -330,6 +484,7 @@
       - label: 'Jestem w terapii hormonalnej'
         name: is_hrt
         type: checkbox
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
             - label: 'Od kiedy?'
               name: hrt_since
@@ -338,10 +493,12 @@
       - label: 'Poddano mnie testom psychologicznym'
         name: has_assessment
         type: checkbox
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         description: 'Jeśli psycholog, u którego był_ś, pracuje w modelu świadomej zgody, prawdopodobnie nie poddano cię żadnym testom psychologicznym, wówczas możesz pozostawić to pole niezaznaczone.'
       - label: 'Chcę ujawnić sądowi imię, którego używam na co dzień'
         name: has_common_name
         type: checkbox
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
             - label: 'Imię, jakim się posługujesz'
               name: common_name
@@ -349,6 +506,58 @@
       - label: 'W sferze społecznej funkcjonuję zgodnie z moją tożsamością płciową'
         name: areas
         type: radio_vertical
+        showIf: { step: 0, answer: is_underage, valueNot: true }
         options:
             some: 'w niektórych obszarach'
             all: 'w większości obszarów'
+      # wariant dla dorosłych – koniec
+
+      # wariant dla niepełnoletnich
+      - label: 'Opisz jak przebiegało osobie nieletniej uświadamianie swojej tożsamości płciowej'
+        name: underage_experience
+        type: textarea
+        description: "Osoba małoletnia powinna być tu nazywana „Wnioskodawczynią” (gdy zmiana oznaczenia na K) lub „Wnioskodawcą” (gdy zmiana oznaczenia na M)."
+        showIf: { step: 0, answer: is_underage }
+        extraInfo: |
+            :::spoiler Wskazówki, jak wypełnić to pole
+
+            W przypadku osób niepełnoletnich sądy są dużo bardziej skłonne do weryfikowania przedstawianych informacji, dlatego zalecamy szczegółowy opis. Jeśli świadomość tożsamości płciowej pojawiała się już w dzieciństwie, warto to opisać. Warto opisać jak przebiegał proces dojrzewania i czy w jego trakcie występowała dysforia. Istotnym elementem jest to, kiedy osoba małoletnia nabrała pewności co do swojej tożsamości płciowej.
+
+            Przykład:
+
+            > Około [...] roku życia zaczęło pojawiać się u Wnioskodawcy/czyni poczucie rozbieżności pomiędzy płcią przypisaną jej/mu przy urodzeniu a jej/jego tożsamością płciową. Doprowadziło to do wykształcenia się u niej/niego dysforii, której towarzyszyło obniżenie nastroju. Pewność co do swojej żeńskiej/męskiej tożsamości płciowej uzyskał(a) około […] roku.
+
+            Powyższy przykład należy potraktować jako punkt wyjścia do rozbudowania o dużo więcej szczegółów.
+
+            :::
+      - heading: 'Osoba małoletnia…'
+        label: '…jest w terapii hormonalnej'
+        name: is_hrt
+        type: checkbox
+        showIf: { step: 0, answer: is_underage }
+        subquestions:
+            - label: 'Od kiedy?'
+              name: hrt_since
+              type: month
+              showIf: {}
+      - label: '…była poddawana testom psychologicznym'
+        description: 'Można to zweryfikować sprawdzając, czy w opinii psychologicznej jest wzmianka o testach'
+        name: has_assessment
+        type: checkbox
+        showIf: { step: 0, answer: is_underage }
+      - label: '…chce podać sądowi imię, którego używa na co dzień'
+        name: has_common_name
+        type: checkbox
+        showIf: { step: 0, answer: is_underage }
+        subquestions:
+            - label: 'Imię, jakim się posługuje'
+              name: common_name
+              showIf: {}
+      - label: '…w sferze społecznej funkcjonuje zgodnie ze swoją tożsamością płciową'
+        name: areas
+        type: radio_vertical
+        showIf: { step: 0, answer: is_underage }
+        options:
+            some: 'w niektórych obszarach'
+            all: 'w większości obszarów'
+      # wariant dla niepełnoletnich – koniec
