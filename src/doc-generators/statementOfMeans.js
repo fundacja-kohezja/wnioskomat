@@ -1,5 +1,3 @@
-// TODO load it anynchronously?
-import { courts } from '../helpers/datasets'
 import { estimateLines } from '@/helpers/misc'
 
 const normalize = text => (text || '').trim()
@@ -80,7 +78,7 @@ export default (exemptionFormAnswers, documentCreatorInitializer) => {
         row(() => {
             cell(() => {
                 font({ size: 10 }, () => {
-                    p((normalize(a.chosen_court) || 'Sąd Rejonowy w ......................') + ', ' + (normalize(a.court_department) || 'Wydział Cywilny') + ', ' + normalize(courts[a.chosen_court]?.address || '......................').replace('\n', ', '))
+                    p((normalize(a.chosen_court) || 'Sąd Rejonowy w ......................') + ', ' + (normalize(a.court_department) || 'Wydział Cywilny') + ', ' + (normalize(a.court_address) || '...................') + ', ' + (normalize(a.court_zip_code) || '........') + ' ' + (normalize(a.court_city) || '...................'))
                 })
             }, { pt: -1 })
         }, 9)

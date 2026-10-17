@@ -41,6 +41,11 @@ const registerExtensions = (md) => {
     })
 }
 
+const processExtraInfoAsMarkdown = (q, md) => {
+    if (typeof q?.extraInfo !== 'string') return
+    q.extraInfo = md.render(q.extraInfo)
+}
+
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
@@ -63,8 +68,11 @@ export default defineConfig({
                 data.forEach(step => {
                     if (!Array.isArray(step?.questions)) return
                     step.questions.forEach(q => {
-                        if (typeof q?.extraInfo !== 'string') return
-                        q.extraInfo = md.render(q.extraInfo)
+                        processExtraInfoAsMarkdown(q, md)
+                        if (!q.subquestions) return
+                        q.subquestions.forEach(subq => {
+                            processExtraInfoAsMarkdown(subq, md)
+                        })
                     })
                 })
                 return data

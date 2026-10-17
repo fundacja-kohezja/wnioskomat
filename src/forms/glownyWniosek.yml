@@ -288,7 +288,7 @@
         validation: pesel
         showIf: { step: 0, answer: is_underage, valueNot: true }
       - heading: 'Adres zamieszkania'
-        subheading: '„Centrum życiowe” osoby niepełnoletniej. To nie musi być jej adres zameldowania. Jeśli jest to niejednoznaczne, np. jest w opiece naprzemiennej, to można wybrać który ades wskazać jako adres zamieszkania.'
+        subheading: '„Centrum życiowe” osoby niepełnoletniej. To nie musi być jej adres zameldowania. Jeśli jest to niejednoznaczne, np. jest w opiece naprzemiennej, można wybrać które miejsce wskazać jako adres zamieszkania.'
         label: 'Pierwsza linia adresu'
         name: address_1
         description: 'Ulica, numer domu, mieszkania'
@@ -312,6 +312,46 @@
         subquestions:
             - label: 'Miejscowość'
               name: city
+      - heading: 'Wybór sądu'
+        subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla miejsca zamieszkania osoby małoletniej, czyli adresu wpisanego powyżej. Możesz się upewnić, który sąd jest właściwy, dzwoniąc do Biura Obsługi Interesantów w najbliższym sądzie rejonowym.'
+        label: 'Nazwa sądu'
+        name: chosen_court
+        description: 'Zacznij wpisywać miejscowość, by wyświetlić sugestie – jeśli wybierzesz sąd z listy, adres sądu zostanie wypełniony automatycznie.'
+        datalist: courts
+        autopopulateCourtAddress: true
+        showIf: { step: 0, answer: is_underage }
+      - heading: 'Wybór sądu'
+        subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla Twojego miejsca zamieszkania, czyli adresu, który wpisał_ś powyżej. Możesz się upewnić, który sąd jest właściwy, dzwoniąc do Biura Obsługi Interesantów w najbliższym sądzie rejonowym.'
+        label: 'Nazwa sądu'
+        name: chosen_court
+        description: 'Zacznij wpisywać miejscowość, by wyświetlić sugestie – jeśli wybierzesz sąd z listy, adres sądu zostanie wypełniony automatycznie.'
+        datalist: courts
+        autopopulateCourtAddress: true
+        showIf: { step: 0, answer: is_underage, valueNot: true }
+      - label: 'Adres sądu – ulica i numer'
+        name: court_address
+        placeholder: 'Przykładowa 34B'
+      - label: 'Kod pocztowy'
+        name: court_zip_code
+        isRow: true
+        placeholder: '00-000'
+        subquestions:
+            - label: 'Miejscowość'
+              name: court_city
+      - heading: 'Dane kontaktowe'
+        label: 'Chcę podać swoje dane kontaktowe'
+        name: has_contact_info
+        type: checkbox
+        description: 'Nie jest to konieczne, ale może ułatwić kontakt z sądem'
+        showIf: { step: 0, answer: is_underage, valueNot: true }
+        subquestions:
+            - label: 'Adres e-mail'
+              name: email
+              validation: email
+              showIf: {}
+            - label: 'Numer telefonu'
+              name: phone
+              showIf: {}
       - heading: 'Pełnomocnik do doręczeń'
         subheading: 'Możesz wyznaczyć osobę, która pod swoim adresem będzie odbierać korenspondecję z sądu.'
         label: 'Chcę mieć pełnomocnika do doręczeń'
@@ -344,32 +384,6 @@
                   - label: 'Miejscowość'
                     name: proxy_city
                     showIf: { answer: has_proxy }
-      - heading: 'Wybór sądu'
-        subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla miejsca zamieszkania osoby małoletniej, czyli adresu wpisanego powyżej. Możesz się upewnić, który sąd jest właściwy, dzwoniąc do Biura Obsługi Interesantów w najbliższym sądzie rejonowym.'
-        label: 'Znajdź wpisując miejscowość/dzielnicę'
-        name: chosen_court
-        datalist: courts
-        showIf: { step: 0, answer: is_underage }
-      - heading: 'Wybór sądu'
-        subheading: 'Sąd rejonowy, do którego złożysz wniosek. Wybierz sąd właściwy dla Twojego miejsca zamieszkania, czyli adresu, który wpisał_ś powyżej. Możesz się upewnić, który sąd jest właściwy, dzwoniąc do Biura Obsługi Interesantów w najbliższym sądzie rejonowym.'
-        label: 'Znajdź wpisując miejscowość/dzielnicę'
-        name: chosen_court
-        datalist: courts
-        showIf: { step: 0, answer: is_underage, valueNot: true }
-      - heading: 'Dane kontaktowe'
-        label: 'Chcę podać swoje dane kontaktowe'
-        name: has_contact_info
-        type: checkbox
-        description: 'Nie jest to konieczne, ale może ułatwić kontakt z sądem'
-        showIf: { step: 0, answer: is_underage, valueNot: true }
-        subquestions:
-            - label: 'Adres e-mail'
-              name: email
-              validation: email
-              showIf: {}
-            - label: 'Numer telefonu'
-              name: phone
-              showIf: {}
       - heading: 'Dane z aktu urodzenia'
         label: 'Imię/imiona'
         name: birth_name

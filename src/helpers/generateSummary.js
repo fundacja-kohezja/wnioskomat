@@ -90,13 +90,13 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
         attached.push(['Zaświadczenie od ', '…', ' z diagnozą ', '…'])
     }
     const push = (array, item) => array.push(item)
-    push(a.hrt_certificate ? attached : unattached, 'Zaświadczenie o wdrożeniu terapii hormonalnej')
     if (a.is_underage) {
         push(a.wpath_guidelines  ? attached : unattached, 'Ramowe zalecenia panelu ekspertów')
     } else {
         push(a.pts_guidelines  ? attached : unattached, 'Zalecenia Polskiego Towarzystwa Seksuologicznego')
     }
     push(a.long_guidelines ? attached : unattached, 'Publikację „Postępowania w sprawach o uzgodnienie płci. Przewodnik”')
+    push(a.hrt_certificate ? attached : unattached, 'Zaświadczenie o wdrożeniu terapii hormonalnej')
     if (!a.is_new_firstname) {
         (a.name_change_confirmation ? attached : unattached).push('Decyzję o zmianie imienia')
     }

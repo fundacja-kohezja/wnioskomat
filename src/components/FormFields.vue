@@ -72,7 +72,7 @@ const nextStep = () => {
             <template v-if="currentIndex < steps.length">
                 <h1><StepTitle :step="currentStep" :answers="answers" /></h1>
                 <button
-                    v-if="populationAvailability"
+                    v-if="populationAvailability && !currentStep.populate.question"
                     class="btn"
                     @click="emit('populate')"
                 >
@@ -82,7 +82,7 @@ const nextStep = () => {
             </template>
             <h1 v-else-if="hasSummary && currentIndex === steps.length">{{ t('summary') }}</h1>
         </div>
-        <form v-if="currentIndex < steps.length">
+        <form v-if="currentIndex < steps.length" @submit.prevent>
             <AnswerInput
                 v-for="(q, i) of currentStep.questions"
                 v-model="answers[currentIndex][q.name]"
@@ -90,7 +90,16 @@ const nextStep = () => {
                 :step="currentIndex"
                 :answer-number="'a_'+i"
                 :form-store="formStore"
-            />
+            >
+                <button
+                    v-if="populationAvailability && currentStep.populate.question === q.name"
+                    class="btn"
+                    type="button"
+                    @click="emit('populate')"
+                >
+                    {{ t('fill') }} {{ currentStep.populate.label }}{{ populationAvailability === 'fill' ? '' : '…' }}
+                </button>
+            </AnswerInput>
         </form>
         <DataSummary v-else-if="hasSummary && currentIndex === steps.length" />
         <DownloadsStep v-else :name="formName" :store="formStore" />

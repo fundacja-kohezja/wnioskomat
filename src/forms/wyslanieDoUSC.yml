@@ -1,7 +1,7 @@
 - title: 'Podstawowe informacje'
   populate:
       source: mainApplication
-      fields: [new_mark, city, chosen_court, birth_name, birth_surname]
+      fields: [new_mark, city, chosen_court, court_address, court_zip_code, court_city, birth_name, birth_surname]
       label: 'danymi z głównego wniosku'
   questions:
       - label: 'Zmieniasz oznaczenie płci na:'
@@ -14,10 +14,21 @@
         name: city
         description: 'Do wstawienia na górze dokumentu, obok bieżącej daty'
       - heading: 'Wybór sądu'
-        subheading: 'Wybierz sąd, który prowadzi Twoją sprawę'
-        label: 'Znajdź wpisując miejscowość/dzielnicę'
+        subheading: 'Dane sądu, który prowadzi Twoją sprawę'
+        label: 'Nazwa sądu'
         name: chosen_court
         datalist: courts
+        autopopulateCourtAddress: true
+      - label: 'Adres sądu – ulica i numer'
+        name: court_address
+        placeholder: 'Przykładowa 34B'
+      - label: 'Kod pocztowy'
+        name: court_zip_code
+        isRow: true
+        placeholder: '00-000'
+        subquestions:
+            - label: 'Miejscowość'
+              name: court_city
       - heading: 'Dane z aktu urodzenia'
         label: 'Imię/imiona'
         name: birth_name

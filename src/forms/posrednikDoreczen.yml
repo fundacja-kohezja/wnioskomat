@@ -1,5 +1,10 @@
 - title: 'Dane do pełnomocnictwa'
   description: 'Jeśli chcesz w trakcie postępowania (czyli już po złożeniu właściwego wniosku) wyznaczyć osobę, która będzie w Twoim imieniu odbierać korespondecję z sądu (pod swoim adresem), wypełnij poniższe pola.'
+  populate:
+      source: mainApplication
+      fields: [city, chosen_court]
+      label: 'danymi z głównego wniosku'
+      question: chosen_court
   questions:
       - label: 'Sygnatura sprawy'
         name: case_id

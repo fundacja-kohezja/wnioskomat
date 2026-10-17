@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 
 import { isShown } from '../helpers/answers'
 import validators from '../helpers/validation'
-import datasets from '../helpers/datasets'
+import datasets, { courts } from '../helpers/datasets'
 import MonthPicker from './MonthPicker.vue'
 import RepeaterField from './RepeaterField.vue'
 
@@ -54,11 +54,29 @@ const shown = computed(() => !props.question.showIf || isShown(
     props.parent
 ))
 
+const populateCourtAddress = ({ inputType, target: { value } }) => {
+    if (inputType && inputType !== 'insertReplacementText') return
+
+    const court = courts[value]
+    if (!court) return
+
+    const [address, zipCodeAndCity] = court.address.split('\n')
+    const [zipCode, ...cityParts] = zipCodeAndCity.split(' ')
+    const city = cityParts.join(' ')
+
+    answers.value[props.step].court_address = address
+    answers.value[props.step].court_zip_code = zipCode
+    answers.value[props.step].court_city = city
+}
+
 </script>
 
 <template>
     <div v-if="question.heading || question.subheading" v-show="shown">
-        <h2 v-if="question.heading" class="section-heading">{{ question.heading }}</h2>
+        <h2 v-if="question.heading" class="section-heading">
+            {{ question.heading }}
+            <slot></slot>
+        </h2>
         <p v-if="question.subheading" class="help-text">{{ question.subheading }}</p>
     </div>
     <div
@@ -118,10 +136,19 @@ const shown = computed(() => !props.question.showIf || isShown(
                 <span>{{ question.suffix }}</span>
             </span>
             <input
+                v-else-if="question.autopopulateCourtAddress"
+                type="text"
+                v-model.lazy.trim="value"
+                :list="'q_'+step+'_'+answerNumber+'_datalist'"
+                autocomplete="off"
+                @input="populateCourtAddress"
+            />
+            <input
                 v-else
                 type="text"
                 v-model.lazy.trim="value"
                 :list="question.datalist ? ('q_'+step+'_'+answerNumber+'_datalist') : undefined"
+                :autocomplete="question.datalist ? 'off' : undefined"
                 :placeholder="question.placeholder"
             />
         </label>

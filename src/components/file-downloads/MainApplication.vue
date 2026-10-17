@@ -1,9 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 
-// TODO load it asynchronously?
-import { courts } from '@/helpers/datasets'
-
 import { useMainApplicationFormStore } from '@/stores/subforms'
 import generateMainDoc from '@/doc-generators/mainApplication'
 import generateDocForUnderage from '@/doc-generators/underageApplication'
@@ -61,7 +58,6 @@ if (!answers.value[1].psychiatrist && !answers.value[1].sexologist) {
     attached.push(['Zaświadczenie od ', '…'].join(''))
 }
 
-if(answers.value[1].hrt_certificate) attached.push('Zaświadczenie o wdrożeniu terapii hormonalnej')
 if (answers.value[0].is_underage) {
     if(answers.value[1].wpath_guidelines) attached.push('Ramowe zalecenia panelu ekspertów')
 } else {
@@ -69,6 +65,7 @@ if (answers.value[0].is_underage) {
 }
 if(answers.value[1].long_guidelines) attached.push('Publikację „Postępowania w sprawach o uzgodnienie płci. Przewodnik”')
 
+if(answers.value[1].hrt_certificate) attached.push('Zaświadczenie o wdrożeniu terapii hormonalnej')
 if (!answers.value[0].is_new_firstname && answers.value[1].name_change_confirmation) {
     attached.push('Decyzję o zmianie imienia')
 }
@@ -106,8 +103,8 @@ if (answers.value[1].proving_documents) {
                 <p>
                     Dokumenty możesz zanieść bezpośrednio do sądu i złożyć na biurze podawczym. Miej ze sobą <b>dodatkową kserokopię wniosku</b>, na którym w sądzie przybita zostanie pieczątka potwierdzająca jego złożenie.
                 </p>
-                <p v-if="answers[2].chosen_court">
-                    Adres sądu: {{ courts[answers[2].chosen_court]?.address?.replace('\n', ', ') }}
+                <p v-if="answers[2].court_address">
+                    Adres sądu: {{ normalize(answers[2].court_address) }}{{ answers[2].court_zip_code || answers[2].court_city ? (', ' + normalize(answers[2].court_zip_code) + ' ' + normalize(answers[2].court_city)) : '' }}
                 </p>
             </details>
             <details>
@@ -128,7 +125,7 @@ if (answers.value[1].proving_documents) {
                         <div class="address">
                             Adresat: <br />
                             <span>
-                                {{ answers[2].chosen_court + '\nWydział Cywilny' }}<br/>{{ courts[answers[2].chosen_court]?.address }}
+                                {{ normalize(answers[2].chosen_court) || 'Sąd Rejonowy w ......................' }}<br/>Wydział Cywilny<br/>{{ normalize(answers[2].court_address) || '...................' }}<br/>{{ normalize(answers[2].court_zip_code) || '........' }} {{ normalize(answers[2].court_city) || '...................' }}
                             </span>
                         </div>
                     </li>

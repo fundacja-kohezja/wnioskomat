@@ -1,6 +1,3 @@
-// TODO load it asynchronously?
-import { courts } from '../helpers/datasets'
-
 const normalize = text => (text || '').trim()
 
 export default (urgencyFormAnswers, documentCreatorInitializer) => {
@@ -26,18 +23,12 @@ export default (urgencyFormAnswers, documentCreatorInitializer) => {
     }
 
     font({ style: 'bold' }, () => {
-        if (a.chosen_court) {
-            p(a.chosen_court, top)
-            p(normalize(a.court_department) || 'Wydział Cywilny', top)
-            p(courts[a.chosen_court]?.address || '', { // TODO ability to manually provide court address
-                ...top,
-                mayBreak: true,
-            })
-        } else {
-            p('Sąd Rejonowy w ......................', top)
-            p(normalize(a.court_department) || 'Wydział Cywilny', top)
-            p('......................', top)
-        }
+        p(normalize(a.chosen_court) || 'Sąd Rejonowy w ......................', top)
+        p(normalize(a.court_department) || 'Wydział Cywilny', top)
+        p((normalize(a.court_address) || '...................') + '\n' + (normalize(a.court_zip_code) || '........') + ' ' + (normalize(a.court_city) || '...................'), {
+            ...top,
+            mayBreak: true,
+        })
 
         p({K: 'Wnioskodawczyni:', M: 'Wnioskodawca:'}[a.new_mark] || '', {
             ...top,
