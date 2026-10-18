@@ -1603,6 +1603,29 @@ a {
         }
     }
 
+    legend {
+        margin-bottom: 0.75em;
+        padding: 0;
+    }
+
+    .featured + legend {
+        margin-bottom: 0.5em;
+    }
+
+    del {
+        color: light-dark($gray-500, $gray-400);
+    }
+
+    .validation-message {
+        font-size: 0.9em;
+        margin-top: 0.5em;
+        font-weight: 600;
+    }
+}
+
+.questions,
+.docs-instruction-list {
+
     details {
         border: 1px solid light-dark($gray-300, $gray-750);
         border-radius: 4px;
@@ -1632,25 +1655,6 @@ a {
                 margin-left: 0.75em;
             }
         }
-    }
-
-    legend {
-        margin-bottom: 0.75em;
-        padding: 0;
-    }
-
-    .featured + legend {
-        margin-bottom: 0.5em;
-    }
-
-    del {
-        color: light-dark($gray-500, $gray-400);
-    }
-
-    .validation-message {
-        font-size: 0.9em;
-        margin-top: 0.5em;
-        font-weight: 600;
     }
 }
 
@@ -1833,9 +1837,9 @@ a {
         padding-left: 1.5em;
         margin-block: 0.75em;
 
-         li {
-             margin-bottom: 0.5em;
-         }
+        li {
+             margin-bottom: 0.75em;
+        }
     }
 
     .address {
@@ -1845,6 +1849,15 @@ a {
         margin-block: 0.5em;
         margin-right: 2em;
         font-weight: 600;
+    }
+
+    &-list details {
+        margin-top: 0.75em;
+        margin-bottom: 1em;
+
+        summary ~ * {
+            font-size: 14px;
+        }
     }
 }
 
@@ -1951,7 +1964,8 @@ details[open] > summary::before {
 }
 
 .docs-instruction,
-.further-steps {
+.further-steps,
+.docs-instruction-list {
 
     ol, ul {
         padding-left: 1.5em;
