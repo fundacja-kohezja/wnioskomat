@@ -1783,13 +1783,24 @@ a {
     }
 
     &-table {
-        display: grid;
-        grid-template-columns: minmax(auto, 10em) 1fr;
-        gap: 1em;
         white-space: pre-wrap;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+
+        @media (min-width: 36em) {
+            display: grid;
+            grid-template-columns: minmax(auto, 10em) 1fr;
+        }
 
         dd {
             font-weight: bold;
+            margin-top: -0.5em;
+            margin-left: 0.5em;
+
+            @media (min-width: 36em) {
+                margin: 0;
+            }
 
             span {
                 font-weight: normal;

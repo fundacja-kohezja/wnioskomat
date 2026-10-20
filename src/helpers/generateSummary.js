@@ -128,10 +128,13 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
             ...(!a.is_underage && a.has_contact_info ? {
                 'Dane kontaktowe:': ['', a.email + '\n', 'tel. ', a.phone]
             } : {}),
+            ...(a.has_delivery_address ? {
+                'Adres korespondencyjny:': ['', (a.delivery_address_1 || '…') + (a.delivery_address_2 ? ('\n' + a.delivery_address_2) : '') + '\n' + (a.delivery_zip_code || '…') + ' ' + (a.delivery_city || '…')]
+            } : {}),
             ...(a.has_proxy ? {
                 'Pełnomocnik do doręczeń:': ['', (a.proxy_name || '…'), '\nPESEL ', (a.proxy_pesel || '…') + '\n' + (a.proxy_address_1 || '…') + (a.proxy_address_2 ? ('\n' + a.proxy_address_2) : '') + '\n' + (a.proxy_zip_code || '…') + ' ' + (a.proxy_city || '…')]
             } : {}),
-            'Wybrany sąd:': a.chosen_court || '…',
+            'Wybrany sąd:': ['', (a.chosen_court || '…') + '\n' + (a.court_address || '…') + '\n' + (a.court_zip_code || '…') + ' ' + (a.court_city || '…')],
             'Akt urodzenia:': ['', (a.birth_name || '…') + ' ' + (a.birth_surname || '…'), '\n'+'ur. ', a.birth_date || '…', '\n'+'nr aktu ', a.birth_certificate_id || '…', '\n'+'wydany przez'+' Urząd Stanu Cywilnego w ', a.birth_certificate_issuer || '…'],
         }
     })
@@ -145,8 +148,8 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
         summary.push({
             type: 'table',
             rows: {
-                'Imię i nazwisko': ['', a.parent_1_name || '…'],
-                'PESEL': a.parent_1_pesel || '…',
+                'Imię i nazwisko:': ['', a.parent_1_name || '…'],
+                'PESEL:': a.parent_1_pesel || '…',
                 'Adres zamieszkania:': [(a.parent_1_address_1 || '…'), a.parent_1_address_2, (a.parent_1_zip_code || '…') + ' ' + (a.parent_1_city || '…')]
                     .filter(x => x)
                     .join('\n'),
@@ -164,8 +167,8 @@ export default ([step_0, step_1, step_2, step_3, step_4], t) => {
         summary.push({
             type: 'table',
             rows: {
-                'Imię i nazwisko': ['', a.parent_2_name || '…'],
-                'PESEL': a.parent_2_pesel || '…',
+                'Imię i nazwisko:': ['', a.parent_2_name || '…'],
+                'PESEL:': a.parent_2_pesel || '…',
                 'Adres zamieszkania:': [(a.parent_2_address_1 || '…'), a.parent_2_address_2, (a.parent_2_zip_code || '…') + ' ' + (a.parent_2_city || '…')]
                     .filter(x => x)
                     .join('\n'),
