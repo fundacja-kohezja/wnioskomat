@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { useEventListener } from '@vueuse/core'
@@ -11,13 +11,14 @@ import useFormStore from './stores/form'
 import ThemeSwitch from './components/ThemeSwitch.vue'
 // import TheLocaleError from './components/TheLocaleError.vue'
 import TheStartScreen from './components/TheStartScreen.vue'
-import TheFormScreen from './components/TheFormScreen.vue'
 import HelpModal from './components/modals/HelpModal.vue'
 import ExportModal from './components/modals/ExportModal.vue'
 import ExitModal from './components/modals/ExitModal.vue'
 import RestorationModal from './components/modals/RestorationModal.vue'
 import { subforms } from './stores/subforms'
 import useTitle from './composables/useTitle'
+import SkeletonLoader from './components/SkeletonLoader.vue'
+import LoadingError from './components/LoadingError.vue'
 
 // bring commented code back when there are translations
 // const { isInitialLocaleLoading, isCurrentLocaleLoading } = storeToRefs(usePrefsStore())
@@ -83,6 +84,26 @@ useEventListener('focus', () => {
         store.$hydrate()
     })
 })
+
+const formScreenLoader = () => import('./components/TheFormScreen.vue')
+const formScreenFailedToLoad = ref(false)
+let retryloadingFormScreen = () => {}
+const TheFormScreen = defineAsyncComponent({
+    loader: formScreenLoader,
+    loadingComponent: SkeletonLoader,
+    delay: 50,
+    onError: (_, retry) => {
+        formScreenFailedToLoad.value = true
+        retryloadingFormScreen = retry
+    }
+})
+
+const handleRetry = () => {
+    formScreenFailedToLoad.value = false
+    retryloadingFormScreen()
+}
+
+onMounted(formScreenLoader)
 
 </script>
 
@@ -176,7 +197,8 @@ useEventListener('focus', () => {
     <div class="padding-x main-content">
         <!-- <TheLocaleError /> -->
 
-        <TheFormScreen v-if="currentScreen === 'form'" @go-to-start="navigate('start')" />
+        <LoadingError v-if="currentScreen === 'form' && formScreenFailedToLoad" @retry="handleRetry" />
+        <TheFormScreen v-else-if="currentScreen === 'form'" @go-to-start="navigate('start')" />
         <TheStartScreen v-else @go-to-form="navigate('form')" />
     </div>
     <ModalsContainer />

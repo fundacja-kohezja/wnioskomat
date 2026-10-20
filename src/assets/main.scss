@@ -429,6 +429,42 @@ hr {
     }
 }
 
+.skeleton {
+
+    .side-nav {
+        height: 3.25em;
+        overflow: hidden;
+
+        svg rect:not(:first-child) {
+            opacity: 0;
+        }
+
+        @media (min-width: 54em) {
+            height: auto;
+
+            svg rect:not(:first-child) {
+                opacity: 1;
+            }
+        }
+    }
+
+    .questions {
+        overflow: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+        svg {
+            fill: currentColor;
+        }
+
+        .questions::after {
+            content: 'Ładowanie…';
+            position: absolute;
+        }
+    }
+}
+
 .vfm--fixed{position:fixed}
 .vfm--absolute{position:absolute}
 .vfm--inset{top:0;right:0;bottom:0;left:0}

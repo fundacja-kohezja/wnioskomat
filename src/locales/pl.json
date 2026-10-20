@@ -75,6 +75,8 @@
     "clear_data": "Usuń wszystkie dane",
     "data_cleared": "Usunięto wszystkie dane Wnioskomatu z pamięci przeglądarki.",
     "no_data_to_clear": "W pamięci przeglądarki nie ma obecnie zapisanych żadnych danych z Wnioskomatu.",
+    "loading_error": "Nie udało się załadować głównej części aplikacji Wnioskomat. Sprawdź, czy masz stabilne połączenie internetowe.",
+    "retry": "Spróbuj ponownie",
     "download_pdf": "Pobierz PDF",
     "download_docx": "Pobierz dokument Word",
     "download_backup": "Pobierz zapisany postęp",
