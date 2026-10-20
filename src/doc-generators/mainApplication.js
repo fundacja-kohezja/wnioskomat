@@ -56,9 +56,26 @@ export default ([step_0, step_1, step_2, step_3, step_4], documentCreatorInitial
         })
     }
 
+    if (a.has_delivery_address) {
+        font({ style: 'bold' }, () => {
+            p('Adres do korespondencji:', {
+                ...top,
+                spaceBefore: 5,
+            })
+        })
+        p([a.delivery_address_1, a.delivery_address_2, (a.delivery_zip_code || '........') + ' ' + (a.delivery_city || '...................')]
+            .map(normalize)
+            .filter(x => x)
+            .join('\n'),
+        {
+            ...top,
+            mayBreak: true,
+        })
+    }
+
     if (a.has_proxy) {
         font({ style: 'bold' }, () => {
-            p('Pełnomocnik do doręczeń', {
+            p('Pełnomocnik do doręczeń:', {
                 ...top,
                 spaceBefore: 5,
             })

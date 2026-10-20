@@ -288,14 +288,14 @@
         validation: pesel
         showIf: { step: 0, answer: is_underage, valueNot: true }
       - heading: 'Adres zamieszkania'
-        subheading: '„Centrum życiowe” osoby niepełnoletniej. To nie musi być jej adres zameldowania. Jeśli jest to niejednoznaczne, np. jest w opiece naprzemiennej, można wybrać które miejsce wskazać jako adres zamieszkania.'
+        subheading: '„Centrum życiowe” osoby niepełnoletniej. To nie musi być jej adres zameldowania. Jeśli jest to niejednoznaczne, np. jest w opiece naprzemiennej, można wybrać które miejsce wskazać jako adres zamieszkania. Ten adres determinuje, do którego sądu należy złożyć wniosek.'
         label: 'Pierwsza linia adresu'
         name: address_1
         description: 'Ulica, numer domu, mieszkania'
         placeholder: 'Przykładowa 34B/12'
         showIf: { step: 0, answer: is_underage }
       - heading: 'Twój adres zamieszkania'
-        subheading: 'Wpisz adres, pod którym faktycznie mieszkasz. To nie musi być adres zameldowania. Jeśli jest to niejednoznaczne, np. mieszkasz w akademiku i jeździsz do domu rodzinnego w weekendy, do Ciebie należy decyzja, które z tych miejsc uznasz za swój adres zamieszkania. Na ten adres przyjdzie odpowiedź z sądu, chyba że wyznaczysz pełnomocnika do doręczeń.'
+        subheading: 'Wpisz adres, pod którym faktycznie mieszkasz. To nie musi być adres zameldowania. Jeśli jest to niejednoznaczne, np. mieszkasz w akademiku i jeździsz do domu rodzinnego w weekendy, do Ciebie należy decyzja, które z tych miejsc uznasz za swój adres zamieszkania. Ten adres determinuje, do którego sądu należy złożyć wniosek.'
         label: 'Pierwsza linia adresu'
         name: address_1
         description: 'Ulica, numer domu, mieszkania'
@@ -338,22 +338,33 @@
         subquestions:
             - label: 'Miejscowość'
               name: court_city
-      - heading: 'Dane kontaktowe'
-        label: 'Chcę podać swoje dane kontaktowe'
-        name: has_contact_info
+      - heading: 'Adres do koresponecji'
+        subheading: 'Jeśli chcesz odbierać korespondencję z sądu pod innym adresem niż ten, który podano jako adres zamieszkania, możesz podać oddzielny adres do korespondencji'
+        label: 'Chcę podać adres do korespondencji'
+        name: has_delivery_address
         type: checkbox
-        description: 'Nie jest to konieczne, ale może ułatwić kontakt z sądem'
-        showIf: { step: 0, answer: is_underage, valueNot: true }
         subquestions:
-            - label: 'Adres e-mail'
-              name: email
-              validation: email
+            - label: 'Pierwsza linia adresu'
+              name: delivery_address_1
+              description: 'Ulica, numer domu, mieszkania'
+              placeholder: 'Przykładowa 34B/12'
               showIf: {}
-            - label: 'Numer telefonu'
-              name: phone
+            - label: 'Druga linia adresu'
+              name: delivery_address_2
+              description: 'Opcjonalnie, w przypadku większości adresów nie jest potrzebna'
+              filledIfAny: [proxy_address_1]
               showIf: {}
+            - label: 'Kod pocztowy'
+              name: delivery_zip_code
+              isRow: true
+              placeholder: '00-000'
+              showIf: {}
+              subquestions:
+                  - label: 'Miejscowość'
+                    name: delivery_city
+                    showIf: { answer: has_delivery_address }
       - heading: 'Pełnomocnik do doręczeń'
-        subheading: 'Możesz wyznaczyć osobę, która pod swoim adresem będzie odbierać korenspondecję z sądu.'
+        subheading: 'Możesz wyznaczyć osobę upoważnioną do odbierania korespondencji z sądu w Twoim imieniu.'
         label: 'Chcę mieć pełnomocnika do doręczeń'
         name: has_proxy
         type: checkbox
@@ -384,6 +395,20 @@
                   - label: 'Miejscowość'
                     name: proxy_city
                     showIf: { answer: has_proxy }
+      - heading: 'Dane kontaktowe'
+        label: 'Chcę podać swoje dane kontaktowe'
+        name: has_contact_info
+        type: checkbox
+        description: 'Nie jest to konieczne, ale może ułatwić kontakt z sądem'
+        showIf: { step: 0, answer: is_underage, valueNot: true }
+        subquestions:
+            - label: 'Adres e-mail'
+              name: email
+              validation: email
+              showIf: {}
+            - label: 'Numer telefonu'
+              name: phone
+              showIf: {}
       - heading: 'Dane z aktu urodzenia'
         label: 'Imię/imiona'
         name: birth_name
